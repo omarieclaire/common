@@ -1,61 +1,143 @@
-<!DOCTYPE html>
-<head>
-  <meta charset="UTF-8">
-  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
-  <script language="javascript" src="libraries/p5.dom.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
-  <script language="javascript" type="text/javascript" src="sketch.js"></script>
- 
-</head>
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+        
 
 
-<style>
+        <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+        <script language="javascript" src="libraries/p5.dom.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
+        <script language="javascript" type="text/javascript" src="sketch.js"></script>
+        
+        
+    </head>
+    
+   
+    <body> 
+                
+        <div class="header-container">
+            <header class="wrapper clearfix">
+                <h1 class="title">Common</h1>
+                <nav>
+                    <ul>
+                        <li><a href="#">nav ul li a</a></li>
+                        <li><a href="#">nav ul li a</a></li>
+                        <li><a href="#">nav ul li a</a></li>
+                    </ul>
+                </nav>
+            </header>
+        </div>
 
-.links line {
-  stroke: #999;
-  stroke-opacity: 0.6;
-}
+        <div class="main-container">
+            <div class="main wrapper clearfix">
 
-.nodes circle {
-  stroke: black;
-  stroke-width: 0px;
-}
+                <article>
+                    <header>
+                        <h1>Welcome to Common</h1>
+                        <p>A game for communities</p>
+                    </header>
+                    <section>
+                        <h2>To play you must find an active player</h2>
+                        <p>Click here to find an active player</p>
+                    </section>
 
-</style>
+                    <!--     <style>
 
-<svg width="800" height="500"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="d3.js"></script>
+                        .links line {
+                            stroke: #999;
+                            stroke-opacity: 0.6;
+                        }
+
+                        .nodes circle {
+                            stroke: black;
+                            stroke-width: 0px;
+                        }
+
+                    </style> -->
+
+                    <svg width="200" height="150"></svg>
+                    <script src="https://d3js.org/d3.v4.min.js"></script>
+                    <script src="d3.js"></script>
+    
+    
+
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        
+                    <form>
+                    Node name:<br>
+                    <input type="text" name="name"><br>
+                    <button type="button" id="node-submit">submit</button>
+                  </form>
+
+                  <form>
+                    Edge name:<br>
+                    <input type="text" name="from"><br>
+                    <input type="text" name="from"><br>
+                    <button type="button" id="edge-submit">submit</button>
+                  </form>
+                        
+                          <div id="game">
+                  </div>
+                  <p>
+                    <ol id="scorelist">
+                    </ol>
+                  </p>
 
 
 
-<body>
-  <form>
-    Node name:<br>
-    <input type="text" name="name"><br>
-    <button type="button" id="node-submit">submit</button>
-  </form>
 
-  <form>
-    Edge name:<br>
-    <input type="text" name="from"><br>
-    <input type="text" name="from"><br>
-    <button type="button" id="edge-submit">submit</button>
-  </form>
 
-<body>
+                    <footer>
+                        <h3>Credits</h3>
+                        <p>Common was made by aliens on earth.</p>
+                    </footer>
+                </article>
 
-  <div id="game">
-  </div>
-  <p>
-    <ol id="scorelist">
-    </ol>
-  </p>
+                <!-- <aside>
+                    <h3>aside</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor. Etiam ullamcorper lorem dapibus velit suscipit ultrices.</p>
+                </aside> -->
 
-</body>
+            </div> <!-- #main -->
+        </div> <!-- #main-container -->
 
-</body>
+        <div class="footer-container">
+            <footer class="wrapper">
+                <h3>footer</h3>
+            </footer>
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+        </script>
+    </body>
 </html>
+
 
 
 
