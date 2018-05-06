@@ -1,7 +1,7 @@
 /*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
 
 html {
-    color: #black;
+    color: black;
     font-size: 1em;
     line-height: 1.4;
 }
@@ -129,7 +129,15 @@ nav a:hover {
 }
 
 .main article h1 {
-    font-size: 2em;
+    font-size: 1em;
+}
+
+.main article h2 {
+    font-size: 1em;
+}
+
+.main article h3 {
+    font-size: 1em;
 }
 
 .main aside {
