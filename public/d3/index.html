@@ -13,24 +13,22 @@
 
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
         <script src="libraries/jquery-3.3.1.min.js"></script>
-        
+
 
         <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
         <script language="javascript" src="libraries/p5.dom.js"></script>
         <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
         <script language="javascript" type="text/javascript" src="sketch.js"></script>
-        
-        
+
+
     </head>
-    
-   
-    <body> 
-                
+
+    <body>
+
         <div class="header-container">
             <header class="wrapper clearfix">
                 <h1 class="title">Common</h1>
                 <nav>
-
 
                             <!-- Trigger/Open The Modal -->
                             <button id="aboutBtn">About</button>
@@ -76,53 +74,36 @@
                         <p>Click <a href="https://twitter.com/hashtag/commonplay?src=hash " target="_blank">here</a> to find an active player</p>
                     </section>
 
-                    <!--     <style>
-
-                        .links line {
-                            stroke: #999;
-                            stroke-opacity: 0.6;
-                        }
-
-                        .nodes circle {
-                            stroke: black;
-                            stroke-width: 0px;
-                        }
-
-                    </style> -->
-
                     <svg width="200" height="150"></svg>
+
+                    <!-- question - why does this need to be way down here? (when I move it to the top d3 breaks)  -->
                     <script src="https://d3js.org/d3.v4.min.js"></script>
                     <script src="d3.js"></script>
-    
-    
+                    <script type='text/javascript' src='d3fire.min.js'></script>
 
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        
-                    <form>
+                  <form>
                     Node name:<br>
                     <input type="text" name="name"><br>
                     <button type="button" id="node-submit">submit</button>
                   </form>
 
-                  <form>
+                  <!-- <form>
                     Edge name:<br>
                     <input type="text" name="from"><br>
                     <input type="text" name="from"><br>
                     <button type="button" id="edge-submit">submit</button>
-                  </form>
-                        
+                  </form> -->
+
                           <div id="game">
                   </div>
                   <p>
                     <ol id="scorelist">
                     </ol>
                   </p>
-
-
-
 
 
 <!--                     <footer>
@@ -161,7 +142,3 @@
         </script> -->
     </body>
 </html>
-
-
-
-

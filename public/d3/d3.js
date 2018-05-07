@@ -6,14 +6,14 @@ var svg = d3.select("svg"),
 var radius = 15;
 
 var nodes_data =  [
-    {"name": "Marie", "sex": "F"},
-    {"name": "Aaron", "sex": "F"}
+    {"name": "M", "strength": "F"},
+    {"name": "A", "strength": "F"}
     ]
 
 //Sample links data
 //type: A for Ally, E for Enemy
 var links_data = [
-    {"source": "Marie", "target": "Aaron", "type":"E"}
+    {"source": "M", "target": "A", "type":"E"}
 ]
 
 //set up the simulation and add forces
@@ -39,7 +39,7 @@ simulation
 //Function to choose what color circle we have
 //Let's return blue for males and red for females
 function circleColour(d){
-  if(d.sex =="M"){
+  if(d.strength =="M"){
     return "blue";
   } else {
     return "pink";
@@ -153,8 +153,8 @@ document.addEventListener('DOMContentLoaded', function(){
   nodeSubmitElement.addEventListener(
     'click', function() {
       console.log(nodes_data);
-      console.log("hi marie!");
-      nodes_data.push({"name": "roro", "sex": "M"});
+      console.log("hi!");
+      nodes_data.push({"name": "roro", "strength": "M"});
       restart();
     }
   );
