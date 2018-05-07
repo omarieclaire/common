@@ -12,14 +12,11 @@
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-        <script src="libraries/jquery-3.3.1.min.js"></script>
-
-
         <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
         <script language="javascript" src="libraries/p5.dom.js"></script>
         <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
         <script language="javascript" type="text/javascript" src="js/sketch.js"></script>
-
+        <script src="https://d3js.org/d3.v4.min.js"></script>
 
     </head>
 
@@ -75,11 +72,6 @@
                     </section>
 
                     <svg width="200" height="150"></svg>
-
-                    <!-- question - why does this need to be way down here? (when I move it to the top d3 breaks)  -->
-                    <script src="https://d3js.org/d3.v4.min.js"></script>
-                    <script src="js/commonplay.js"></script>
-                    <script type='text/javascript' src='d3fire.min.js'></script>
 
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -140,5 +132,10 @@
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
             ga('create','UA-XXXXX-X','auto');ga('send','pageview');
         </script> -->
+
+        <!-- define all the html and then define interactivity -->
+        <script src="js/commonplay.js"></script>
+
+
     </body>
 </html>
