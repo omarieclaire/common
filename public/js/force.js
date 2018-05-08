@@ -3,7 +3,7 @@ var forceFunction = function() {
 var width = 960,
     height = 500
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("body").prepend("svg")
     .attr("width", width)
     .attr("height", height);
 
