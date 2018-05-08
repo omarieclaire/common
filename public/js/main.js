@@ -1,4 +1,5 @@
 var createModal = function(modalId, buttonId, spanIndex) {
+
 	// Get the modal
 	var modal = document.getElementById(modalId);
 
@@ -8,8 +9,7 @@ var createModal = function(modalId, buttonId, spanIndex) {
 	// Get the <span> element that closes the modal
 	var span = document.getElementsByClassName("close")[spanIndex];
 
-
-	// When the user clicks on the button, open the modal 
+	// When the user clicks on the button, open the modal
 	btn.onclick = function() {
 	    modal.style.display = "block";
 	}
@@ -31,3 +31,29 @@ var createModal = function(modalId, buttonId, spanIndex) {
 createModal('aboutModal', 'aboutBtn', 0);
 createModal('joinModal', 'joinBtn', 1);
 createModal('settingsModal', 'settingsBtn', 2);
+
+
+//add and remove players framework
+
+var myData = [];
+
+function addPlayer() {
+	// if(myData.length === 10)
+	// 	return;
+	//
+	// myData.push({
+	// 	name: names[myData.length],
+	// 	score: 30 + randomInteger(70);
+	console.log("hi");
+//	update(myData);
+	}
+
+function removePlayer() {
+	// if(myData.length === 0)
+	// 	return;
+	//
+	// myData.pop();
+
+//	update(myData);
+console.log("bye");
+}

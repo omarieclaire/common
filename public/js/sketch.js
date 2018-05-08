@@ -9,11 +9,11 @@ function setup() {
   canvas = createCanvas(100, 100);
   canvas.parent('game');
   score = 0;
-  createP('Click the button to get points.').parent('game');
+  createP('Click the button to get lifeforce.').parent('game');
   button = createButton('click');
   button.mousePressed(increaseScore);
   button.parent('game');
-  initialInput = createInput('initials');
+  initialInput = createInput('');
   initialInput.parent('game');
   submitButton = createButton('submit');
   submitButton.parent('game');
