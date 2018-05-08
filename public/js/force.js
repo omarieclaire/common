@@ -3,9 +3,14 @@ var forceFunction = function() {
 var width = 960,
     height = 500
 
-var svg = d3.select("body").prepend("svg")
-    .attr("width", width)
-    .attr("height", height);
+    var svg = d3.select("svg"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+
+    var radius = 15; 
+// var svg = d3.select("body").append("svg")
+//     .attr("width", width)
+//     .attr("height", height);
 
 var force = d3.layout.force()
     .gravity(0.1)

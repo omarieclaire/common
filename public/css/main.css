@@ -212,13 +212,13 @@ nav a:hover {
    .link {
     stroke: #777;
     stroke-opacity: 0.3;
-    stroke-width: 1.5px;
+    stroke: #999;
+    stroke-opacity: 0.6;
    }
 
    .node circle {
-    fill: #ccc;
-    stroke: #000;
-    stroke-width: 1.5px;
+      stroke: black	;
+      stroke-width: 0px;
    }
 
    .node text {
