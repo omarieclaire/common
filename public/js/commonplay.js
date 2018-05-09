@@ -85,6 +85,8 @@ nodeSubmitElement.addEventListener(
     // note: myData is JSON, which can contain many types of data
     // specifcally, key-value pairs.
     myData["nodes"].push({"name":"Marie","group":1});
+    forceFunction();
+
     //myData["links"].push({"source":1,"target":0,"value":3})
 
     console.log(myData);
