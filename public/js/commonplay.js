@@ -15,7 +15,7 @@ var svg = d3.select("svg"),
 var force = d3.layout.force()
     .gravity(0.1)
     .charge(-120)
-    .linkDistance(30)
+    .linkDistance(10)
     .size([width, height]);
 
 //to optimise hover/click/touch areas

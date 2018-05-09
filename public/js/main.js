@@ -53,7 +53,6 @@ function removePlayer() {
 	// 	return;
 	//
 	// myData.pop();
-
 //	update(myData);
 console.log("bye");
 }
