@@ -6,13 +6,6 @@
   var people = {
   };
 
-  // var graph = {
-  //   "nodes":[
-  //     {"id": "Aaron", "group": 1},
-  //   ],
-  //   "links":[]
-  // };
-
   var addPlayer = function(id){
     if (people[id]) {
       //do nothing
@@ -42,7 +35,6 @@
   //     {"source": "Aaron", "target": "Marie", "value": 1},
   //   ]
   // };
-
 
   var forceFunction = function(){
     var svg = d3.select("svg"),
@@ -124,8 +116,6 @@ var forceFunctionOld = function() {
       width = +svg.attr("width"),
       height = +svg.attr("height");
 
-
-
   var radius = 15;
   // var svg = d3.select("body").append("svg")
   //     .attr("width", width)
@@ -205,19 +195,14 @@ nodeSubmitElement.addEventListener(
     addPlayer(nameInput.value);
     addConnection(nameInput.value, friendInput.value);
 
-
-//    nodes_data.push({"name":"Myriel","group":1});
+    //nodes_data.push({"name":"Myriel","group":1});
     //myData.push({"name":"Marie","group":1});
-    // Access the "nodes" value of the myData json object.
-    // note: myData is JSON, which can contain many types of data
-    // specifcally, key-value pairs.
 
     forceFunction();
 
     //myData["links"].push({"source":1,"target":0,"value":3})
 
     console.log(myData);
-
   }
 );
 forceFunction();
