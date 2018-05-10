@@ -16,12 +16,11 @@
         <script language="javascript" src="libraries/p5.dom.js"></script>
         <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
         <script language="javascript" type="text/javascript" src="js/sketch.js"></script>
-        <script src="https://d3js.org/d3.v3.min.js"></script>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
         <!-- <link rel="json" href="readme.json"> -->
     </head>
 
     <body>
-
         <div class="header-container">
             <header class="wrapper clearfix">
                 <h1 class="title">Common</h1>
@@ -77,8 +76,10 @@
                   <p>1--- TEST SECTION --------</p>
                   <p>Add a node to the network [nonfuctional]</p>
                   <form>
+                    Friend name:<br>
+                    <input id="friendInput" type="text" name="friend"><br>
                     Node name:<br>
-                    <input type="text" name="name"><br>
+                    <input id="nameInput" type="text" name="name"><br>
                     <button type="button" id="node-submit">submit</button>
                   </form>
 

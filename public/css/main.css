@@ -209,34 +209,14 @@ nav a:hover {
       ========================================================================== */
 
 
-   .link {
-    stroke: #777;
-    stroke-opacity: 0.3;
-    stroke: #999;
-    stroke-opacity: 0.6;
+      .links line {
+     stroke: #999;
+     stroke-opacity: 0.6;
    }
 
-   .node circle {
-      stroke: black	;
-      stroke-width: 0px;
-   }
-
-   .node text {
-    display: none;
-    font: 10px sans-serif;
-   }
-
-   .node:hover circle {
-    fill: #000;
-   }
-
-   .node:hover text {
-    display: inline;
-   }
-
-   .cell {
-    fill: none;
-    pointer-events: all;
+   .nodes circle {
+     stroke: #fff;
+     stroke-width: 1.5px;
    }
 
 
