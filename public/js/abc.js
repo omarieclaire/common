@@ -59,7 +59,7 @@ function addEdge(from, to) {
 }
 
 var simulation = d3.forceSimulation(nodes)
-      .force("charge", d3.forceManyBody().strength(-100))
+      .force("charge", d3.forceManyBody().strength(-1000))
       .force("link", d3.forceLink(links).distance(100))
       .force("center", d3.forceCenter())
       .force("collide", d3.forceCollide(40))
