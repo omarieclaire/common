@@ -45,7 +45,7 @@ function addNode(id) {
 function addEdge(from, to) {
   var id = edgeId(from, to);
   if (from === to) {
-    // do nothing
+    addNode(from);
   } else if (seenEdges[id]) {
     //console.log("edge %o -> %o already exists", from, to);
   } else {
