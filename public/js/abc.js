@@ -1,14 +1,27 @@
+// this is our svg canvas to draw onto
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height"),
     color = d3.scaleOrdinal(d3.schemeCategory10);
 
+// use dragging to pan around the graph
+svg.call(d3.drag().on("drag", function () {
+  var vb = d3.select(this).attr("viewBox");
+  var toks = vb.split(" ");
+  var x = parseInt(toks[0]) + d3.event.dx;
+  var y = parseInt(toks[1]) + d3.event.dy;
+  svg.attr("viewBox", x + " " + y + " " + toks[2] + " " + toks[3]);
+}));
+
+// set of nodes/edges we have already seen
 var seenNodes = {};
 var seenEdges = {};
 
+// list of node/edge data used by the force-directed graph
 var nodes = [];
 var links = [];
 
+// given two node IDs, produce an edge ID.
 function edgeId(from, to) {
   if (from < to) {
     return from + "-" + to;
@@ -67,6 +80,7 @@ var simulation = d3.forceSimulation(nodes)
       .force("y", d3.forceY())
       .alphaTarget(0)
       .on("tick", ticked);
+
 
 var g = svg
       .append("g")
@@ -136,11 +150,28 @@ function ticked() {
     .attr("y", function(d) {return d.y - 5; });
 }
 
+// used to generate random nodes
+var index = 1;
+
 window.onload = function () {
   document.getElementById("add").addEventListener('click', function () {
     var from = document.getElementById("from").value;
     var to = document.getElementById("to").value;
     //console.log("click %o %o", from, to);
+    addEdge(from, to);
+    restart();
+  });
+
+  document.getElementById("random").addEventListener('click', function () {
+    var from;
+    if (_.random(1) === 0) {
+      // create a new node
+      from = "rr" + index;
+      index += 1;
+    } else {
+      var from = _.sample(seenNodes).id;
+    }
+    var to = _.sample(seenNodes).id;
     addEdge(from, to);
     restart();
   });
