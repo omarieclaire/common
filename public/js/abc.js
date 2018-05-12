@@ -8,8 +8,8 @@ var svg = d3.select("svg"),
 svg.call(d3.drag().on("drag", function () {
   var vb = d3.select(this).attr("viewBox");
   var toks = vb.split(" ");
-  var x = parseInt(toks[0]) + d3.event.dx;
-  var y = parseInt(toks[1]) + d3.event.dy;
+  var x = parseInt(toks[0]) - d3.event.dx;
+  var y = parseInt(toks[1]) - d3.event.dy;
   svg.attr("viewBox", x + " " + y + " " + toks[2] + " " + toks[3]);
 }));
 
