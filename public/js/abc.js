@@ -104,6 +104,9 @@ var label = g
       .attr("stroke-width", 1.5)
       .selectAll(".node");
 
+var nc = document.getElementById("nodecount");
+var ec = document.getElementById("edgecount");
+
 restart();
 
 function restart() {
@@ -134,6 +137,9 @@ function restart() {
   simulation.nodes(nodes);
   simulation.force("link").links(links);
   simulation.alpha(1).restart();
+
+  nc.textContent = Object.keys(seenNodes).length;
+  ec.textContent = Object.keys(seenEdges).length;
 }
 
 function ticked() {
