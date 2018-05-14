@@ -189,47 +189,6 @@ window.onload = function () {
   });
 };
 
-
-
-
-//   var graph = {
-//     "nodes":[],
-//     "links":[]
-//   };
-//
-//   var people = {
-//   };
-//
-//   var addPlayer = function(id){
-//     if (people[id]) {
-//       //do nothing
-//     } else {
-//       graph.nodes.push({"id": id, "group": 1});
-//       people[id]=1;
-//     }
-//
-//   }
-//   var addConnection = function(id1, id2){
-//     graph.links.push({"source": id1, "target": id2, "value": 1})
-//   }
-//   var removeConnection = function(id1, id2){}
-//
-//   addPlayer("Aaron");
-//   addPlayer("Marie");
-//   addPlayer("Erik");
-//   addConnection("Aaron", "Marie");
-//   addConnection("Marie", "Erik");
-//
-//   // var graph = {
-//   //   "nodes":[
-//   //     {"id": "Aaron", "group": 1},
-//   //     {"id": "Marie", "group": 1},
-//   //   ],
-//   //   "links":[
-//   //     {"source": "Aaron", "target": "Marie", "value": 1},
-//   //   ]
-//   // };
-//
 //   var forceFunction = function(){
 //     var svg = d3.select("svg"),
 //     width = +svg.attr("width"),
