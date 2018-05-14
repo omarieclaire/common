@@ -16,7 +16,7 @@
         <script language="javascript" src="libraries/p5.dom.js"></script>
         <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
         <script language="javascript" type="text/javascript" src="js/sketch.js"></script>
-        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
         <!-- <link rel="json" href="readme.json"> -->
     </head>
 
@@ -66,21 +66,16 @@
                         <p>Click <a href="https://twitter.com/hashtag/commonplay?src=hash " target="_blank">here</a> to find an active player</p>
                     </section>
 
-                    <svg width="300" height="300"></svg>
-
-                    <!--[if lt IE 8]>
-                        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-                    <![endif]-->
-
-                    <p>1--- TEST SECTION --------</p>
-                    <p>Add a new player to Common</p>
-                    <form>
-                      Current Active Player Name:<br>
-                      <input id="friendInput" type="text" name="friend"><br>
-                      New Player Name:<br>
-                      <input id="nameInput" type="text" name="name"><br>
-                      <button type="button" id="node-submit">submit</button>
-                    </form>
+                    <h1>d3 graph</h1
+                    <p>
+                    # people: <span id="nodecount">0</span><br>
+                    # connections: <span id="edgecount">0</span><br>
+                    edge from <input id="from" type="text"> to <input id="to" type="text">
+                    <input id="add" type="button" value="add">
+                    <input id="random" type="button" value="random"><br>
+                    <svg  width="700" height="500" viewBox="0 0 1000 700"></svg>
+                    <script src="https://d3js.org/d3.v4.min.js"></script>
+                    </p>
 
                     <p>2---- TEST SECTION ------</p>
                     <p>Get points by clicking, then send your info to the server [fuctional]</p>
@@ -89,31 +84,21 @@
                     <p>
                       <ol id="scorelist">
                       </ol>
-                    </p>
+                    </p> -->
 
-                  <!-- add and remove players -->
-                  <!-- <p>3---- TEST SECTION -------</p>
-                  <p>Test buttons to add and remove players [nonfunctional]</p>
-                  <p>
-                    <div class="menu">
-                      <button onclick="addPlayer();">Add player</button>
-                      <button onclick="removePlayer();">Remove player</button>
-                    </div>
-                  </p> -->
-
-<!--                     <footer>
+                    <!-- <footer>
                         <h3>Credits</h3>
-                        <p>Common was made by aliens on earth.</p>
-                    </footer>
-                </article> -->
+                        <p>.</p>
+                    </footer> -->
+                <!-- </article> --> -->
 
                 <!-- <aside>
                     <h3>aside</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor. Etiam ullamcorper lorem dapibus velit suscipit ultrices.</p>
-                </aside> -->
+                </aside>
 
             </div> <!-- #main -->
-        </div> <!-- #main-container -->
+        </div> <!-- #main-container
 
         <div class="footer-container">
             <footer class="wrapper">
@@ -124,7 +109,9 @@
 <!--         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
  -->
-        <script src="js/main.js"></script>
+        <!-- <script src="js/main.js"></script> -->
+        <script src="js/underscore-min.js"></script>
+        <script src="js/commonplay.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
  <!--        <script>
@@ -137,10 +124,10 @@
         </script> -->
 
         <!-- define all the html and then define interactivity -->
-        <script src="js/commonplay.js"></script>
+        <!-- <script src="js/commonplay.js"></script> -->
 
         <!-- the other tutorial -->
-        <script src="js/force.js"></script>
+        <!-- <script src="js/force.js"></script> -->
 
     </body>
 </html>

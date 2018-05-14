@@ -1,19 +1,22 @@
 // this is our svg canvas to draw onto
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height"),
-    color = d3.scaleOrdinal(d3.schemeCategory10);
+var svg = d3.select("svg");
+
+var width = +svg.attr("width");
+var height = +svg.attr("height");
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+var dragFunction = function() {
+     var vb = d3.select(this).attr("viewBox");
+     var toks = vb.split(" ");
+     var x = parseInt(toks[0]) - d3.event.dx;
+     var y = parseInt(toks[1]) - d3.event.dy;
+     svg.attr("viewBox", x + " " + y + " " + toks[2] + " " + toks[3]);
+}
 
 // use dragging to pan around the graph
-svg.call(d3.drag().on("drag", function () {
-  var vb = d3.select(this).attr("viewBox");
-  var toks = vb.split(" ");
-  var x = parseInt(toks[0]) - d3.event.dx;
-  var y = parseInt(toks[1]) - d3.event.dy;
-  svg.attr("viewBox", x + " " + y + " " + toks[2] + " " + toks[3]);
-}));
+svg.call(d3.drag().on("drag", dragFunction));
 
-// set of nodes/edges we have already seen
+// set of nodes/edges we have already seen (objects)
 var seenNodes = {};
 var seenEdges = {};
 
@@ -30,26 +33,15 @@ function edgeId(from, to) {
   }
 }
 
-addEdge("a", "b");
-addEdge("b", "c");
-addEdge("d", "e");
-addEdge("d", "f");
-addEdge("d", "g");
-addEdge("e", "h");
-addEdge("h", "i");
-addEdge("h", "b");
-addEdge("i", "a");
-addEdge("i", "b");
-addEdge("i", "c");
-addEdge("i", "d");
-
 function addNode(id) {
   if (seenNodes[id]) {
     return seenNodes[id];
   } else {
-    var o = {id: id};
+    var o = {'id': id};
     nodes.push(o);
     //console.log("added node %o", o);
+    // key   is id
+    // value is o
     seenNodes[id] = o;
     return o;
   }
@@ -58,6 +50,7 @@ function addNode(id) {
 function addEdge(from, to) {
   var id = edgeId(from, to);
   if (from === to) {
+    // why?
     addNode(from);
   } else if (seenEdges[id]) {
     //console.log("edge %o -> %o already exists", from, to);
@@ -70,6 +63,19 @@ function addEdge(from, to) {
     //console.log("created edge %o", o);
   }
 }
+
+addEdge("a", "b");
+addEdge("b", "c");
+addEdge("d", "e");
+addEdge("d", "f");
+addEdge("d", "g");
+addEdge("e", "h");
+addEdge("h", "i");
+addEdge("h", "b");
+addEdge("i", "a");
+addEdge("i", "b");
+addEdge("i", "c");
+addEdge("i", "d");
 
 var simulation = d3.forceSimulation(nodes)
       .force("charge", d3.forceManyBody().strength(-1000))
