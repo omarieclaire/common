@@ -209,7 +209,7 @@ nav a:hover {
       ========================================================================== */
 
 
-      .links line {
+    .links line {
      stroke: #999;
      stroke-opacity: 0.6;
    }
@@ -217,6 +217,10 @@ nav a:hover {
    .nodes circle {
      stroke: #fff;
      stroke-width: 1.5px;
+   }
+
+   #d3viz {
+     max-width: 100%;
    }
 
 
