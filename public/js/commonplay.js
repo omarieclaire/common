@@ -79,20 +79,15 @@ function addEdge(from, to) {
 	} else if (seenEdges[id]) {
 		// if 'from' and 'to' are different, but
 		// we've seen the id before, do nothing
-
 		//console.log("edge %o -> %o already exists", from, to);
 	} else {
-		// if 'from' and 'to' are different and new
-
+		// if 'from' and 'to' are different and ne
 		// add a node for 'from' in case it doesn't exist
 		var x = addNode(from);
 		// add a node for 'to' in case it doesn't exist
 		var y = addNode(to);
 		// create a new edge
-		var o = {
-			source: x,
-			target: y
-		};
+		var o = {source: x, target: y};
 		// add the edges to the array of edges
 		links.push(o);
 		// add the edge id to the seenEdges object
@@ -163,43 +158,29 @@ restart();
 // function to refresh d3 (for any changes to the graph)
 function restart() {
 	// Apply the update to the nodes.
-
 	// get nodes array, extract ids, and draw them
-	node = node.data(nodes, function(d) {
-		return d.id;
-	});
-
+	node = node.data(nodes, function(d) { return d.id;});
 	// exit and remove before redrawing?
 	node.exit().remove();
-
 	// redraw the nodes
 	node = node.enter()
 		.append("circle")
-		.attr("fill", function(d) {
-			return color(d.id);
-		})
+		.attr("fill", function(d) { return color(d.id) })
 		.attr("r", 8)
 		.merge(node);
-
-
 	// do the same thing for the labels
-	label = label.data(nodes, function(d) {
-		return d.id;
-	});
+	label = label.data(nodes, function(d) { return d.id;});
 	label.exit().remove();
 	label = label.enter()
 		.append("text")
-		.text(function(d) {
-			return d.id;
+		.text(function(d) {return d.id;
 		})
 		.style("fill", "#000000")
 		.style("stroke", "#000000")
 		.merge(label);
 
 	// do the same thing for the links
-	link = link.data(links, function(d) {
-		return d.source.id + "-" + d.target.id;
-	});
+	link = link.data(links, function(d) {	return d.source.id + "-" + d.target.id;	});
 	link.exit().remove();
 	link = link.enter().append("line").merge(link);
 
@@ -217,32 +198,16 @@ function restart() {
 // function called on every "tick" of d3 like a clock or gameloop
 function ticked() {
 	node
-		.attr("cx", function(d) {
-			return d.x;
-		})
-		.attr("cy", function(d) {
-			return d.y;
-		});
+		.attr("cx", function(d) { return d.x; })
+		.attr("cy", function(d) { return d.y; });
 	link
-		.attr("x1", function(d) {
-			return d.source.x;
-		})
-		.attr("y1", function(d) {
-			return d.source.y;
-		})
-		.attr("x2", function(d) {
-			return d.target.x;
-		})
-		.attr("y2", function(d) {
-			return d.target.y;
-		});
+		.attr("x1", function(d) { return d.source.x; })
+		.attr("y1", function(d) { return d.source.y; })
+		.attr("x2", function(d) { return d.target.x; })
+		.attr("y2", function(d) { return d.target.y; });
 	label
-		.attr("x", function(d) {
-			return d.x + 5;
-		})
-		.attr("y", function(d) {
-			return d.y - 5;
-		});
+		.attr("x", function(d) { return d.x + 5; })
+		.attr("y", function(d) { return d.y - 5; });
 }
 
 // used to generate random nodes
