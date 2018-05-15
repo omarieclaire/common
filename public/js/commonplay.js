@@ -187,7 +187,6 @@ function nodeClick(d) {
 
 //getting the strength of an edge by its id
 function connectionStrength(d) {
-  console.log(d)
   return d.strength;
 }
 
@@ -256,7 +255,8 @@ function ticked() {
 		.attr("x1", function(d) { return d.source.x; })
 		.attr("y1", function(d) { return d.source.y; })
 		.attr("x2", function(d) { return d.target.x; })
-		.attr("y2", function(d) { return d.target.y; });
+		.attr("y2", function(d) { return d.target.y; })
+		.attr("stroke-width", connectionStrength);
 	label
 		.attr("x", function(d) { return d.x + 5; })
 		.attr("y", function(d) { return d.y - 5; });
