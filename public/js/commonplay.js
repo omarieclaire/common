@@ -1,5 +1,8 @@
 /* global d3:false _:false */
 
+//default strength for all connections
+var DEFAULT_STRENGTH = 1;
+
 // this is the svg canvas to draw onto
 var svg = d3.select("svg")
 
@@ -60,7 +63,7 @@ function addNode(id) {
 
 // Given a 'from' id and a 'to' id, add an edge
 // this function returns nothing
-function addEdge(from, to) {
+function addEdge(from, to, strength) {
 	// calculate the edge id
 	var id = edgeId(from, to);
 	if (from === to) {
@@ -82,24 +85,28 @@ function addEdge(from, to) {
 		// add the edges to the array of edges
 		links.push(o);
 		// add the edge id to the seenEdges object
-		seenEdges[id] = 1;
+		seenEdges[id] = strength;
 		//console.log("created edge %o", o);
 	}
 }
 
+function getNode(id){
+	return seenNodes[id];
+}
+
 // add a bunch of edges for the example
-addEdge("a", "b");
-addEdge("b", "c");
-addEdge("d", "e");
-addEdge("d", "f");
-addEdge("d", "g");
-addEdge("e", "h");
-addEdge("h", "i");
-addEdge("h", "b");
-addEdge("i", "a");
-addEdge("i", "b");
-addEdge("i", "c");
-addEdge("i", "d");
+addEdge("a", "b", 3);
+addEdge("b", "c", 1);
+addEdge("d", "e", 3);
+addEdge("d", "f", 1);
+addEdge("d", "g", 1);
+addEdge("e", "h", 2);
+addEdge("h", "i", 1);
+addEdge("h", "b", 2);
+addEdge("i", "a", 1);
+addEdge("i", "b", 1);
+addEdge("i", "c", 2);
+addEdge("i", "d", 1);
 
 // create a d3 simulation object?
 var simulation = d3.forceSimulation(nodes)
@@ -113,6 +120,7 @@ var simulation = d3.forceSimulation(nodes)
 	.on("tick", ticked);
 
 // create a <g> element and append it into <svg>
+//create the graph itself
 var g = svg
 	.append("g")
 //setting the zoom level
@@ -158,11 +166,16 @@ function nodeClick(d) {
 	console.log(this);
 }
 
+//getting the strength of an edge by its id 
+function connectionStrength(d) {
+  return seenEdges[edgeId(d.source.id, d.target.id)];
+}
+
 // restart refreshes the graph?
-restart();
+draw();
 
 // function to refresh d3 (for any changes to the graph)
-function restart() {
+function draw() {
 	// Apply the update to the nodes.
 	// get nodes array, extract ids, and draw them
 	node = node.data(nodes, function(d) { return d.id;});
@@ -177,18 +190,19 @@ function restart() {
 	// an anon function that returns a color
 		.attr("fill", function(d) { return color(d.id) })
 		.attr("r", 8)
-	//we added the onclick to the circle, but maybe we could have added it to the node
+	//we added the onclick to the circle, but maybe we should have added it to the node
 		.on("click", nodeClick)
 	//what does this mean?
 		.merge(node);
 
 	// do the same thing for the labels
 	label = label.data(nodes, function(d) { return d.id;});
+
+	//I removed line below because it didn't do anything?
 	label.exit().remove();
 	label = label.enter()
 		.append("text")
-		.text(function(d) {return d.id;
-		})
+		.text(function(d) {return d.id;})
 		.style("fill", "#000000")
 		.style("stroke", "#000000")
 		.merge(label);
@@ -196,7 +210,11 @@ function restart() {
 	// do the same thing for the links
 	link = link.data(links, function(d) {	return d.source.id + "-" + d.target.id;	});
 	link.exit().remove();
-	link = link.enter().append("line").merge(link);
+	//before .merge is where I can add the viz representation of the stroke/connection
+	link = link.enter()
+    .append("line")
+    .attr("stroke-width", connectionStrength)
+    .merge(link);
 
 	// Update and restart the simulation.
 	simulation.nodes(nodes);
@@ -242,7 +260,7 @@ window.onload = function() {
 		addEdge(from, to);
 
 		// redraw.
-		restart();
+		draw();
 	});
 
 	// add a function when the `random` button is clicked
@@ -260,7 +278,7 @@ window.onload = function() {
 			from = _.sample(seenNodes).id;
 		}
 		var to = _.sample(seenNodes).id;
-		addEdge(from, to);
-		restart();
+		addEdge(from, to, DEFAULT_STRENGTH);
+		draw();
 	});
 };
