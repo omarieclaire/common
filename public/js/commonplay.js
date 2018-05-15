@@ -153,6 +153,11 @@ var nc = document.getElementById("nodecount");
 // get the edgecount HTML node
 var ec = document.getElementById("edgecount");
 
+//nodeclick function
+function nodeClick(d) {
+	console.log(this);
+}
+
 // restart refreshes the graph?
 restart();
 
@@ -172,7 +177,8 @@ function restart() {
 	// an anon function that returns a color
 		.attr("fill", function(d) { return color(d.id) })
 		.attr("r", 8)
-		.on("click", function(d) { alert("Here I am"); console.log(d)})
+	//we added the onclick to the circle, but maybe we could have added it to the node
+		.on("click", nodeClick)
 	//what does this mean?
 		.merge(node);
 
