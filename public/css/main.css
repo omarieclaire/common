@@ -210,13 +210,13 @@ nav a:hover {
 
 
     .links line {
-     stroke: #999;
-     stroke-opacity: 0.6;
+     color: #999;
+     opacity: 0.6;
    }
 
    .nodes circle {
-     stroke: #fff;
-     stroke-width: 1.5px;
+     /* color: #fff; */
+     width: 1.5px;
    }
 
    #d3viz {

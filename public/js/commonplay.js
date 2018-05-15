@@ -1,30 +1,33 @@
 /* global d3:false _:false */
 
-// this is our svg canvas to draw onto
+// this is the svg canvas to draw onto
 var svg = d3.select("svg");
 
+// attributes of the svg canvas as variables
 var width = +svg.attr("width");
 var height = +svg.attr("height");
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
+// dragging function given to d3
 var dragFunction = function() {
 	var vb = d3.select(this).attr("viewBox");
-	var toks = vb.split(" ");
-	var x = parseInt(toks[0]) - d3.event.dx;
-	var y = parseInt(toks[1]) - d3.event.dy;
-	svg.attr("viewBox", x + " " + y + " " + toks[2] + " " + toks[3]);
+	var tokens = vb.split(" ");
+	var x = parseInt(tokens[0]) - d3.event.dx;
+	var y = parseInt(tokens[1]) - d3.event.dy;
+	svg.attr("viewBox", x + " " + y + " " + tokens[2] + " " + tokens[3]);
 };
 
-// use dragging to pan around the graph
+// call dragging function when d3 detects a drag
 svg.call(d3.drag().on("drag", dragFunction));
 
+// zooming funtion given to d3
+// <svg transform="translate(10) + scale(2)">;
 var zoomFunction = function() {
-	svg.attr("transform", "translate(" + d3.event.transform.x + ")" + " scale(" + d3.event.transform.k + ")")
+	svg.attr("transform", "translate(" + d3.event.transform.x + ")" + " scale(" + d3.event.transform.k + ")");
 };
 
-// use zooming on the svg
-svg.call(d3.zoom().on("zoom", zoomFunction))
-
+// call zooming function when d3 detects a zoom
+svg.call(d3.zoom().on("zoom", zoomFunction));
 
 // set of nodes/edges we have already seen (objects)
 var seenNodes = {};
@@ -43,37 +46,62 @@ function edgeId(from, to) {
 	}
 }
 
+// given a node id, add a node
+// this function returns the node
 function addNode(id) {
+	// check if the id was already added
 	if (seenNodes[id]) {
+		// the id was added, so return the node
 		return seenNodes[id];
 	} else {
-		var o = {"id": id};
+		// create a new node object
+		var o = {
+			"id": id
+		};
+		// add the new node to the array of nodes
 		nodes.push(o);
-		//console.log("added node %o", o);
-		// key   is id
-		// value is o
+		// add the id and node to the seenNodes object
 		seenNodes[id] = o;
+		// return the node
 		return o;
 	}
 }
 
+// Given a 'from' id and a 'to' id, add an edge
+// this function returns nothing
 function addEdge(from, to) {
+	// calculate the edge id
 	var id = edgeId(from, to);
 	if (from === to) {
-		// why?
+		// if 'from' id is equal to 'to' id, assume we're adding
+		// a node and not an edge.
 		addNode(from);
 	} else if (seenEdges[id]) {
+		// if 'from' and 'to' are different, but
+		// we've seen the id before, do nothing
+
 		//console.log("edge %o -> %o already exists", from, to);
 	} else {
+		// if 'from' and 'to' are different and new
+
+		// add a node for 'from' in case it doesn't exist
 		var x = addNode(from);
+		// add a node for 'to' in case it doesn't exist
 		var y = addNode(to);
-		var o = {source: x, target: y};
+		// create a new edge
+		var o = {
+			source: x,
+			target: y
+		};
+		// add the edges to the array of edges
 		links.push(o);
+		// add the edge id to the seenEdges object
 		seenEdges[id] = 1;
 		//console.log("created edge %o", o);
 	}
 }
 
+// add a bunch of edges for the example
 addEdge("a", "b");
 addEdge("b", "c");
 addEdge("d", "e");
@@ -87,6 +115,7 @@ addEdge("i", "b");
 addEdge("i", "c");
 addEdge("i", "d");
 
+// create a d3 simulation object?
 var simulation = d3.forceSimulation(nodes)
 	.force("charge", d3.forceManyBody().strength(-1000))
 	.force("link", d3.forceLink(links).distance(100))
@@ -97,54 +126,80 @@ var simulation = d3.forceSimulation(nodes)
 	.alphaTarget(0)
 	.on("tick", ticked);
 
+// create a <g> element and append it into <svg>
 var g = svg
 	.append("g")
 	.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+// create a <g> elements, append it to the previous g
 var link = g
 	.append("g")
 	.attr("stroke", "#000")
 	.attr("stroke-width", 1.5)
 	.selectAll(".link");
 
+// create a <g> element, append it to the first g
 var node = g
 	.append("g")
 	.attr("stroke", "#fff")
 	.attr("stroke-width", 1.5)
 	.selectAll(".node");
 
+// create a <g> element, append it to the first g
 var label = g
 	.append("g")
 	.attr("stroke", "#fff")
 	.attr("stroke-width", 1.5)
 	.selectAll(".node");
 
+// get the nodecount HTML node
 var nc = document.getElementById("nodecount");
+// get the edgecount HTML node
 var ec = document.getElementById("edgecount");
 
+// restart refreshes the graph?
 restart();
 
+// function to refresh d3 (for any changes to the graph)
 function restart() {
-	// Apply the general update pattern to the nodes.
-	node = node.data(nodes, function(d) { return d.id;});
+	// Apply the update to the nodes.
+
+	// get nodes array, extract ids, and draw them
+	node = node.data(nodes, function(d) {
+		return d.id;
+	});
+
+	// exit and remove before redrawing?
 	node.exit().remove();
+
+	// redraw the nodes
 	node = node.enter()
 		.append("circle")
-		.attr("fill", function(d) { return color(d.id); })
+		.attr("fill", function(d) {
+			return color(d.id);
+		})
 		.attr("r", 8)
 		.merge(node);
 
-	label = label.data(nodes, function(d) { return d.id;});
+
+	// do the same thing for the labels
+	label = label.data(nodes, function(d) {
+		return d.id;
+	});
 	label.exit().remove();
 	label = label.enter()
 		.append("text")
-		.text(function(d) { return d.id; })
+		.text(function(d) {
+			return d.id;
+		})
 		.style("fill", "#000000")
 		.style("stroke", "#000000")
 		.merge(label);
 
-	// Apply the general update pattern to the links.
-	link = link.data(links, function(d) { return d.source.id + "-" + d.target.id; });
+	// do the same thing for the links
+	link = link.data(links, function(d) {
+		return d.source.id + "-" + d.target.id;
+	});
 	link.exit().remove();
 	link = link.enter().append("line").merge(link);
 
@@ -153,37 +208,70 @@ function restart() {
 	simulation.force("link").links(links);
 	simulation.alpha(1).restart();
 
+	// update the node and edge counts
+	// can we instead call nodes.length and edges.length?
 	nc.textContent = Object.keys(seenNodes).length;
 	ec.textContent = Object.keys(seenEdges).length;
 }
 
+// function called on every "tick" of d3 like a clock or gameloop
 function ticked() {
 	node
-		.attr("cx", function(d) { return d.x; })
-		.attr("cy", function(d) { return d.y; });
+		.attr("cx", function(d) {
+			return d.x;
+		})
+		.attr("cy", function(d) {
+			return d.y;
+		});
 	link
-		.attr("x1", function(d) { return d.source.x; })
-		.attr("y1", function(d) { return d.source.y; })
-		.attr("x2", function(d) { return d.target.x; })
-		.attr("y2", function(d) { return d.target.y; });
+		.attr("x1", function(d) {
+			return d.source.x;
+		})
+		.attr("y1", function(d) {
+			return d.source.y;
+		})
+		.attr("x2", function(d) {
+			return d.target.x;
+		})
+		.attr("y2", function(d) {
+			return d.target.y;
+		});
 	label
-		.attr("x", function(d){ return d.x + 5; })
-		.attr("y", function(d) {return d.y - 5; });
+		.attr("x", function(d) {
+			return d.x + 5;
+		})
+		.attr("y", function(d) {
+			return d.y - 5;
+		});
 }
 
 // used to generate random nodes
 var index = 1;
 
-window.onload = function () {
-	document.getElementById("add").addEventListener("click", function () {
+// when the window is ready, call the function below
+window.onload = function() {
+
+	// add a function when "add" button is clicked
+	document.getElementById("add").addEventListener("click", function() {
+		// get the text from the 'from' form
 		var from = document.getElementById("from").value;
+		// get the text from the to' form
 		var to = document.getElementById("to").value;
 		//console.log("click %o %o", from, to);
+
+		// add an edge between `from` and `to`
 		addEdge(from, to);
+
+		// redraw.
 		restart();
 	});
 
-	document.getElementById("random").addEventListener("click", function () {
+	// add a function when the `random` button is clicked
+	document.getElementById("random").addEventListener("click", function() {
+
+		// create a random name for a new node
+		// find an existing node to connect it
+		// connect the nodes
 		var from;
 		if (_.random(1) === 0) {
 			// create a new node
@@ -197,174 +285,3 @@ window.onload = function () {
 		restart();
 	});
 };
-
-//   var forceFunction = function(){
-//     var svg = d3.select("svg"),
-//     width = +svg.attr("width"),
-//     height = +svg.attr("height");
-//
-//     svg.selectAll("*").remove();
-//     //svg.clear();
-//
-//   var color = d3.scaleOrdinal(d3.schemeCategory20);
-//
-//   var simulation = d3.forceSimulation()
-//     .force("link", d3.forceLink().id(function(d) { return d.id; }))
-//     .force("charge", d3.forceManyBody())
-//     .force("center", d3.forceCenter(width / 2, height / 2));
-//
-//   var link = svg.append("g")
-//       .attr("class", "links")
-//     .selectAll("line")
-//     .data(graph.links)
-//     .enter().append("line")
-//       .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
-//
-//   var node = svg.append("g")
-//       .attr("class", "nodes")
-//     .selectAll("circle")
-//     .data(graph.nodes)
-//     .enter().append("circle")
-//       .attr("r", 5)
-//       .attr("fill", function(d) { return color(d.group); })
-//       .call(d3.drag()
-//           .on("start", dragstarted)
-//           .on("drag", dragged)
-//           .on("end", dragended));
-//
-//   node.append("title")
-//       .text(function(d) { return d.id; });
-//
-//   simulation
-//       .nodes(graph.nodes)
-//       .on("tick", ticked);
-//
-//   simulation.force("link")
-//       .links(graph.links);
-//
-//   function ticked() {
-//     link
-//         .attr("x1", function(d) { return d.source.x; })
-//         .attr("y1", function(d) { return d.source.y; })
-//         .attr("x2", function(d) { return d.target.x; })
-//         .attr("y2", function(d) { return d.target.y; });
-//
-//     node
-//         .attr("cx", function(d) { return d.x; })
-//         .attr("cy", function(d) { return d.y; });
-//   }
-//
-//   function dragstarted(d) {
-//   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-//   d.fx = d.x;
-//   d.fy = d.y;
-//   }
-//
-//   function dragged(d) {
-//   d.fx = d3.event.x;
-//   d.fy = d3.event.y;
-//   }
-//
-//   function dragended(d) {
-//   if (!d3.event.active) simulation.alphaTarget(0);
-//   d.fx = null;
-//   d.fy = null;
-//   }
-// }
-//
-// var forceFunctionOld = function() {
-//
-//   var svg = d3.select("svg"),
-//       width = +svg.attr("width"),
-//       height = +svg.attr("height");
-//
-//   var radius = 15;
-//   // var svg = d3.select("body").append("svg")
-//   //     .attr("width", width)
-//   //     .attr("height", height);
-//
-//   //create a new instance of the force layout
-//   var force = d3.layout.force()
-//       .gravity(0.1) //spring attached to the center
-//       .charge(-120) //nodes rel: neg make them repulse, pos attract
-//       .linkDistance(10)
-//       .size([width, height]);
-//
-//   //to optimise hover/click/touch areas
-//   var voronoi = d3.geom.voronoi()
-//       .x(function(d) { return d.x; })
-//       .y(function(d) { return d.y; })
-//       .clipExtent([[0, 0], [width, height]]);
-//
-//     force
-//         .nodes(myData.nodes)
-//         .links(myData.links)
-//         .start();
-//
-//     var link = svg.selectAll(".link")
-//         .data(myData.links)
-//       .enter().append("line")
-//         .attr("class", "link");
-//
-//     var node = svg.selectAll(".node")
-//         .data(myData.nodes)
-//       .enter().append("g")
-//         .attr("class", "node")
-//         .call(force.drag);
-//
-//     var circle = node.append("circle")
-//         .attr("r", 4.5);
-//
-//     var label = node.append("text")
-//         .attr("dy", ".35em")
-//         .text(function(d) { return d.name; });
-//
-//     var cell = node.append("path")
-//         .attr("class", "cell");
-//
-//     //access to the simulation at each loop
-//     force.on("tick", function() {
-//       cell
-//           .data(voronoi(myData.nodes))
-//           .attr("d", function(d) { return d.length ? "M" + d.join("L") : null; });
-//
-//       link
-//           .attr("x1", function(d) { return d.source.x; })
-//           .attr("y1", function(d) { return d.source.y; })
-//           .attr("x2", function(d) { return d.target.x; })
-//           .attr("y2", function(d) { return d.target.y; });
-//
-//       circle
-//           .attr("cx", function(d) { return d.x; })
-//           .attr("cy", function(d) { return d.y; });
-//
-//       label
-//           .attr("x", function(d) { return d.x + 8; })
-//           .attr("y", function(d) { return d.y; });
-//     });
-//
-// };
-//
-// //add a new node
-// var nodeSubmitElement = document.getElementById("node-submit");
-//
-// nodeSubmitElement.addEventListener(
-//   'click', function() {
-//     var friendInput = document.getElementById("friendInput");
-//     var nameInput = document.getElementById("nameInput");
-//     // console.log(friendInput.value);
-//     // console.log(nameInput.value);
-//     addPlayer(nameInput.value);
-//     addConnection(nameInput.value, friendInput.value);
-//
-//     //nodes_data.push({"name":"Myriel","group":1});
-//     //myData.push({"name":"Marie","group":1});
-//
-//     forceFunction();
-//
-//     //myData["links"].push({"source":1,"target":0,"value":3})
-//
-//     console.log(myData);
-//   }
-// );
-// forceFunction();
