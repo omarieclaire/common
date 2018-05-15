@@ -1,7 +1,7 @@
 /* global d3:false _:false */
 
 // this is the svg canvas to draw onto
-var svg = d3.select("svg");
+var svg = d3.select("svg")
 
 // attributes of the svg canvas as variables
 var width = +svg.attr("width");
@@ -19,15 +19,6 @@ var dragFunction = function() {
 
 // call dragging function when d3 detects a drag
 svg.call(d3.drag().on("drag", dragFunction));
-
-// zooming funtion given to d3
-// <svg transform="translate(10) + scale(2)">;
-var zoomFunction = function() {
-	svg.attr("transform", "translate(" + d3.event.transform.x + ")" + " scale(" + d3.event.transform.k + ")");
-};
-
-// call zooming function when d3 detects a zoom
-svg.call(d3.zoom().on("zoom", zoomFunction));
 
 // set of nodes/edges we have already seen (objects)
 var seenNodes = {};
@@ -124,7 +115,17 @@ var simulation = d3.forceSimulation(nodes)
 // create a <g> element and append it into <svg>
 var g = svg
 	.append("g")
+//setting the zoom level
 	.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+// zooming funtion given to d3
+// <svg transform="translate(10) + scale(2)">;
+var zoomFunction = function() {
+	g.attr("transform", "translate(" + d3.event.transform.x + ")" + " scale(" + d3.event.transform.k + ")");
+};
+
+// call zooming function when d3 detects a zoom
+svg.call(d3.zoom().on("zoom", zoomFunction));
 
 // create a <g> elements, append it to the previous g
 var link = g

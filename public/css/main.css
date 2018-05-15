@@ -222,6 +222,8 @@ nav a:hover {
 
    #d3viz {
      max-width: 100%;
+     border: solid black 1px;
+     background: aliceblue;
    }
 
    .button button {
