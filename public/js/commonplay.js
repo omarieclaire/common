@@ -18,6 +18,14 @@ var dragFunction = function() {
 // use dragging to pan around the graph
 svg.call(d3.drag().on("drag", dragFunction));
 
+var zoomFunction = function() {
+	svg.attr("transform", "translate(" + d3.event.transform.x + ")" + " scale(" + d3.event.transform.k + ")")
+};
+
+// use zooming on the svg
+svg.call(d3.zoom().on("zoom", zoomFunction))
+
+
 // set of nodes/edges we have already seen (objects)
 var seenNodes = {};
 var seenEdges = {};
@@ -88,7 +96,6 @@ var simulation = d3.forceSimulation(nodes)
 	.force("y", d3.forceY())
 	.alphaTarget(0)
 	.on("tick", ticked);
-
 
 var g = svg
 	.append("g")
