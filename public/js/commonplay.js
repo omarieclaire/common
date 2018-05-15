@@ -164,11 +164,18 @@ function restart() {
 	// exit and remove before redrawing?
 	node.exit().remove();
 	// redraw the nodes
+	//enter is a d3 method being called on node
+	//whatever this process returns: append is called on it
 	node = node.enter()
 		.append("circle")
+	//fill takes a color but instead of giving a color I give it
+	// an anon function that returns a color
 		.attr("fill", function(d) { return color(d.id) })
 		.attr("r", 8)
+		.on("click", function(d) { alert("Here I am"); console.log(d)})
+	//what does this mean?
 		.merge(node);
+
 	// do the same thing for the labels
 	label = label.data(nodes, function(d) { return d.id;});
 	label.exit().remove();
