@@ -81,11 +81,11 @@ function addEdge(from, to, strength) {
 		// add a node for 'to' in case it doesn't exist
 		var y = addNode(to);
 		// create a new edge
-		var o = {source: x, target: y};
+		var o = {source: x, target: y, strength: strength};
 		// add the edges to the array of edges
 		links.push(o);
 		// add the edge id to the seenEdges object
-		seenEdges[id] = strength;
+		seenEdges[id] = 1;
 		//console.log("created edge %o", o);
 	}
 }
@@ -95,18 +95,21 @@ function getNode(id){
 }
 
 // add a bunch of edges for the example
-addEdge("a", "b", 3);
+addEdge("i", "d", 3);
 addEdge("b", "c", 1);
 addEdge("d", "e", 3);
-addEdge("d", "f", 1);
+addEdge("i", "f", 1);
 addEdge("d", "g", 1);
-addEdge("e", "h", 2);
+addEdge("i", "h", 2);
 addEdge("h", "i", 1);
 addEdge("h", "b", 2);
 addEdge("i", "a", 1);
-addEdge("i", "b", 1);
+addEdge("e", "b", 1);
 addEdge("i", "c", 2);
 addEdge("i", "d", 1);
+
+//pretend we know who the user is, "i"
+var me = "i";
 
 // create a d3 simulation object?
 var simulation = d3.forceSimulation(nodes)
@@ -162,19 +165,36 @@ var nc = document.getElementById("nodecount");
 var ec = document.getElementById("edgecount");
 
 //nodeclick function
+//why isn't it redrawing!!!?
 function nodeClick(d) {
-	console.log(this);
+  var target = d.id;
+  //reference to the link between me and the targe
+
+  var ourLink = links.filter(function (link) {
+		return link.source.id == me && link.target.id == target ||
+      link.target.id == me && link.source.id == target;
+	})[0];
+
+  if (ourLink){
+    ourLink.strength = ourLink.strength + 1;
+    console.log(d, ourLink);
+  } else {
+    console.log(d, "No Link!");
+  }
+  //good time to send update to firebase
+	draw();
 }
 
-//getting the strength of an edge by its id 
+//getting the strength of an edge by its id
 function connectionStrength(d) {
-  return seenEdges[edgeId(d.source.id, d.target.id)];
+  console.log(d)
+  return d.strength;
 }
 
-// restart refreshes the graph?
+// draw refreshes the graph?
 draw();
 
-// function to refresh d3 (for any changes to the graph)
+// function to refresh d3 (for any changes to the graph)?
 function draw() {
 	// Apply the update to the nodes.
 	// get nodes array, extract ids, and draw them
@@ -212,9 +232,9 @@ function draw() {
 	link.exit().remove();
 	//before .merge is where I can add the viz representation of the stroke/connection
 	link = link.enter()
-    .append("line")
-    .attr("stroke-width", connectionStrength)
-    .merge(link);
+		.append("line")
+		.attr("stroke-width", connectionStrength)
+		.merge(link);
 
 	// Update and restart the simulation.
 	simulation.nodes(nodes);
@@ -257,7 +277,7 @@ window.onload = function() {
 		//console.log("click %o %o", from, to);
 
 		// add an edge between `from` and `to`
-		addEdge(from, to);
+		addEdge(from, to, DEFAULT_STRENGTH);
 
 		// redraw.
 		draw();
