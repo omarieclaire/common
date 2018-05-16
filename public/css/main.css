@@ -210,25 +210,38 @@ nav a:hover {
       ========================================================================== */
 
 
-    .links line {
-     color: #999;
-     opacity: 0.6;
-   }
 
-   .nodes circle {
-     /* color: #fff; */
-     width: 1.5px;
-   }
 
-   #d3viz {
-     max-width: 100%;
-     border: solid black 1px;
-     background: aliceblue;
-   }
 
-   .button button {
-     padding: 15px 15px 15px 15px;
-   }
+  /* body {
+  position: relative;
+  width: 960px;
+  } */
+
+  #d3viz {
+    max-width: 100%;
+    border: solid black 1px;
+    background: aliceblue;
+    font: 10px sans-serif;
+  }
+
+  .buttons {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+  }
+
+  .links line {
+   color: #999;
+   opacity: 0.6;
+ }
+
+ .nodes circle {
+   /* color: #fff; */
+   width: 1.5px;
+ }
+
+
 
 
 

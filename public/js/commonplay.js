@@ -31,7 +31,7 @@ var seenEdges = {};
 var nodes = [];
 var links = [];
 
-// given two node IDs, produce an edge ID.
+// given two node IDs, produce a consistent edge ID.
 function edgeId(from, to) {
 	if (from < to) {
 		return from + "-" + to;
@@ -135,6 +135,7 @@ var g = svg
 var zoomFunction = function() {
 	g.attr("transform", "translate(" + d3.event.transform.x + ")" + " scale(" + d3.event.transform.k + ")");
 };
+
 
 // call zooming function when d3 detects a zoom
 svg.call(d3.zoom().on("zoom", zoomFunction));
@@ -265,11 +266,12 @@ function draw() {
 }
 
 // function called on every "tick" of d3 like a clock or gameloop
-function ticked() {
+function ticked(e) {
 	node
+	//cx is the relative position of the node
 		.attr("cx", function(d) { return d.x; })
 		.attr("cy", function(d) { return d.y; })
-		.attr("fill", function(d) { return d.color;});
+		.attr("fill", function(d) { return d.color;})
 	link
 		.attr("x1", function(d) { return d.source.x; })
 		.attr("y1", function(d) { return d.source.y; })
