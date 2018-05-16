@@ -4,12 +4,12 @@
 var DEFAULT_STRENGTH = 1;
 
 // this is the svg canvas to draw onto
-var svg = d3.select("svg")
+var svg = d3.select("svg");
 
 // attributes of the svg canvas as variables
 var width = +svg.attr("width");
 var height = +svg.attr("height");
-var color = d3.scaleOrdinal(d3.schemeCategory10);
+var colorPicker = d3.scaleOrdinal(d3.schemeCategory10);
 
 // dragging function given to d3
 var dragFunction = function() {
@@ -50,7 +50,8 @@ function addNode(id) {
 	} else {
 		// create a new node object
 		var o = {
-			"id": id
+			"id": id,
+			color: colorPicker(id)
 		};
 		// add the new node to the array of nodes
 		nodes.push(o);
@@ -167,27 +168,44 @@ var ec = document.getElementById("edgecount");
 //nodeclick function
 //why isn't it redrawing!!!?
 function nodeClick(d) {
-  var target = d.id;
-  //reference to the link between me and the targe
-
-  var ourLink = links.filter(function (link) {
+	var target = d.id;
+	//reference to the link between me and the targe
+	var ourLink = links.filter(function (link) {
 		return link.source.id == me && link.target.id == target ||
       link.target.id == me && link.source.id == target;
 	})[0];
 
-  if (ourLink){
-    ourLink.strength = ourLink.strength + 1;
-    console.log(d, ourLink);
-  } else {
-    console.log(d, "No Link!");
-  }
-  //good time to send update to firebase
+	if (ourLink){
+		ourLink.strength = ourLink.strength + .5  ;
+	} else {
+		console.log(d, "No Link!");
+	}
+
+	// get the node we clicked on.
+	// filter returns true when the id matches target.
+	var clickedNodeFilter = function (n) {
+		return n.id == target;
+	};
+	// clickedNodes is an array with each node having id 'target'
+	// (hopefully only one)
+	var clickedNodes = nodes.filter(clickedNodeFilter);
+	// take the first element of clickedNodes
+	var clickedNode = clickedNodes[0];
+
+	if(clickedNode) {
+		// if the node was clicked, set its color to black
+		clickedNode.color = "#00000";
+	} else {
+		console.log(d, "no node!");
+	}
+
+	//good time to send update to firebase
 	draw();
 }
 
 //getting the strength of an edge by its id
 function connectionStrength(d) {
-  return d.strength;
+	return d.strength;
 }
 
 // draw refreshes the graph?
@@ -207,7 +225,7 @@ function draw() {
 		.append("circle")
 	//fill takes a color but instead of giving a color I give it
 	// an anon function that returns a color
-		.attr("fill", function(d) { return color(d.id) })
+		.attr("fill", function(d) { return d.color; })
 		.attr("r", 8)
 	//we added the onclick to the circle, but maybe we should have added it to the node
 		.on("click", nodeClick)
@@ -250,7 +268,8 @@ function draw() {
 function ticked() {
 	node
 		.attr("cx", function(d) { return d.x; })
-		.attr("cy", function(d) { return d.y; });
+		.attr("cy", function(d) { return d.y; })
+		.attr("fill", function(d) { return d.color;});
 	link
 		.attr("x1", function(d) { return d.source.x; })
 		.attr("y1", function(d) { return d.source.y; })
