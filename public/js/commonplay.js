@@ -31,6 +31,111 @@ var seenEdges = {};
 var nodes = [];
 var links = [];
 
+
+// return [
+//   {network: 1, people: ["a", "b", ...], score: 99},
+//   {network: 2, people: ["z", "y", ...], score: 23},
+//   ...
+// ]
+function calculateNetworkScoresByNode(edges, nodes) {
+
+  // first, build a dictionary which associates each node ID with the
+  // IDs it is directly connected to. sometimes this would be called
+  // an "adjacency matrix".
+  var dict = {};
+  _.each(edges, function (edge) {
+
+    const targets = dict[edge.source.id] || [];
+    targets.push({dest: edge.target.id, strength: edge.strength});
+    dict[edge.source.id] = targets;
+
+    const sources = dict[edge.target.id] || [];
+    sources.push({dest: edge.source.id, strength: edge.strength});
+    dict[edge.target.id] = sources;
+  });
+
+  var networks = [];
+  var seen = {}
+
+  // in-progress
+  var currentNetworkId = 1;
+
+  //var networkQueue = nodes.slice(0, nodes.length);
+  var networkQueue = _.sortBy(nodes, function (node) { return node.id });
+  while (networkQueue.length > 0) {
+    var node = networkQueue.pop();
+    if (!seen[node.id]) {
+      var currentPeople = [];
+      var currentScore = 0;
+
+      var queue = [{dest: node.id}];
+      while (queue.length > 0) {
+        var obj = queue.pop();
+        var id = obj.dest;
+        if (!seen[id]) {
+          currentPeople.push(id);
+          var neighbors = dict[id] || [];
+          _.each(neighbors, function (neighbor) {
+            currentScore += neighbor.strength;
+          });
+          queue = queue.concat(neighbors);
+          seen[id] = 1;
+        }
+      }
+
+      networks.push({network: currentNetworkId, people: currentPeople, score: currentScore});
+      currentNetworkId += 1;
+    }
+  }
+  return networks;
+}
+
+// edges: [a -> b, a -> c, b -> d, c -> d]
+//
+// dict: { a -> [b, c], b -> [d], c -> [d] }
+
+// each edge has:
+// - {source: nodeId, target: nodeId, strength: number}
+function calculateCommonScore(edges, id) {
+
+  // first, build a dictionary which associates each node ID with the
+  // IDs it is directly connected to. sometimes this would be called
+  // an "adjacency matrix".
+  var dict = {};
+  _.each(edges, function (edge) {
+
+    const targets = dict[edge.source.id] || [];
+    targets.push({dest: edge.target.id, strength: edge.strength});
+    dict[edge.source.id] = targets;
+
+    const sources = dict[edge.target.id] || [];
+    sources.push({dest: edge.source.id, strength: edge.strength});
+    dict[edge.target.id] = sources;
+  });
+
+  var score = 0;
+  var seen = {}; // nodes we've already counted
+  var queue = [{dest: id}]; // nodes we need to count
+  while (queue.length > 0) {
+    var obj = queue.pop();
+    var id = obj.dest;
+    if (!seen[id]) {
+      var neighbors = dict[id] || [];
+      _.each(neighbors, function (neighbor) {
+        score += neighbor.strength;
+      });
+      queue = queue.concat(neighbors);
+      seen[id] = 1;
+    }
+  }
+
+  //console.log("score = %o", score);
+  document.getElementById("iscore").textContent = score.toString();
+
+  var networkScores = calculateNetworkScoresByNode(edges, nodes);
+  console.log("network scores = %o", networkScores);
+};
+
 // given two node IDs, produce a consistent edge ID.
 function edgeId(from, to) {
 	if (from < to) {
@@ -87,8 +192,12 @@ function addEdge(from, to, strength) {
 		links.push(o);
 		// add the edge id to the seenEdges object
 		seenEdges[id] = 1;
-		//console.log("created edge %o", o);
+        calculateCommonScore(links, "i");
 	}
+}
+
+function destroyEdge(edge) {
+  _
 }
 
 function getNode(id){
@@ -120,7 +229,7 @@ var simulation = d3.forceSimulation(nodes)
 	.force("collide", d3.forceCollide(40))
 	.force("x", d3.forceX())
 	.force("y", d3.forceY())
-	.alphaTarget(0)
+	.alphaTarget(0.0)
 	.on("tick", ticked);
 
 // create a <g> element and append it into <svg>
@@ -178,6 +287,7 @@ function nodeClick(d) {
 
 	if (ourLink){
 		ourLink.strength = ourLink.strength + .5  ;
+      calculateCommonScore(links, "i");
 	} else {
 		console.log(d, "No Link!");
 	}
@@ -322,4 +432,19 @@ window.onload = function() {
 		addEdge(from, to, DEFAULT_STRENGTH);
 		draw();
 	});
+
+  document.getElementById("destroy").addEventListener("click", function () {
+    var destroyPower = 0.5;
+
+    var index = _.random(0, links.length - 1);
+    var edge = links[index];
+    if (edge.strength <= destroyPower) {
+      console.log("destroying %o", edge);
+      links.splice(index, 1);
+      destroyEdge(edge);
+    } else {
+      console.log("weakening %o", edge);
+      edge.strength -= destroyPower;
+    }
+  });
 };
