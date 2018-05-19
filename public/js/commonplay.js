@@ -5,6 +5,12 @@ var DEFAULT_STRENGTH = 1;
 
 var MAX_EDGE_STRENGTH = 3;
 
+var INITIAL_NODE_SCORE = 8;
+
+var GIVER_POWER = 0.5;
+
+var DESTROYER_POWER = 0.5;
+
 // this is the svg canvas to draw onto
 var svg = d3.select("svg");
 
@@ -167,7 +173,8 @@ function addNode(id) {
 		// create a new node object
 		var o = {
 			"id": id,
-			color: colorPicker(id)
+			color: colorPicker(id),
+			score: INITIAL_NODE_SCORE
 		};
 		// add the new node to the array of nodes
 		nodes.push(o);
@@ -398,6 +405,7 @@ function ticked(e) {
 	//cx is the relative position of the node
 		.attr("cx", function(d) { return d.x; })
 		.attr("cy", function(d) { return d.y; })
+		.attr("r", function(d) { return d.score; })
 		.attr("fill", function(d) { return d.color;})
 
 	link
@@ -452,20 +460,37 @@ window.onload = function() {
 	});
 
   document.getElementById("destroy").addEventListener("click", function () {
-    var destroyPower = 0.5;
-
     var index = _.random(0, links.length - 1);
     var edge = links[index];
-    if (edge.strength <= destroyPower) {
-      console.log("destroying %o", edge);
-      links.splice(index, 1);
-      destroyEdge(edge);
-    } else {
-      console.log("weakening %o", edge);
-      edge.strength -= destroyPower;
-    }
+		if(edge) {
+	    if (edge && edge.strength <= DESTROYER_POWER) {
+	      console.log("destroying %o", edge);
+	      links.splice(index, 1);
+				delete seenEdges[edge.id];
+	      destroyEdge(edge);
+	    } else {
+	      console.log("weakening %o", edge);
+	      edge.strength -= DESTROYER_POWER;
+	    }
+		}
+
+		var randomNodeIndex = _.random(0, nodes.length -1);
+		var node = nodes[randomNodeIndex];
+		node.score = node.score - DESTROYER_POWER;
+		if(node.score <= 0) {
+			console.log("deleting node: " + node);
+			delete seenNodes[node.id];
+			nodes.splice(randomNodeIndex,1);
+		}
+
 		calculateNetworkScoresByNode(links, nodes);
   });
+
+	document.getElementById("giver").addEventListener("click", function() {
+		_.each(nodes, function(node) {
+			node.score = node.score + GIVER_POWER;
+		});
+	});
 
 	// Get the "reset-button" add a function to be executed on click
 	document.getElementById("reset-button").addEventListener("click", function () {
