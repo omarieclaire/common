@@ -237,7 +237,7 @@ var zoomFunction = function() {
 
 // call zooming function when d3 detects a zoom
 //svg.call(d3.zoom().on("zoom", zoomFunction));
-var zoomCall = d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", zoomFunction);
+var zoomCall = d3.zoom().scaleExtent([1 / 4, 4]).on("zoom", zoomFunction);
 
 svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight / 2) );
 svg.call(zoomCall);
