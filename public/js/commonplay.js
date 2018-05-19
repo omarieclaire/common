@@ -31,6 +31,12 @@ var seenEdges = {};
 var nodes = [];
 var links = [];
 
+function renderMyScore() {
+	var myNode = seenNodes[me];
+	var html = document.getElementById("node-score-me");
+	html.textContent = myNode.score;
+}
+
 function renderNetworkScores(networkScores) {
 	var scoreHtml = document.getElementById("network-score");
 	// clear the html elements
@@ -386,6 +392,9 @@ function connectionStrength(d) {
 // draw refreshes the graph?
 draw();
 
+// render the score for the first time
+renderMyScore();
+
 // function to refresh d3 (for any changes to the graph)?
 function draw() {
 	// Apply the update to the nodes.
@@ -526,12 +535,14 @@ window.onload = function() {
 		}
 
 		calculateNetworkScoresByNode(links, nodes);
+		renderMyScore();
   });
 
 	document.getElementById("giver").addEventListener("click", function() {
 		_.each(nodes, function(node) {
 			node.score = node.score + GIVER_POWER;
 		});
+		renderMyScore();
 	});
 
 	// Get the "reset-button" add a function to be executed on click
