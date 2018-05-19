@@ -7,21 +7,9 @@ var DEFAULT_STRENGTH = 1;
 var svg = d3.select("svg");
 
 // attributes of the svg canvas as variables
-var width = +svg.attr("width");
-var height = +svg.attr("height");
+var svgWidth = +svg.attr("width");
+var svgHeight = +svg.attr("height");
 var colorPicker = d3.scaleOrdinal(d3.schemeCategory10);
-
-// dragging function given to d3
-var dragFunction = function() {
-	var vb = d3.select(this).attr("viewBox");
-	var tokens = vb.split(" ");
-	var x = parseInt(tokens[0]) - d3.event.dx;
-	var y = parseInt(tokens[1]) - d3.event.dy;
-	svg.attr("viewBox", x + " " + y + " " + tokens[2] + " " + tokens[3]);
-};
-
-// call dragging function when d3 detects a drag
-svg.call(d3.drag().on("drag", dragFunction));
 
 // set of nodes/edges we have already seen (objects)
 var seenNodes = {};
@@ -30,7 +18,6 @@ var seenEdges = {};
 // list of node/edge data used by the force-directed graph
 var nodes = [];
 var links = [];
-
 
 // return [
 //   {network: 1, people: ["a", "b", ...], score: 99},
@@ -237,17 +224,21 @@ var simulation = d3.forceSimulation(nodes)
 var g = svg
 	.append("g")
 //setting the zoom level
-	.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+	.attr("transform", "translate(" + svgWidth / 2 + "," + svgHeight / 2 + ")");
 
 // zooming funtion given to d3
 // <svg transform="translate(10) + scale(2)">;
 var zoomFunction = function() {
-	g.attr("transform", "translate(" + d3.event.transform.x + ")" + " scale(" + d3.event.transform.k + ")");
+	var transWidth = d3.event.transform.x + (svgWidth/2);
+	var transHeight = d3.event.transform.y + (svgHeight/2);
+	g.attr("transform", "translate(" + transWidth + ", " + transHeight + ")" + " scale(" + d3.event.transform.k + ")");
 };
 
 
 // call zooming function when d3 detects a zoom
-svg.call(d3.zoom().on("zoom", zoomFunction));
+//svg.call(d3.zoom().on("zoom", zoomFunction));
+svg.call(d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", zoomFunction));
+
 
 // create a <g> elements, append it to the previous g
 var link = g
