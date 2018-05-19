@@ -121,6 +121,8 @@ function calculateCommonScore(edges, id) {
 
   var networkScores = calculateNetworkScoresByNode(edges, nodes);
   console.log("network scores = %o", networkScores);
+
+	return score;
 };
 
 // given two node IDs, produce a consistent edge ID.
@@ -179,7 +181,7 @@ function addEdge(from, to, strength) {
 		links.push(o);
 		// add the edge id to the seenEdges object
 		seenEdges[id] = 1;
-        calculateCommonScore(links, "i");
+    calculateCommonScore(links, "i");
 	}
 }
 
@@ -222,24 +224,23 @@ var simulation = d3.forceSimulation(nodes)
 // create a <g> element and append it into <svg>
 //create the graph itself
 var g = svg
-	.append("g")
-//setting the zoom level
-	.attr("transform", "translate(" + svgWidth / 2 + "," + svgHeight / 2 + ")");
+	.append("g");
 
 // zooming funtion given to d3
 // <svg transform="translate(10) + scale(2)">;
 var zoomFunction = function() {
-	var transWidth = d3.event.transform.x + (svgWidth/2);
-	var transHeight = d3.event.transform.y + (svgHeight/2);
-	g.attr("transform", "translate(" + transWidth + ", " + transHeight + ")" + " scale(" + d3.event.transform.k + ")");
+	var transWidth =  d3.event.transform.x; // + (svgWidth/2);
+	var transHeight = d3.event.transform.y; // + (svgHeight/2);
+	g.attr("transform", d3.event.transform);
 };
 
 
 // call zooming function when d3 detects a zoom
 //svg.call(d3.zoom().on("zoom", zoomFunction));
 var zoomCall = d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", zoomFunction);
-svg.call(zoomCall);
 
+svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight / 2) );
+svg.call(zoomCall);
 
 // create a <g> elements, append it to the previous g
 var link = g
@@ -374,6 +375,8 @@ function ticked(e) {
 		.attr("cx", function(d) { return d.x; })
 		.attr("cy", function(d) { return d.y; })
 		.attr("fill", function(d) { return d.color;})
+		//.attr("r", function(d) { return calculateCommonScore(links, d.id) / 2; })
+
 	link
 		.attr("x1", function(d) { return d.source.x; })
 		.attr("y1", function(d) { return d.source.y; })

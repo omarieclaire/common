@@ -64,8 +64,8 @@
         </section>
 
         <h1>d3 graph</h1>
-          <div class="buttons">
-            <button data-zoom="+1" id="zoom-in">Zoom In</button>
+          <div class="xx">
+            <button data-zoom="+1" id="zoom-inx">Zoom In</button>
             <button data-zoom="-1" id="zoom-out">Zoom Out</button>
             <button id="reset-button">Reset</button>
           </div>
@@ -75,7 +75,10 @@
           <input id="random" type="button" value="random"><br>
           <input id="destroy" type="button" value="destroy"><br>
           score for i: <span id="iscore">0</span><br>
-          <svg id="d3viz" width="500" height="300"></svg>
+          <svg id="d3viz" width="500" height="300">
+            <circle fill="#7f7f7f" r="12" cx="450" cy="20" id="zoom-in"></circle>
+<text x="450" y="20" text-anchor="middle" style="fill: rgb(0, 0, 0); stroke: rgb(0, 0, 0);">+</text>
+          </svg>
           <script src="https://d3js.org/d3.v4.min.js"></script>
 
         <p>2---- TEST SECTION ------</p>
