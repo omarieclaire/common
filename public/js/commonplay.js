@@ -3,6 +3,8 @@
 //default strength for all connections
 var DEFAULT_STRENGTH = 1;
 
+var MAX_EDGE_STRENGTH = 3;
+
 // this is the svg canvas to draw onto
 var svg = d3.select("svg");
 
@@ -18,6 +20,25 @@ var seenEdges = {};
 // list of node/edge data used by the force-directed graph
 var nodes = [];
 var links = [];
+
+function renderNetworkScores(networkScores) {
+	var scoreHtml = document.getElementById("network-score");
+	// clear the html elements
+	while(scoreHtml.firstChild){
+    scoreHtml.removeChild(scoreHtml.firstChild);
+	}
+	_.each(networkScores, function(networkScore) {
+		var liHtml = document.createElement("LI");
+		liHtml.textContent =
+			"network: " +
+			networkScore.network +
+			" score: " +
+			networkScore.score +
+			" people: " +
+			networkScore.people.toString();
+		scoreHtml.appendChild(liHtml);
+	});
+}
 
 // return [
 //   {network: 1, people: ["a", "b", ...], score: 99},
@@ -74,6 +95,7 @@ function calculateNetworkScoresByNode(edges, nodes) {
       currentNetworkId += 1;
     }
   }
+	renderNetworkScores(networks);
   return networks;
 }
 
@@ -279,8 +301,10 @@ function nodeClick(d) {
 	})[0];
 
 	if (ourLink){
-		ourLink.strength = ourLink.strength + .5  ;
-      calculateCommonScore(links, "i");
+		if(ourLink.strength < MAX_EDGE_STRENGTH) {
+		  ourLink.strength = ourLink.strength + 0.5;
+	  }
+    calculateCommonScore(links, "i");
 	} else {
 		console.log(d, "No Link!");
 	}
@@ -375,7 +399,6 @@ function ticked(e) {
 		.attr("cx", function(d) { return d.x; })
 		.attr("cy", function(d) { return d.y; })
 		.attr("fill", function(d) { return d.color;})
-		//.attr("r", function(d) { return calculateCommonScore(links, d.id) / 2; })
 
 	link
 		.attr("x1", function(d) { return d.source.x; })
@@ -441,6 +464,7 @@ window.onload = function() {
       console.log("weakening %o", edge);
       edge.strength -= destroyPower;
     }
+		calculateNetworkScoresByNode(links, nodes);
   });
 
 	// Get the "reset-button" add a function to be executed on click
