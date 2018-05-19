@@ -11,6 +11,10 @@ var GIVER_POWER = 0.5;
 
 var DESTROYER_POWER = 0.5;
 
+var CLICK_NODE_DESTROYER_POWER = 0.5;
+
+var CLICK_EDGE_INCREMENTER = 0.5;
+
 // this is the svg canvas to draw onto
 var svg = d3.select("svg");
 
@@ -297,6 +301,32 @@ var nc = document.getElementById("nodecount");
 // get the edgecount HTML node
 var ec = document.getElementById("edgecount");
 
+// Deletes edges
+function deleteEdge(edge) {
+	delete seenEdges[edge.id];
+	var index = links.indexOf(edge);
+	console.log("DELETE EDGE: " + edge + " at index " + index);
+	links.splice(index,1);
+}
+
+// Deletes nodes
+function deleteNode(node) {
+	// first delete all the edges that refer to this node
+	_.each(links, function(link) {
+		if(link) {
+			if(link.source.id == node.id || link.target.id == node.id) {
+				deleteEdge(link);
+			}
+		}
+	});
+
+	// now delete the node
+	delete seenNodes[node.id];
+	var index = nodes.indexOf(node);
+	console.log("DELETE NODE: " + node + " at index " + index);
+	nodes.splice(index,1);
+}
+
 //nodeclick function
 //why isn't it redrawing!!!?
 function nodeClick(d) {
@@ -307,11 +337,21 @@ function nodeClick(d) {
       link.target.id == me && link.source.id == target;
 	})[0];
 
+	// if clicking on a link attached to our nodes
+	// decrement our score
 	if (ourLink){
 		if(ourLink.strength < MAX_EDGE_STRENGTH) {
-		  ourLink.strength = ourLink.strength + 0.5;
+		  ourLink.strength = ourLink.strength + CLICK_EDGE_INCREMENTER;
+
+			// get our node from the seenNodes object (efficient)
+			var ourNode = seenNodes[me];
+			// decrement our score
+			ourNode.score = ourNode.score - CLICK_NODE_DESTROYER_POWER;
+			if(ourNode.score <= 0) {
+				deleteNode(ourNode);
+			}
 	  }
-    calculateCommonScore(links, "i");
+    calculateCommonScore(links, me);
 	} else {
 		console.log(d, "No Link!");
 	}
@@ -466,6 +506,8 @@ window.onload = function() {
 	    if (edge && edge.strength <= DESTROYER_POWER) {
 	      console.log("destroying %o", edge);
 	      links.splice(index, 1);
+
+				// how does this work? Should we use our deleteEdge function?
 				delete seenEdges[edge.id];
 	      destroyEdge(edge);
 	    } else {
