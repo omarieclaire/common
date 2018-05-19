@@ -33,8 +33,12 @@ var links = [];
 
 function renderMyScore() {
 	var myNode = seenNodes[me];
-	var html = document.getElementById("node-score-me");
-	html.textContent = myNode.score;
+	if(myNode) {
+		var html = document.getElementById("node-score-me");
+		html.textContent = myNode.score;
+	} else {
+		console.log("can't find ME :(");
+	}
 }
 
 function renderNetworkScores(networkScores) {
@@ -50,10 +54,17 @@ function renderNetworkScores(networkScores) {
 			networkScore.network +
 			" score: " +
 			networkScore.score +
+			" health: " +
+			networkScore.health.toFixed(2) +
 			" people: " +
 			networkScore.people.toString();
 		scoreHtml.appendChild(liHtml);
 	});
+}
+
+function calculateNetworkHealth(numEdges, sumEdgesStrength, numPeople) {
+	var averageEdgePerPerson = sumEdgesStrength / numPeople;
+	return averageEdgePerPerson;
 }
 
 // return [
@@ -91,6 +102,7 @@ function calculateNetworkScoresByNode(edges, nodes) {
     if (!seen[node.id]) {
       var currentPeople = [];
       var currentScore = 0;
+			var currentNumEdges = 0;
 
       var queue = [{dest: node.id}];
       while (queue.length > 0) {
@@ -101,13 +113,22 @@ function calculateNetworkScoresByNode(edges, nodes) {
           var neighbors = dict[id] || [];
           _.each(neighbors, function (neighbor) {
             currentScore += neighbor.strength;
+						currentNumEdges++;
           });
           queue = queue.concat(neighbors);
           seen[id] = 1;
         }
       }
 
-      networks.push({network: currentNetworkId, people: currentPeople, score: currentScore});
+			var health = calculateNetworkHealth(currentNumEdges, currentScore, currentPeople.length);
+
+      networks.push({
+				network: currentNetworkId,
+				people: currentPeople,
+				score: currentScore,
+				numEdges: currentNumEdges,
+				health: health
+			});
       currentNetworkId += 1;
     }
   }
@@ -215,7 +236,7 @@ function addEdge(from, to, strength) {
 		// add a node for 'to' in case it doesn't exist
 		var y = addNode(to);
 		// create a new edge
-		var o = {source: x, target: y, strength: strength};
+		var o = {id: id, source: x, target: y, strength: strength};
 		// add the edges to the array of edges
 		links.push(o);
 		// add the edge id to the seenEdges object
@@ -309,9 +330,9 @@ var ec = document.getElementById("edgecount");
 
 // Deletes edges
 function deleteEdge(edge) {
-	delete seenEdges[edge.id];
 	var index = links.indexOf(edge);
 	console.log("DELETE EDGE: " + edge + " at index " + index);
+	delete seenEdges[edge.id];
 	links.splice(index,1);
 }
 
@@ -512,12 +533,10 @@ window.onload = function() {
     var index = _.random(0, links.length - 1);
     var edge = links[index];
 		if(edge) {
-	    if (edge && edge.strength <= DESTROYER_POWER) {
+	    if (edge.strength <= DESTROYER_POWER) {
 	      console.log("destroying %o", edge);
-	      links.splice(index, 1);
-
 				// how does this work? Should we use our deleteEdge function?
-				delete seenEdges[edge.id];
+				deleteEdge(edge);
 	      destroyEdge(edge);
 	    } else {
 	      console.log("weakening %o", edge);
@@ -530,8 +549,7 @@ window.onload = function() {
 		node.score = node.score - DESTROYER_POWER;
 		if(node.score <= 0) {
 			console.log("deleting node: " + node);
-			delete seenNodes[node.id];
-			nodes.splice(randomNodeIndex,1);
+			deleteNode(node);
 		}
 
 		calculateNetworkScoresByNode(links, nodes);
@@ -539,8 +557,16 @@ window.onload = function() {
   });
 
 	document.getElementById("giver").addEventListener("click", function() {
+		var networkScores = calculateNetworkScoresByNode(links,nodes);
 		_.each(nodes, function(node) {
-			node.score = node.score + GIVER_POWER;
+			var network = networkScores.filter(function(network) {
+				return network.people.indexOf(node.id) != -1;
+			})[0]
+			if(network) {
+				node.score = node.score + GIVER_POWER * network.health;
+			} else {
+				console.log("YIKES! Could not find a network for node " + node.id);
+			}
 		});
 		renderMyScore();
 	});
