@@ -237,7 +237,8 @@ var zoomFunction = function() {
 
 // call zooming function when d3 detects a zoom
 //svg.call(d3.zoom().on("zoom", zoomFunction));
-svg.call(d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", zoomFunction));
+var zoomCall = d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", zoomFunction);
+svg.call(zoomCall);
 
 
 // create a <g> elements, append it to the previous g
@@ -438,4 +439,27 @@ window.onload = function() {
       edge.strength -= destroyPower;
     }
   });
+
+	// Get the "reset-button" add a function to be executed on click
+	document.getElementById("reset-button").addEventListener("click", function () {
+		// https://stackoverflow.com/questions/46342757/d3-v4-zoom-using-transitions-doesnt-seem-to-work
+		// svg is the d3 selection of our svg html element.
+		// creating a transition on the svg, for a duration of 500ms
+		//svg.call(zoomCall.scaleTo, 1) is equivalent to zoomCall.scaleTo(svg,1)
+		// create a transition element of duration 500ms with initial state
+		// the current svg, and final state the svg after calling zoomCall.scaleTo(1)
+		// and begin transition
+		svg.transition().duration(500).call(zoomCall.scaleTo, 1).transition();
+	});
+
+	document.getElementById("zoom-in").addEventListener("click", function() {
+		var currentScale = d3.zoomTransform(svg.node()).k;
+		svg.transition().duration(500).call(zoomCall.scaleTo, currentScale + 0.1).transition();
+	});
+
+	document.getElementById("zoom-out").addEventListener("click", function() {
+		var currentScale = d3.zoomTransform(svg.node()).k;
+		svg.transition().duration(500).call(zoomCall.scaleTo, currentScale - 0.1).transition();
+	});
+
 };

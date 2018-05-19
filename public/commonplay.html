@@ -64,12 +64,11 @@
         </section>
 
         <h1>d3 graph</h1>
-        <p>
-          <!-- <div class="buttons">
-            <button data-zoom="+1">Zoom In</button>
-            <button data-zoom="-1">Zoom Out</button>
-            <button>Reset</button>
-          </div> -->
+          <div class="buttons">
+            <button data-zoom="+1" id="zoom-in">Zoom In</button>
+            <button data-zoom="-1" id="zoom-out">Zoom Out</button>
+            <button id="reset-button">Reset</button>
+          </div>
 
           # people: <span id="nodecount">0</span><br> # connections: <span id="edgecount">0</span><br> edge from <input id="from" type="text"> to <input id="to" type="text">
           <input id="add" type="button" value="add">
@@ -78,7 +77,6 @@
           score for i: <span id="iscore">0</span><br>
           <svg id="d3viz" width="500" height="300"></svg>
           <script src="https://d3js.org/d3.v4.min.js"></script>
-        </p>
 
         <p>2---- TEST SECTION ------</p>
         <p>Get points by clicking, then send your info to the server [fuctional]</p>
