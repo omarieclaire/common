@@ -215,11 +215,20 @@ nav a:hover {
   width: 960px;
   } */
 
+  /* svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+  } */
+
   #d3viz {
     max-width: 100%;
     border: solid black 1px;
     background: aliceblue;
     font: 16px sans-serif;
+    /* position: absolute; */
+    /* z-index: -1; */
+
   }
 
   .control-button {
@@ -232,6 +241,8 @@ nav a:hover {
     margin-left: 0em;
     margin-right: .05em;
     /* background-color: #d1c2d2; */
+
+
   }
 
   .nav-buttons {
@@ -240,7 +251,7 @@ nav a:hover {
     top: 10px;
   }
 
-  .links line {
+  .edges line {
    color: #999;
    opacity: 0.6;
  }

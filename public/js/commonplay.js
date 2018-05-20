@@ -10,10 +10,13 @@ var INITIAL_NODE_SCORE = 8;
 var GIVER_POWER = 0.5;
 //the default amount of "life force" decayed by entropy/destroyer
 var DESTROYER_POWER = 0.5;
-//the "life force" a player trades to strengthen a connection
+//the "life force" a player trades to strengthen a edge
 var CLICK_NODE_DESTROYER_POWER = 2;
 //the edge-strength increase-when the node is clicked
 var CLICK_EDGE_INCREMENTER = 0.5;
+
+//pretend we know who the user is, "i"
+var ME = "i";
 
 // this is the svg canvas to draw onto
 var svg = d3.select("svg");
@@ -29,8 +32,9 @@ var seenEdges = {};
 
 // list of node/edge data used by the force-directed graph
 var nodes = [];
-var links = [];
+var edges = [];
 
+//create html id for each edge so we can change visuals
 function edgeIdAttr(edge) {
 	return "edge-" + edge.id;
 }
@@ -51,7 +55,7 @@ function getEdgesForNode(node, edges) {
 
 
 function renderMyScore() {
-	var myNode = seenNodes[me];
+	var myNode = seenNodes[ME];
 	if(myNode) {
 		var html = document.getElementById("node-score-me");
 		html.textContent = myNode.score;
@@ -254,10 +258,10 @@ function addEdge(from, to, strength) {
 		// create a new edge
 		var o = {id: id, source: x, target: y, strength: strength};
 		// add the edges to the array of edges
-		links.push(o);
+		edges.push(o);
 		// add the edge id to the seenEdges object
 		seenEdges[id] = 1;
-    calculateCommonScore(links, "i");
+    calculateCommonScore(edges, "i");
 	}
 }
 
@@ -283,19 +287,18 @@ addEdge("e", "b", 1);
 addEdge("i", "c", 2);
 addEdge("i", "d", 1);
 
-//pretend we know who the user is, "i"
-var me = "i";
-
 // create a d3 simulation object?
 var simulation = d3.forceSimulation(nodes)
 	.force("charge", d3.forceManyBody().strength(-500))
-	.force("link", d3.forceLink(links).distance(200))
+	.force("link", d3.forceLink(edges).distance(200))
 	.force("center", d3.forceCenter())
 	.force("collide", d3.forceCollide(40))
 	.force("x", d3.forceX())
 	.force("y", d3.forceY())
 	.alphaTarget(0.0)
 	.on("tick", ticked);
+
+
 
 // create a <g> element and append it into <svg>
 //create the graph itself
@@ -319,11 +322,11 @@ svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight /
 svg.call(zoomCall);
 
 // create a <g> elements, append it to the previous g
-var link = g
+var edge = g
 	.append("g")
 	.attr("stroke", "#000")
 	.attr("stroke-width", 1.5)
-	.selectAll(".link");
+	.selectAll(".edge");
 
 // create a <g> element, append it to the first g
 var node = g
@@ -346,19 +349,19 @@ var ec = document.getElementById("edgecount");
 
 // Deletes edges
 function deleteEdge(edge) {
-	var index = links.indexOf(edge);
+	var index = edges.indexOf(edge);
 	console.log("DELETE EDGE: " + edge + " at index " + index);
 	delete seenEdges[edge.id];
-	links.splice(index,1);
+	edges.splice(index,1);
 }
 
 // Deletes nodes
 function deleteNode(node) {
 	// first delete all the edges that refer to this node
-	_.each(links, function(link) {
-		if(link) {
-			if(link.source.id == node.id || link.target.id == node.id) {
-				deleteEdge(link);
+	_.each(edges, function(edge) {
+		if(edge) {
+			if(edge.source.id == node.id || edge.target.id == node.id) {
+				deleteEdge(edge);
 			}
 		}
 	});
@@ -375,20 +378,20 @@ function deleteNode(node) {
 function nodeClick(d) {
 
 	var target = d.id;
-	//reference to the link between me and the target
-	var ourLink = links.filter(function (link) {
-		return link.source.id == me && link.target.id == target ||
-      link.target.id == me && link.source.id == target;
+	//reference to the edge between me and the target
+	var ouredge = edges.filter(function (edge) {
+		return edge.source.id == ME && edge.target.id == target ||
+      edge.target.id == ME && edge.source.id == target;
 	})[0];
 
-	// if clicking on a link attached to our nodes
+	// if clicking on a edge attached to our nodes
 	// decrement our score
-	if (ourLink){
-		if(ourLink.strength < MAX_EDGE_STRENGTH) {
-		  ourLink.strength = ourLink.strength + CLICK_EDGE_INCREMENTER;
+	if (ouredge){
+		if(ouredge.strength < MAX_EDGE_STRENGTH) {
+		  ouredge.strength = ouredge.strength + CLICK_EDGE_INCREMENTER;
 
 			// get our node from the seenNodes object (efficient)
-			var ourNode = seenNodes[me];
+			var ourNode = seenNodes[ME];
 			// decrement our score
 			ourNode.score = ourNode.score - CLICK_NODE_DESTROYER_POWER;
 			if(ourNode.score <= 0) {
@@ -396,8 +399,8 @@ function nodeClick(d) {
 			}
 
 			// begin edge animation
-			var htmlEdge = document.getElementById(edgeIdAttr(ourLink));
-			d3.select(htmlEdge).transition().duration(500).attr("stroke-dasharray", "5, 5").transition().duration(1500).attr("stroke-dasharray", null);
+			var htmlEdge = document.getElementById(edgeIdAttr(ouredge));
+			d3.select(htmlEdge).transition().duration(1000).attr("stroke-dasharray", "5, 5").transition().duration(1500).attr("stroke-dasharray", null);
 	  }
 
 		// begin node animation
@@ -405,15 +408,15 @@ function nodeClick(d) {
 		d3.select(htmlNode).transition().duration(10).style("fill","#000000").transition().duration(1500).style("fill", d.color);
 
 	} else {
-		console.log(d, "No Link!");
+		console.log(d, "No edge!");
 	}
 
-	calculateCommonScore(links, me);
+	calculateCommonScore(edges, ME);
 	draw();
 }
 
 //getting the strength of an edge by its id
-function connectionStrength(d) {
+function edgeStrength(d) {
 	return d.strength;
 }
 
@@ -458,19 +461,19 @@ function draw() {
 		.style("stroke", "#000000")
 		.merge(label);
 
-	// do the same thing for the links
-	link = link.data(links, function(d) {	return d.source.id + "-" + d.target.id;	});
-	link.exit().remove();
-	//before .merge is where I can add the viz representation of the stroke/connection
-	link = link.enter()
+	// do the same thing for the edges
+	edge = edge.data(edges, function(d) {	return d.source.id + "-" + d.target.id;	});
+	edge.exit().remove();
+	//before .merge is where I can add the viz representation of the stroke/edge
+	edge = edge.enter()
 		.append("line")
-		.attr("stroke-width", connectionStrength)
+		.attr("stroke-width", edgeStrength)
 		.attr("id", edgeIdAttr)
-		.merge(link);
+		.merge(edge);
 
 	// Update and restart the simulation.
 	simulation.nodes(nodes);
-	simulation.force("link").links(links);
+	simulation.force("link").links(edges);
 	simulation.alpha(1).restart();
 
 	// update the node and edge counts
@@ -488,12 +491,12 @@ function ticked(e) {
 		.attr("r", function(d) { return d.score; })
 		.attr("fill", function(d) { return d.color;})
 
-	link
+	edge
 		.attr("x1", function(d) { return d.source.x; })
 		.attr("y1", function(d) { return d.source.y; })
 		.attr("x2", function(d) { return d.target.x; })
 		.attr("y2", function(d) { return d.target.y; })
-		.attr("stroke-width", connectionStrength);
+		.attr("stroke-width", edgeStrength);
 	label
 		.attr("x", function(d) { return d.x + 5; })
 		.attr("y", function(d) { return d.y - 5; });
@@ -540,8 +543,8 @@ window.onload = function() {
 	});
 
   document.getElementById("destroy").addEventListener("click", function () {
-    var index = _.random(0, links.length - 1);
-    var edge = links[index];
+    var index = _.random(0, edges.length - 1);
+    var edge = edges[index];
 		if(edge) {
 	    if (edge.strength <= DESTROYER_POWER) {
 	      console.log("destroying %o", edge);
@@ -562,13 +565,13 @@ window.onload = function() {
 			deleteNode(node);
 		}
 
-		calculateNetworkScoresByNode(links, nodes);
+		calculateNetworkScoresByNode(edges, nodes);
 		renderMyScore();
 		draw();
   });
 
 	document.getElementById("giver").addEventListener("click", function() {
-		var networkScores = calculateNetworkScoresByNode(links,nodes);
+		var networkScores = calculateNetworkScoresByNode(edges,nodes);
 		_.each(nodes, function(node) {
 			var network = networkScores.filter(function(network) {
 				return network.people.indexOf(node.id) != -1;
