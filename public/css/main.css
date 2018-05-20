@@ -4,7 +4,7 @@ html {
     color: black;
     background-color: inherit;
     font-size: 1em;
-    line-height: 1.4;
+    line-height: 1.7;
 }
 
 ::-moz-selection {
@@ -225,10 +225,16 @@ nav a:hover {
     font: 10px sans-serif;
   }
 
-  .buttons {
+  .button {
     position: absolute;
     right: 30px;
-    top: 30px;
+    top: 40px;
+  }
+
+  .nav-buttons {
+    position: absolute;
+    right: 30px;
+    top: 10px;
   }
 
   .links line {
