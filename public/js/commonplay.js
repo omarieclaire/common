@@ -1,5 +1,7 @@
 /* global d3:false _:false */
 
+var MY_FIXED_X = 0;
+var MY_FIXED_Y = 0;
 //default starting strength for each edge
 var DEFAULT_STRENGTH = 1;
 //capping the strength of each edge
@@ -25,6 +27,8 @@ var svg = d3.select("svg");
 var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
 var colorPicker = d3.scaleOrdinal(d3.schemeCategory10);
+
+
 
 // set of nodes/edges we have already seen (objects)
 var seenNodes = {};
@@ -227,6 +231,11 @@ function addNode(id) {
 			color: colorPicker(id),
 			score: INITIAL_NODE_SCORE
 		};
+
+		if (id === ME) {
+			o.fx = MY_FIXED_X;
+			o.fy = MY_FIXED_Y;
+		}
 		// add the new node to the array of nodes
 		nodes.push(o);
 		// add the id and node to the seenNodes object
