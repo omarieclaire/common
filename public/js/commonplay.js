@@ -31,9 +31,24 @@ var seenEdges = {};
 var nodes = [];
 var links = [];
 
+function edgeIdAttr(edge) {
+	return "edge-" + edge.id;
+}
+
+//create html id for each node so we can change visuals
 function nodeIdAttr(node) {
 	return "node-" + node.id;
 }
+
+// Given a node and edges, find all connected edges to that node.
+function getEdgesForNode(node, edges) {
+	var connectedEdgesForNode = edges.filter(function(edge){
+		return edge.source.id == node.id || edge.target.id == node.id;
+	});
+
+	return connectedEdgesForNode;
+}
+
 
 function renderMyScore() {
 	var myNode = seenNodes[me];
@@ -360,7 +375,7 @@ function deleteNode(node) {
 function nodeClick(d) {
 
 	var target = d.id;
-	//reference to the link between me and the targe
+	//reference to the link between me and the target
 	var ourLink = links.filter(function (link) {
 		return link.source.id == me && link.target.id == target ||
       link.target.id == me && link.source.id == target;
@@ -379,35 +394,22 @@ function nodeClick(d) {
 			if(ourNode.score <= 0) {
 				deleteNode(ourNode);
 			}
+
+			// begin edge animation
+			var htmlEdge = document.getElementById(edgeIdAttr(ourLink));
+			d3.select(htmlEdge).transition().duration(500).attr("stroke-dasharray", "5, 5").transition().duration(1500).attr("stroke-dasharray", null);
 	  }
-    calculateCommonScore(links, me);
+
+		// begin node animation
+		var htmlNode = document.getElementById(nodeIdAttr(d));
+		d3.select(htmlNode).transition().duration(10).style("fill","#000000").transition().duration(1500).style("fill", d.color);
+
 	} else {
 		console.log(d, "No Link!");
 	}
 
-	// get the node we clicked on.
-	// filter returns true when the id matches target.
-	var clickedNodeFilter = function (n) {
-		return n.id == target;
-	};
-	// clickedNodes is an array with each node having id 'target'
-	// (hopefully only one)
-	var clickedNodes = nodes.filter(clickedNodeFilter);
-	// take the first element of clickedNodes
-	var clickedNode = clickedNodes[0];
-
-	if(clickedNode) {
-		// if the node was clicked, set its color to black
-		//console.log(clickedNode.transition());
-		//clickedNode.color = "#00000";
-	} else {
-		console.log(d, "no node!");
-	}
-
-	//good time to send update to firebase
+	calculateCommonScore(links, me);
 	draw();
-	var htmlNode = document.getElementById(nodeIdAttr(d));
-	d3.select(htmlNode).transition().duration(10).style("fill","#000000").transition().duration(1500).style("fill", d.color);
 }
 
 //getting the strength of an edge by its id
@@ -463,6 +465,7 @@ function draw() {
 	link = link.enter()
 		.append("line")
 		.attr("stroke-width", connectionStrength)
+		.attr("id", edgeIdAttr)
 		.merge(link);
 
 	// Update and restart the simulation.
