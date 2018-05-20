@@ -6,12 +6,10 @@
   <meta charset="utf-8">
   <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
   <meta name="description" content="">
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
   <link rel="stylesheet" href="css/normalize.min.css">
   <link rel="stylesheet" href="css/main.css">
-
   <script src="js/vendor/modernizr-2.8.3.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -50,45 +48,41 @@
   </div>
   <div class="main-container">
     <div class="main wrapper clearfix">
-      <article>
         <header>
           <!-- <h1>Welcome to Common</h1>
           <p>A game for communities</p> -->
         </header>
-        <section class="button">
           <!-- <h2>To play you must find an active player</h2>
           <p>Click <a href="https://twitter.com/hashtag/commonplay?src=hash " target="_blank">here</a> to find an active player</p> -->
-          <button data-zoom="+1" id="zoom-in">Zoom In</button>
-          <button data-zoom="-1" id="zoom-out">Zoom Out</button>
-          <button id="reset-button">Reset</button>
+        <section>
+          <button id="destroy" class="control-button">Destroyer</button>
+          <button id="giver" class="control-button">Giver</button>
+          <button id="zoom-in" class="zoom-button">Zoom In</button>
+          <button id="zoom-out" class="zoom-button">Zoom Out</button>
+          <button id="reset-button" class="zoom-button">Reset</button>
         </section>
 
-        <!-- <h1>d3 graph</h1> -->
+        <svg id="d3viz" width="500" height="300">
+        </svg>
 
-          # people: <span id="nodecount">0</span><br> # connections: <span id="edgecount">0</span><br> edge from <input id="from" type="text"> to <input id="to" type="text">
-          <input id="add" type="button" value="add">
-          <input id="random" type="button" value="random"><br>
-          <input id="destroy" type="button" value="destroyer">
-          <input id="giver" type="button" value="giver"><br>
+        <section>
+        # people: <span id="nodecount">0</span><br> # connections: <span id="edgecount">0</span><br> edge from <input id="from" type="text"> to <input id="to" type="text">
+        <input id="add" type="button" value="add">
+        <input id="random" type="button" value="random"><br>
+      </section>
 
-          network score for i: <span id="iscore">0</span><br>
-          node score for i: <span id="node-score-me">0</span><br>
-          network score: <br>
-          <ul id="network-score"></ul><br>
-          <svg id="d3viz" width="500" height="300">
-            <a xlink:href="http://www.kleinefische.com" ><polygon fill="none" points="162,263.3 251.6,256 252.7,273.3 163,280.5"/><text transform="matrix(0.9967 -8.087198e-02 8.087198e-02 0.9967 162.7812 272.6545)" fill="#FFFFFF" font-family="'TradeGothicLT-Bold'" font-size="12.9937">/AGENTUR</text></a>
 
-            <!-- <circle fill="#7f7f7f" r="12" cx="450" cy="20" id="zoom-in"></circle>
-<text x="450" y="20" text-anchor="middle" style="fill: rgb(0, 0, 0); stroke: rgb(0, 0, 0);">+</text>
-           -->
-          </svg>
-        <script src="https://d3js.org/d3.v4.min.js"></script>
+        network score for i: <span id="iscore">0</span><br>
+        node score for i: <span id="node-score-me">0</span><br>
+        network score: <br>
+        <ul id="network-score"></ul><br>
 
-        <footer>
-          <!-- <h3>Credits</h3> -->
-          <!-- <p>.</p> -->
-        </footer>
-      </article>
+      <script src="https://d3js.org/d3.v4.min.js"></script>
+
+      <footer>
+        <!-- <h3>Credits</h3> -->
+        <!-- <p>.</p> -->
+      </footer>
     </div> <!-- #main -->
   </div> <!-- #main-container -->
 

@@ -3,7 +3,7 @@
 //default starting strength for each edge
 var DEFAULT_STRENGTH = 1;
 //capping the strength of each edge
-var MAX_EDGE_STRENGTH = 6;
+var MAX_EDGE_STRENGTH = 9;
 //default starting strength for each node
 var INITIAL_NODE_SCORE = 8;
 //the default amount of "life-force" a network receives
@@ -11,7 +11,7 @@ var GIVER_POWER = 0.5;
 //the default amount of "life force" decayed by entropy/destroyer
 var DESTROYER_POWER = 0.5;
 //the "life force" a player trades to strengthen a connection
-var CLICK_NODE_DESTROYER_POWER = 0.5;
+var CLICK_NODE_DESTROYER_POWER = 2;
 //the edge-strength increase-when the node is clicked
 var CLICK_EDGE_INCREMENTER = 0.5;
 
@@ -30,6 +30,10 @@ var seenEdges = {};
 // list of node/edge data used by the force-directed graph
 var nodes = [];
 var links = [];
+
+function nodeIdAttr(node) {
+	return "node-" + node.id;
+}
 
 function renderMyScore() {
 	var myNode = seenNodes[me];
@@ -269,8 +273,8 @@ var me = "i";
 
 // create a d3 simulation object?
 var simulation = d3.forceSimulation(nodes)
-	.force("charge", d3.forceManyBody().strength(-1000))
-	.force("link", d3.forceLink(links).distance(70))
+	.force("charge", d3.forceManyBody().strength(-500))
+	.force("link", d3.forceLink(links).distance(200))
 	.force("center", d3.forceCenter())
 	.force("collide", d3.forceCollide(40))
 	.force("x", d3.forceX())
@@ -354,6 +358,7 @@ function deleteNode(node) {
 //nodeclick function
 //why isn't it redrawing!!!?
 function nodeClick(d) {
+
 	var target = d.id;
 	//reference to the link between me and the targe
 	var ourLink = links.filter(function (link) {
@@ -393,13 +398,16 @@ function nodeClick(d) {
 
 	if(clickedNode) {
 		// if the node was clicked, set its color to black
-		clickedNode.color = "#00000";
+		//console.log(clickedNode.transition());
+		//clickedNode.color = "#00000";
 	} else {
 		console.log(d, "no node!");
 	}
 
 	//good time to send update to firebase
 	draw();
+	var htmlNode = document.getElementById(nodeIdAttr(d));
+	d3.select(htmlNode).transition().duration(10).style("fill","#000000").transition().duration(1500).style("fill", d.color);
 }
 
 //getting the strength of an edge by its id
@@ -429,6 +437,8 @@ function draw() {
 	// an anon function that returns a color
 		.attr("fill", function(d) { return d.color; })
 		.attr("r", 8)
+		// add an id attribute to each node, so we can access/select it later
+		.attr("id", nodeIdAttr)
 	//we added the onclick to the circle, but maybe we should have added it to the node
 		.on("click", nodeClick)
 	//what does this mean?

@@ -59,6 +59,7 @@ textarea {
 
 body {
     font: 10px/14px "Helvetica", "Helvetica Neue", "Arial";
+    line-height: 1.8;
 }
 
 .wrapper {
@@ -86,7 +87,7 @@ body {
 }
 
 .title {
-    color: white;
+    color: black;
 }
 
 /* ==============
@@ -209,10 +210,6 @@ nav a:hover {
       d3 styles
       ========================================================================== */
 
-
-
-
-
   /* body {
   position: relative;
   width: 960px;
@@ -222,13 +219,19 @@ nav a:hover {
     max-width: 100%;
     border: solid black 1px;
     background: aliceblue;
-    font: 10px sans-serif;
+    font: 16px sans-serif;
   }
 
-  .button {
-    position: absolute;
-    right: 30px;
-    top: 40px;
+  .control-button {
+    margin-left: 0em;
+    margin-right: .05em;
+    background-color: #d8c4c7;
+  }
+
+  .zoom-button {
+    margin-left: 0em;
+    margin-right: .05em;
+    /* background-color: #d1c2d2; */
   }
 
   .nav-buttons {
