@@ -1,18 +1,18 @@
 /* global d3:false _:false */
 
-//default strength for all connections
+//default starting strength for each edge
 var DEFAULT_STRENGTH = 1;
-
-var MAX_EDGE_STRENGTH = 3;
-
+//capping the strength of each edge
+var MAX_EDGE_STRENGTH = 6;
+//default starting strength for each node
 var INITIAL_NODE_SCORE = 8;
-
+//the default amount of "life-force" a network receives
 var GIVER_POWER = 0.5;
-
+//the default amount of "life force" decayed by entropy/destroyer
 var DESTROYER_POWER = 0.5;
-
+//the "life force" a player trades to strengthen a connection
 var CLICK_NODE_DESTROYER_POWER = 0.5;
-
+//the edge-strength increase-when the node is clicked
 var CLICK_EDGE_INCREMENTER = 0.5;
 
 // this is the svg canvas to draw onto
@@ -40,7 +40,7 @@ function renderMyScore() {
 		console.log("can't find ME :(");
 	}
 }
-
+//draw network scores to screen
 function renderNetworkScores(networkScores) {
 	var scoreHtml = document.getElementById("network-score");
 	// clear the html elements
@@ -61,17 +61,14 @@ function renderNetworkScores(networkScores) {
 		scoreHtml.appendChild(liHtml);
 	});
 }
-
+//calculate the health of the network (factors: number of edges,
+// strength of edges, and number of people)
 function calculateNetworkHealth(numEdges, sumEdgesStrength, numPeople) {
 	var averageEdgePerPerson = sumEdgesStrength / numPeople;
 	return averageEdgePerPerson;
 }
 
-// return [
-//   {network: 1, people: ["a", "b", ...], score: 99},
-//   {network: 2, people: ["z", "y", ...], score: 23},
-//   ...
-// ]
+//find the network score of a given node
 function calculateNetworkScoresByNode(edges, nodes) {
 
   // first, build a dictionary which associates each node ID with the
@@ -273,7 +270,7 @@ var me = "i";
 // create a d3 simulation object?
 var simulation = d3.forceSimulation(nodes)
 	.force("charge", d3.forceManyBody().strength(-1000))
-	.force("link", d3.forceLink(links).distance(100))
+	.force("link", d3.forceLink(links).distance(70))
 	.force("center", d3.forceCenter())
 	.force("collide", d3.forceCollide(40))
 	.force("x", d3.forceX())
@@ -554,6 +551,7 @@ window.onload = function() {
 
 		calculateNetworkScoresByNode(links, nodes);
 		renderMyScore();
+		draw();
   });
 
 	document.getElementById("giver").addEventListener("click", function() {
@@ -569,6 +567,7 @@ window.onload = function() {
 			}
 		});
 		renderMyScore();
+		draw();
 	});
 
 	// Get the "reset-button" add a function to be executed on click

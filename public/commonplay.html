@@ -13,10 +13,7 @@
   <link rel="stylesheet" href="css/main.css">
 
   <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
-  <script language="javascript" src="libraries/p5.dom.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
-  <script language="javascript" type="text/javascript" src="js/sketch.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
 </head>
 <body>
@@ -55,20 +52,18 @@
     <div class="main wrapper clearfix">
       <article>
         <header>
-          <h1>Welcome to Common</h1>
-          <p>A game for communities</p>
+          <!-- <h1>Welcome to Common</h1>
+          <p>A game for communities</p> -->
         </header>
-        <section>
-          <h2>To play you must find an active player</h2>
-          <p>Click <a href="https://twitter.com/hashtag/commonplay?src=hash " target="_blank">here</a> to find an active player</p>
+        <section class="button">
+          <!-- <h2>To play you must find an active player</h2>
+          <p>Click <a href="https://twitter.com/hashtag/commonplay?src=hash " target="_blank">here</a> to find an active player</p> -->
+          <button data-zoom="+1" id="zoom-in">Zoom In</button>
+          <button data-zoom="-1" id="zoom-out">Zoom Out</button>
+          <button id="reset-button">Reset</button>
         </section>
 
-        <h1>d3 graph</h1>
-          <div class="xx">
-            <button data-zoom="+1" id="zoom-inx">Zoom In</button>
-            <button data-zoom="-1" id="zoom-out">Zoom Out</button>
-            <button id="reset-button">Reset</button>
-          </div>
+        <!-- <h1>d3 graph</h1> -->
 
           # people: <span id="nodecount">0</span><br> # connections: <span id="edgecount">0</span><br> edge from <input id="from" type="text"> to <input id="to" type="text">
           <input id="add" type="button" value="add">
@@ -81,18 +76,13 @@
           network score: <br>
           <ul id="network-score"></ul><br>
           <svg id="d3viz" width="500" height="300">
-            <circle fill="#7f7f7f" r="12" cx="450" cy="20" id="zoom-in"></circle>
-<text x="450" y="20" text-anchor="middle" style="fill: rgb(0, 0, 0); stroke: rgb(0, 0, 0);">+</text>
-          </svg>
-          <script src="https://d3js.org/d3.v4.min.js"></script>
+            <a xlink:href="http://www.kleinefische.com" ><polygon fill="none" points="162,263.3 251.6,256 252.7,273.3 163,280.5"/><text transform="matrix(0.9967 -8.087198e-02 8.087198e-02 0.9967 162.7812 272.6545)" fill="#FFFFFF" font-family="'TradeGothicLT-Bold'" font-size="12.9937">/AGENTUR</text></a>
 
-        <p>2---- TEST SECTION ------</p>
-        <p>Get points by clicking, then send your info to the server [fuctional]</p>
-        <div id="game">
-        </div>
-        <!-- removed the p tags because of an error but why? -->
-          <ol id="scorelist">
-          </ol>
+            <!-- <circle fill="#7f7f7f" r="12" cx="450" cy="20" id="zoom-in"></circle>
+<text x="450" y="20" text-anchor="middle" style="fill: rgb(0, 0, 0); stroke: rgb(0, 0, 0);">+</text>
+           -->
+          </svg>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
 
         <footer>
           <!-- <h3>Credits</h3> -->
