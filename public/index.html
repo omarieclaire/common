@@ -36,11 +36,13 @@
       <h2>Welcome to Common: A play experience for communities </h2>
       <p>Begins June 2, 2018</p>
       <p id="auth-msg"></p>
+      <p id="auth-element"></p>
       <p><a href="#" id="logout">logout</a></p>
     </div>
     <p id="load">Firebase SDK Loading&hellip;</p>
 
     <script>
+      //when the dom content is loaded, do the following
       document.addEventListener('DOMContentLoaded', function() {
         // event handlers
 
@@ -60,14 +62,20 @@
         // // The Firebase SDK is initialized and available here!
         //
         firebase.auth().onAuthStateChanged(user => {
-          let auth_element = document.getElementById("auth-msg");
+          //grab auth element
+          let auth_msg = document.getElementById("auth-msg");
+          let auth_element = document.getElementById("auth-element");
+          //if the user is logged in then user is not null
           if (user) {
-            auth_element.innerHTML = "Yay, you're logged in!";
+            auth_msg.innerHTML = "Yay, you're logged in!";
           } else {
+            //you are logged out, create a link to log in
             let anchor_node = document.createElement("a");
             anchor_node.setAttribute("href","/auth.html");
             anchor_node.innerHTML = "login";
+            //append link to auth element
             auth_element.appendChild(anchor_node);
+
           }
         });
         // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
