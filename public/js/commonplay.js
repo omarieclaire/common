@@ -7,8 +7,7 @@ var svg = d3.select("svg");
 var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
 
-//var colorPicker = d3.scaleOrdinal(d3.schemeCategory10);
-//console.log(d3.schemeCategory10);
+//colors
 var colorPicker = d3.scaleOrdinal(["#A07A19", "#AC30C0", "#EB9A72", "#BA86F5", "#EA22A8"]);
 
 // set of nodes/edges we have already seen (objects)
@@ -223,10 +222,10 @@ function draw() {
 		networkCircle.exit().remove();
 		networkCircle = networkCircle.enter()
 			.append("circle")
-			.attr("fill", "none")
-			.attr("stroke", "red")
+			.attr("fill", "#000000")
 			.attr("r", function(d) {return d.r + 50;})
 			.merge(networkCircle);
+
 
 	// do the same thing for the labels
 	label = label.data(nodes, function(d) { return d.id;});
@@ -259,6 +258,9 @@ function draw() {
 	// can we instead call nodes.length and edges.length?
 	nc.textContent = Object.keys(seenNodes).length;
 	ec.textContent = Object.keys(seenEdges).length;
+
+	//var enclosed = d3.packEnclose(circles.each(function(c){ return {x: c.cx, y: c.cy, r: c.r};}));
+	//svg.append("circle").attr("fill", "none").attr("stroke", "black").attr("r", enclosed.r).attr("cx",enclosed.x + svgWidth/2).attr("cy", enclosed.y + svgHeight / 2);
 
 }
 
