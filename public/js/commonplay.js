@@ -7,6 +7,12 @@ var svg = d3.select("svg");
 var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
 
+
+svg.append("rect")
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .attr("fill", "#F8F8F8");
+
 //colors
 var colorPicker = d3.scaleOrdinal(["#A07A19", "#AC30C0", "#EB9A72", "#BA86F5", "#EA22A8"]);
 
@@ -107,6 +113,7 @@ var ec = document.getElementById("edgecount");
 // value=nodes in network-id
 function enclosedCirclesByNetwork(nodesByNetwork) {
   var enclosedCircles = [];
+	console.log(nodesByNetwork);
   Object.keys(nodesByNetwork).forEach(function(network,index) {
     var nodesInNetwork = nodesByNetwork[network];
     var enclosedCircle = d3.packEnclose(nodesInNetwork);
