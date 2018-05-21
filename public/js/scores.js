@@ -66,7 +66,13 @@ var scores = (function() {
           score: currentScore,
           numEdges: currentNumEdges,
           health: health
-        }); currentNetworkId += 1; } } renderFunction(networks); return networks; };
+        });
+        currentNetworkId += 1;
+      }
+    }
+    renderFunction(networks);
+    return networks;
+  };
 
   // edges: [a -> b, a -> c, b -> d, c -> d]
   //

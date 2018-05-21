@@ -182,23 +182,46 @@ function draw() {
 	//what does this mean?
 		.merge(node);
 
-		var circles = [];
-		document.getElementById("g-node").childNodes.forEach(function(n){
-			var x = +n.getAttribute("cx");
-			var y = +n.getAttribute("cy");
-			var r = +n.getAttribute("r");
-			circles.push({x: x, y: y, r: r});
-		});
-		var enclosed = d3.packEnclose(circles);
-		enclosed.id = "enclosing-network";
-		networkCircle = networkCircle.data([enclosed], function(d) { return d.id;});
+  // In order to draw circles around the networks, we first calculate
+  // the network scores.
+  // Then we mutate each node by adding the network it belongs to.
+  // Then we group each node by the network it belngs to
+  // Then we use that group and d3.packEnclose to encircle the networks.
+  var networkScores = scores.calculateNetworkScoresByNode(edges,nodes, ui.renderNetworkScores);
+  // add a radius to the data
+  node.data().forEach(function(d) {
+    d.r = d.score;
+    // This is slow; we should improve this.
+    networkScores.forEach(function(network) {
+      if(network.people.indexOf(d.id) != -1) {
+        d.network = network.network;
+      }
+    })
+  });
+
+  var nodesByNetwork = {};
+  networkScores.forEach(function(network) {
+    nodesByNetwork[network.network] = [];
+  });
+  node.data().forEach(function(data) {
+    nodesByNetwork[data.network].push(data);
+  });
+  var enclosedCircles = [];
+  Object.keys(nodesByNetwork).forEach(function(network,index) {
+    var nodesInNetwork = nodesByNetwork[network];
+    var enclosedCircle = d3.packEnclose(nodesInNetwork);
+    enclosedCircle.id = "enclosing-network-" + index;
+    enclosedCircles.push(enclosedCircle);
+  });
+
+  networkCircle = networkCircle.data(enclosedCircles, function(d) { return d.id;});
 		networkCircle.exit().remove();
 		networkCircle = networkCircle.enter()
 			.append("circle")
-			.attr("fill", "#000000")
+			.attr("fill", "none")
+			.attr("stroke", "red")
 			.attr("r", function(d) {return d.r + 50;})
 			.merge(networkCircle);
-
 
 	// do the same thing for the labels
 	label = label.data(nodes, function(d) { return d.id;});
@@ -231,9 +254,6 @@ function draw() {
 	// can we instead call nodes.length and edges.length?
 	nc.textContent = Object.keys(seenNodes).length;
 	ec.textContent = Object.keys(seenEdges).length;
-
-	//var enclosed = d3.packEnclose(circles.each(function(c){ return {x: c.cx, y: c.cy, r: c.r};}));
-	//svg.append("circle").attr("fill", "none").attr("stroke", "black").attr("r", enclosed.r).attr("cx",enclosed.x + svgWidth/2).attr("cy", enclosed.y + svgHeight / 2);
 
 }
 
