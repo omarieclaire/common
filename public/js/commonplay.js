@@ -269,7 +269,7 @@ window.onload = function() {
 			from = _.sample(seenNodes).id;
 		}
 		var to = _.sample(seenNodes).id;
-		addEdge(from, to, DEFAULT_STRENGTH);
+		util.addEdge(from, to, DEFAULT_STRENGTH, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
 		draw();
 	});
 
