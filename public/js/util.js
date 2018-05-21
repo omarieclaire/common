@@ -116,6 +116,19 @@ var util = (function() {
     nodes.splice(index,1);
   }
 
+  // Small helper function to calculate nodes by network
+  function nodesByNetwork(nodes) {
+    var nodesByNetwork = {};
+    nodes.forEach(function(data) {
+      if(nodesByNetwork[data.network]) {
+        nodesByNetwork[data.network].push(data);
+      } else {
+        nodesByNetwork[data.network] = [data];
+      }
+    });
+    return nodesByNetwork;
+  }
+
   return {
     edgeIdAttr: edgeIdAttr,
     nodeIdAttr: nodeIdAttr,
@@ -125,5 +138,6 @@ var util = (function() {
     addEdge: addEdge,
     deleteEdge: deleteEdge,
     deleteNode: deleteNode,
+    nodesByNetwork: nodesByNetwork
   };
 })();

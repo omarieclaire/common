@@ -102,6 +102,21 @@ var nc = document.getElementById("nodecount");
 // get the edgecount HTML node
 var ec = document.getElementById("edgecount");
 
+// small helper function to claculate all enclosed circles
+// assumes nodesByNetwork is map (key-value pairs) of
+// key=netowrk-id
+// value=nodes in network-id
+function enclosedCirclesByNetwork(nodesByNetwork) {
+  var enclosedCircles = [];
+  Object.keys(nodesByNetwork).forEach(function(network,index) {
+    var nodesInNetwork = nodesByNetwork[network];
+    var enclosedCircle = d3.packEnclose(nodesInNetwork);
+    enclosedCircle.id = "enclosing-network-" + index;
+    enclosedCircles.push(enclosedCircle);
+  });
+  return enclosedCircles;
+}
+
 //nodeclick function
 //why isn't it redrawing!!!?
 function nodeClick(d) {
@@ -187,6 +202,8 @@ function draw() {
   // Then we mutate each node by adding the network it belongs to.
   // Then we group each node by the network it belngs to
   // Then we use that group and d3.packEnclose to encircle the networks.
+  // it would be good to find a better place to claculate this stuff
+  // rather than in draw
   var networkScores = scores.calculateNetworkScoresByNode(edges,nodes, ui.renderNetworkScores);
   // add a radius to the data
   node.data().forEach(function(d) {
@@ -199,20 +216,8 @@ function draw() {
     })
   });
 
-  var nodesByNetwork = {};
-  networkScores.forEach(function(network) {
-    nodesByNetwork[network.network] = [];
-  });
-  node.data().forEach(function(data) {
-    nodesByNetwork[data.network].push(data);
-  });
-  var enclosedCircles = [];
-  Object.keys(nodesByNetwork).forEach(function(network,index) {
-    var nodesInNetwork = nodesByNetwork[network];
-    var enclosedCircle = d3.packEnclose(nodesInNetwork);
-    enclosedCircle.id = "enclosing-network-" + index;
-    enclosedCircles.push(enclosedCircle);
-  });
+  var nodesByNetwork = util.nodesByNetwork(node.data());
+  var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork)
 
   networkCircle = networkCircle.data(enclosedCircles, function(d) { return d.id;});
 		networkCircle.exit().remove();
@@ -275,6 +280,11 @@ function ticked(e) {
 	label
 		.attr("x", function(d) { return d.x + 5; })
 		.attr("y", function(d) { return d.y - 5; });
+
+  var nodesByNetwork = util.nodesByNetwork(node.data());
+  var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork)
+
+  networkCircle = networkCircle.data(enclosedCircles, function(d) { return d.id;});
 
 	networkCircle
 	//cx is the relative position of the node
