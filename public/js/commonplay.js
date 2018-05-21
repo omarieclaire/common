@@ -16,9 +16,9 @@ var seenEdges = {};
 var nodes = [];
 var edges = [];
 
-function destroyEdge(edge) {
-  _
-}
+// function destroyEdge(edge) {
+//   _
+// }
 
 function getNode(id){
 	return seenNodes[id];
@@ -107,26 +107,30 @@ function nodeClick(d) {
 
 	// if clicking on a edge attached to our nodes
 	// decrement our score
-	if (ouredge){
-		if(ouredge.strength < MAX_EDGE_STRENGTH) {
-		  ouredge.strength = ouredge.strength + CLICK_EDGE_INCREMENTER;
 
-			// get our node from the seenNodes object (efficient)
-			var ourNode = seenNodes[ME];
+	if (ouredge){
+		// get our node from the seenNodes object (efficient)
+		var ourNode = seenNodes[ME];
+		console.log(ourNode.score);
+		if(ouredge.strength < MAX_EDGE_STRENGTH && ourNode.score > 2) {
+		  ouredge.strength = ouredge.strength + CLICK_EDGE_INCREMENTER;
 			// decrement our score
 			ourNode.score = ourNode.score - CLICK_NODE_DESTROYER_POWER;
-			if(ourNode.score <= 0) {
-				util.deleteNode(ourNode, nodes, seenNodes, edges, seenEdges);
-			}
+			//if(ourNode.score <= 0) {
+			// 	util.deleteNode(ourNode, nodes, seenNodes, edges, seenEdges);
+			// }
 
 			// begin edge animation
 			var htmlEdge = document.getElementById(util.edgeIdAttr(ouredge));
-			d3.select(htmlEdge).transition().duration(1000).attr("stroke-dasharray", "5, 5").transition().duration(1500).attr("stroke-dasharray", null);
-	  }
+			d3.select(htmlEdge).transition().duration(1000).attr("stroke", "magenta").transition().duration(1500).attr("stroke", null);
+			// d3.select(htmlEdge).transition().duration(1000).attr("stroke-dasharray", "5, 5").transition().duration(1500).attr("stroke-dasharray", null);
 
-		// begin node animation
-		var htmlNode = document.getElementById(util.nodeIdAttr(d));
-		d3.select(htmlNode).transition().duration(10).style("fill","#000000").transition().duration(1500).style("fill", d.color);
+			// begin node animation
+			var htmlNode = document.getElementById(util.nodeIdAttr(d));
+			d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
+
+			 }
+
 
 	} else {
 		console.log(d, "No edge!");
