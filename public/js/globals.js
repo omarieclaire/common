@@ -1,6 +1,9 @@
-var ZOOM_AMOUNT = 0.5;
+/* global d3:false _:false */
 
+var ZOOM_AMOUNT = 0.5;
+//location where my (ME) node will be fixed when it is drawn to screen
 var MY_FIXED_X = 0;
+//location where MY node will be fixed when it is drawn to screen
 var MY_FIXED_Y = 0;
 //default starting strength for each edge
 var DEFAULT_STRENGTH = 1;
@@ -16,7 +19,5 @@ var DESTROYER_POWER = 0.5;
 var CLICK_NODE_DESTROYER_POWER = 2;
 //the edge-strength increase-when the node is clicked
 var CLICK_EDGE_INCREMENTER = 0.5;
-
 //pretend we know who the user is, "i"
 var ME = "i";
-

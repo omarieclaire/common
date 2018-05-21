@@ -54,7 +54,6 @@ var simulation = d3.forceSimulation(nodes)
 	.alphaTarget(0.0)
 	.on("tick", ticked);
 
-
 // create a <g> element and append it into <svg>
 //create the graph itself
 var g = svg
@@ -69,18 +68,17 @@ var zoomFunction = function() {
 // call zooming function when d3 detects a zoom
 //svg.call(d3.zoom().on("zoom", zoomFunction));
 var zoomCall = d3.zoom().scaleExtent([1 / 4, 4]).on("zoom", zoomFunction);
-
 svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight / 2) );
 svg.call(zoomCall);
 
-// create a <g> elements, append it to the previous g
+// create a <g> element for edges, append it to the previous g
 var edge = g
 	.append("g")
 	.attr("stroke", "#000")
 	.attr("stroke-width", 1.5)
 	.selectAll(".edge");
 
-// create a <g> element, append it to the first g
+// create a <g> element for nodes, append it to the first g
 var node = g
 	.append("g")
 	.attr("stroke", "#fff")
@@ -88,13 +86,14 @@ var node = g
 	.attr("id", "g-node")
 	.selectAll(".node");
 
+// create a <g> element for networkCircles, append it to the first g
 var networkCircle = g
 	.append("g")
 	.attr("stroke", "magenta")
 	.attr("stroke-width", 1.5)
 	.selectAll(".networkCircle");
 
-// create a <g> element, append it to the first g
+// create a <g> element for labels, append it to the first g
 var label = g
 	.append("g")
 	.attr("stroke", "#fff")
@@ -123,7 +122,6 @@ function enclosedCirclesByNetwork(nodesByNetwork) {
 }
 
 //nodeclick function
-//why isn't it redrawing!!!?
 function nodeClick(d) {
 
 	var target = d.id;
@@ -135,7 +133,6 @@ function nodeClick(d) {
 
 	// if clicking on a edge attached to our nodes
 	// decrement our score
-
 	if (ouredge){
 		// get our node from the seenNodes object (efficient)
 		var ourNode = seenNodes[ME];
@@ -144,9 +141,6 @@ function nodeClick(d) {
 		  ouredge.strength = ouredge.strength + CLICK_EDGE_INCREMENTER;
 			// decrement our score
 			ourNode.score = ourNode.score - CLICK_NODE_DESTROYER_POWER;
-			//if(ourNode.score <= 0) {
-			// 	util.deleteNode(ourNode, nodes, seenNodes, edges, seenEdges);
-			// }
 
 			// begin edge animation
 			var htmlEdge = document.getElementById(util.edgeIdAttr(ouredge));
@@ -158,10 +152,8 @@ function nodeClick(d) {
 			d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
 
 			 }
-
-
 	} else {
-		console.log(d, "No edge!");
+		//console.log(d, "Not our edge!");
 	}
 
 	scores.calculateCommonScore(edges, ME, ui.renderNetworkScores);
@@ -202,17 +194,17 @@ function draw() {
 	//what does this mean?
 		.merge(node);
 
-  // In order to draw circles around the networks, we first calculate
-  // the network scores.
-  // Then we mutate each node by adding the network it belongs to.
+  // In order to draw circles around each network, we calculate
+  // the network scores. Then we mutate each node by adding
+	// the network it belongs to.
   // Then we group each node by the network it belngs to
   // Then we use that group and d3.packEnclose to encircle the networks.
-  // it would be good to find a better place to claculate this stuff
+  // TODO it would be good to find a better place to calculate this stuff
   // rather than in draw
   var networkScores = scores.calculateNetworkScoresByNode(edges,nodes, ui.renderNetworkScores);
   // add a radius to the data
   node.data().forEach(function(d) {
-    // This is slow; we should improve this.
+    // This is slow; TODO we should improve this.
     networkScores.forEach(function(network) {
       if(network.people.indexOf(d.id) != -1) {
         d.network = network.network;
@@ -230,7 +222,6 @@ function draw() {
 			.attr("fill", "#000000")
 			.attr("r", function(d) {return d.r + 50;})
 			.merge(networkCircle);
-
 
 	// do the same thing for the labels
 	label = label.data(nodes, function(d) { return d.id;});
@@ -314,7 +305,6 @@ window.onload = function() {
 
 		// add an edge between `from` and `to`
     util.addEdge(from, to, DEFAULT_STRENGTH, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-
 		// redraw.
 		draw();
 	});
