@@ -78,6 +78,9 @@ var edge = g
 	.attr("stroke-width", 1.5)
 	.selectAll(".edge");
 
+// create a <g> element for annotations, append it to the first g
+var annotationAnchor = g.append("g").attr("stroke", "#E8336D").selectAll(".anchor");
+
 // create a <g> element for nodes, append it to the first g
 var node = g
 	.append("g")
@@ -85,9 +88,6 @@ var node = g
 	.attr("stroke-width", 1.5)
 	.attr("id", "g-node")
 	.selectAll(".node");
-
-// create a <g> element for annotations, append it to the first g
-var annotationAnchor = g.append("g").attr("stroke", "#E8336D").selectAll(".anchor");
 
 // create a <g> element for labels, append it to the first g
 var label = g
@@ -115,6 +115,37 @@ function enclosedCirclesByNetwork(nodesByNetwork) {
   });
   return enclosedCircles;
 }
+
+// extremely side-effecty function
+function doAnnotations(enclosedCircles, annotationAnchor) {
+  var annotations = enclosedCircles.map(function(circle,index) {
+    return {
+      id: "annotation-" + index,
+      note: {  title: "10" },
+      dy: -circle.r + 30,
+      dx: 0,
+      x: circle.x,
+      y: circle.y,
+      type: d3.annotationCalloutCircle,
+      subject: {
+        radius: circle.r,
+        radiusPadding: 10
+      }
+    };
+  });
+
+  annotationAnchor = annotationAnchor.data(annotations, function(d) { return d.id;});
+  annotationAnchor.exit().remove();
+
+  var makeAnnotations = d3.annotation().annotations(annotations).accessors({ x: function x(d) {
+    return d.x;
+  }, y: function y(d) {
+    return d.y;
+  } });
+
+  annotationAnchor.enter().call(makeAnnotations);
+}
+
 
 //nodeclick function
 function nodeClick(d) {
@@ -210,32 +241,7 @@ function draw() {
   var nodesByNetwork = util.nodesByNetwork(node.data());
   var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork)
 
-  var annotations = enclosedCircles.map(function(circle,index) {
-    return {
-      id: "annotation-" + index,
-      note: {  title: "10" },
-      dy: -circle.r - 30,
-      dx: 0,
-      x: circle.x,
-      y: circle.y,
-      type: d3.annotationCalloutCircle,
-      subject: {
-        radius: circle.r,
-        radiusPadding: 5 
-      }
-    };
-  });
-
-  annotationAnchor = annotationAnchor.data(annotations, function(d) { return d.id;});
-  annotationAnchor.exit().remove();
-
-  var makeAnnotations = d3.annotation().annotations(annotations).accessors({ x: function x(d) {
-    return d.x;
-  }, y: function y(d) {
-    return d.y;
-  } });
-
-  annotationAnchor.enter().call(makeAnnotations);
+  doAnnotations(enclosedCircles, annotationAnchor);
 
 	// do the same thing for the labels
 	label = label.data(nodes, function(d) { return d.id;});
@@ -292,32 +298,7 @@ function ticked(e) {
   var nodesByNetwork = util.nodesByNetwork(node.data());
   var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork)
 
-  var annotations = enclosedCircles.map(function(circle,index) {
-    return {
-      id: "annotation-" + index,
-      note: { title: "10" },
-      dy: -circle.r - 30,
-      dx: 0,
-      x: circle.x,
-      y: circle.y,
-      type: d3.annotationCalloutCircle,
-      subject: {
-        radius: circle.r + 20,
-        radiusPadding: 5
-      }
-    };
-  });
-
-
-  annotationAnchor = annotationAnchor.data(annotations, function(d) { return d.id; });
-  annotationAnchor.exit().remove();
-
-  var makeAnnotations = d3.annotation().annotations(annotations).accessors({ x: function x(d) {
-    return d.x;
-  }, y: function y(d) {
-    return d.y;
-  } });
-  annotationAnchor.enter().call(makeAnnotations);
+  doAnnotations(enclosedCircles, annotationAnchor);
 }
 
 
