@@ -11,7 +11,6 @@ var svgHeight = +svg.attr("height");
 //console.log(d3.schemeCategory10);
 var colorPicker = d3.scaleOrdinal(["#A07A19", "#AC30C0", "#EB9A72", "#BA86F5", "#EA22A8"]);
 
-
 // set of nodes/edges we have already seen (objects)
 var seenNodes = {};
 var seenEdges = {};
@@ -19,14 +18,6 @@ var seenEdges = {};
 // list of node/edge data used by the force-directed graph
 var nodes = [];
 var edges = [];
-
-// function destroyEdge(edge) {
-//   _
-// }
-
-// function getNode(id){
-// 	return seenNodes[id];
-// }
 
 // add a bunch of edges for the example
 util.addEdge("i", "d", 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
@@ -45,11 +36,11 @@ util.addEdge("i", "d", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, s
 // create a d3 simulation object
 var simulation = d3.forceSimulation(nodes)
 	//for making elements attract or repel one another
-	.force("charge", d3.forceManyBody().strength(20))
+	.force("charge", d3.forceManyBody().strength(-500))
 	//for creating a fixed distance between connected elements
-	.force("link", d3.forceLink(edges).distance(100))
+	.force("link", d3.forceLink(edges).distance(1))
 	//for setting the center of gravity of the system
-	.force("center", d3.forceCenter(50))
+	.force("center", d3.forceCenter())
 	//for preventing elements overlapping
 	.force("collide", d3.forceCollide(40))
 	//for attracting elements to a given point

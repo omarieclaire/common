@@ -177,10 +177,10 @@ nav a:hover {
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 10% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 40%; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
@@ -229,6 +229,14 @@ nav a:hover {
     /* position: absolute; */
     /* z-index: -1; */
 
+  }
+
+  #chart {
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
   }
 
   .control-button {

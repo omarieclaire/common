@@ -29,8 +29,7 @@ var createModal = function(modalId, buttonId, spanIndex) {
 }
 
 createModal('aboutModal', 'aboutBtn', 0);
-createModal('joinModal', 'joinBtn', 1);
-createModal('settingsModal', 'settingsBtn', 2);
+createModal('settingsModal', 'settingsBtn', 1);
 
 
 //add and remove players framework
