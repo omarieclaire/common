@@ -1,5 +1,7 @@
 /* global d3:false _:false */
 
+var ZOOM_AMOUNT = 0.5;
+
 var MY_FIXED_X = 0;
 var MY_FIXED_Y = 0;
 //default starting strength for each edge
@@ -317,8 +319,6 @@ var g = svg
 // zooming funtion given to d3
 // <svg transform="translate(10) + scale(2)">;
 var zoomFunction = function() {
-	var transWidth =  d3.event.transform.x; // + (svgWidth/2);
-	var transHeight = d3.event.transform.y; // + (svgHeight/2);
 	g.attr("transform", d3.event.transform);
 };
 
@@ -604,17 +604,17 @@ window.onload = function() {
 		// create a transition element of duration 500ms with initial state
 		// the current svg, and final state the svg after calling zoomCall.scaleTo(1)
 		// and begin transition
-		svg.transition().duration(500).call(zoomCall.scaleTo, 1).transition();
+		svg.transition().duration(500).call(zoomCall.translateTo,MY_FIXED_X,MY_FIXED_Y).transition().duration(500).call(zoomCall.scaleTo, 1).transition();
 	});
 
 	document.getElementById("zoom-in").addEventListener("click", function() {
 		var currentScale = d3.zoomTransform(svg.node()).k;
-		svg.transition().duration(500).call(zoomCall.scaleTo, currentScale + 0.1).transition();
+		svg.transition().duration(500).call(zoomCall.scaleTo, currentScale + ZOOM_AMOUNT).transition();
 	});
 
 	document.getElementById("zoom-out").addEventListener("click", function() {
 		var currentScale = d3.zoomTransform(svg.node()).k;
-		svg.transition().duration(500).call(zoomCall.scaleTo, currentScale - 0.1).transition();
+		svg.transition().duration(500).call(zoomCall.scaleTo, currentScale - ZOOM_AMOUNT).transition();
 	});
 
 };
