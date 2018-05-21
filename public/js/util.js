@@ -95,14 +95,20 @@ var util = (function() {
 
   // Deletes nodes
   function deleteNode(node, nodes, seenNodes, edges, seenEdges) {
+    // first, clone the array (this fixed a bug where looping
+    // and slicing over the array caused an issue)
+    // This is potentially expensive if we have a lot of edges.
+    var clonedEdges = edges.slice(0);
+
     // first delete all the edges that refer to this node
-    _.each(edges, function(edge) {
+    _.each(clonedEdges, function(edge) {
       if(edge) {
         if(edge.source.id == node.id || edge.target.id == node.id) {
           deleteEdge(edge, edges, seenEdges);
         }
       }
     });
+
     // now delete the node
     delete seenNodes[node.id];
     var index = nodes.indexOf(node);
