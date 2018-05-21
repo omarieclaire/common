@@ -39,7 +39,12 @@ var util = (function() {
       var o = {
         "id": id,
         color: colorPicker(id),
-        score: INITIAL_NODE_SCORE
+        score: INITIAL_NODE_SCORE,
+        x: 0,
+        y:0,
+        get r() {
+          return this.score;
+        }
       };
 
       if (id === myId) {
@@ -120,10 +125,13 @@ var util = (function() {
   function nodesByNetwork(nodes) {
     var nodesByNetwork = {};
     nodes.forEach(function(data) {
-      if(nodesByNetwork[data.network]) {
-        nodesByNetwork[data.network].push(data);
-      } else {
-        nodesByNetwork[data.network] = [data];
+      // note: if a node doesn't have a network yet, we skip it.
+      if(data.network) {
+        if(nodesByNetwork[data.network]) {
+          nodesByNetwork[data.network].push(data);
+        } else {
+          nodesByNetwork[data.network] = [data];
+        }
       }
     });
     return nodesByNetwork;
