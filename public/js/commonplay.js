@@ -7,7 +7,6 @@ var svg = d3.select("svg");
 var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
 
-
 svg.append("rect")
     .attr("width", "100%")
     .attr("height", "100%")
@@ -91,9 +90,9 @@ var node = g
 
 var networkCircle = g
 	.append("g")
-	.attr("stroke", "#fff")
+	.attr("stroke", "magenta")
 	.attr("stroke-width", 1.5)
-	.selectAll(".blah");
+	.selectAll(".networkCircle");
 
 // create a <g> element, append it to the first g
 var label = g
@@ -296,7 +295,7 @@ function ticked(e) {
 		.attr("cy", function(d) { return d.y; })
 		.attr("r", function(d) { return d.r + 20; })
 		.attr("fill", "none")
-		.attr("stroke", "red");
+		.attr("stroke", "magenta");
 }
 
 // used to generate random nodes

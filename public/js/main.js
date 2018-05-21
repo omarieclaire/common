@@ -28,26 +28,4 @@ var createModal = function(modalId, buttonId, spanIndex) {
 createModal('aboutModal', 'aboutBtn', 0);
 createModal('settingsModal', 'settingsBtn', 1);
 
-
-//add and remove players framework
-
 // var myData = [];
-// function addPlayer() {
-// 	// if(myData.length === 10)
-// 	// 	return;
-// 	//
-// 	// myData.push({
-// 	// 	name: names[myData.length],
-// 	// 	score: 30 + randomInteger(70);
-// 	console.log("hi");
-// //	update(myData);
-// 	}
-//
-// function removePlayer() {
-// 	// if(myData.length === 0)
-// 	// 	return;
-// 	//
-// 	// myData.pop();
-// //	update(myData);
-// console.log("bye");
-// }
