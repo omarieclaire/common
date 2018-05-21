@@ -86,12 +86,8 @@ var node = g
 	.attr("id", "g-node")
 	.selectAll(".node");
 
-// create a <g> element for networkCircles, append it to the first g
-var networkCircle = g
-	.append("g")
-	.attr("stroke", "magenta")
-	.attr("stroke-width", 1.5)
-	.selectAll(".networkCircle");
+// create a <g> element for annotations, append it to the first g
+var annotationAnchor = g.append("g").attr("stroke", "#E8336D").selectAll(".anchor");
 
 // create a <g> element for labels, append it to the first g
 var label = g
@@ -111,7 +107,6 @@ var ec = document.getElementById("edgecount");
 // value=nodes in network-id
 function enclosedCirclesByNetwork(nodesByNetwork) {
   var enclosedCircles = [];
-	console.log(nodesByNetwork);
   Object.keys(nodesByNetwork).forEach(function(network,index) {
     var nodesInNetwork = nodesByNetwork[network];
     var enclosedCircle = d3.packEnclose(nodesInNetwork);
@@ -196,7 +191,7 @@ function draw() {
 
   // In order to draw circles around each network, we calculate
   // the network scores. Then we mutate each node by adding
-	// the network it belongs to.
+  // the network it belongs to.
   // Then we group each node by the network it belngs to
   // Then we use that group and d3.packEnclose to encircle the networks.
   // TODO it would be good to find a better place to calculate this stuff
@@ -215,13 +210,32 @@ function draw() {
   var nodesByNetwork = util.nodesByNetwork(node.data());
   var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork)
 
-  networkCircle = networkCircle.data(enclosedCircles, function(d) { return d.id;});
-		networkCircle.exit().remove();
-		networkCircle = networkCircle.enter()
-			.append("circle")
-			.attr("fill", "#000000")
-			.attr("r", function(d) {return d.r + 50;})
-			.merge(networkCircle);
+  var annotations = enclosedCircles.map(function(circle,index) {
+    return {
+      id: "annotation-" + index,
+      note: { label: 10, title: "Score" },
+      dy: 93,
+      dx: -176,
+      x: circle.x,
+      y: circle.y,
+      type: d3.annotationCalloutCircle,
+      subject: {
+        radius: circle.r,
+        radiusPadding: 10
+      }
+    };
+  });
+
+  annotationAnchor = annotationAnchor.data(annotations, function(d) { return d.id;});
+  annotationAnchor.exit().remove();
+
+  var makeAnnotations = d3.annotation().annotations(annotations).accessors({ x: function x(d) {
+    return d.x;
+  }, y: function y(d) {
+    return d.y;
+  } });
+
+  annotationAnchor.enter().call(makeAnnotations);
 
 	// do the same thing for the labels
 	label = label.data(nodes, function(d) { return d.id;});
@@ -278,16 +292,34 @@ function ticked(e) {
   var nodesByNetwork = util.nodesByNetwork(node.data());
   var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork)
 
-  networkCircle = networkCircle.data(enclosedCircles, function(d) { return d.id;});
+  var annotations = enclosedCircles.map(function(circle,index) {
+    return {
+      id: "annotation-" + index,
+      note: { label: 10, title: "Score" },
+      dy: 93,
+      dx: -176,
+      x: circle.x,
+      y: circle.y,
+      type: d3.annotationCalloutCircle,
+      subject: {
+        radius: circle.r + 20,
+        radiusPadding: 5
+      }
+    };
+  });
 
-	networkCircle
-	//cx is the relative position of the node
-		.attr("cx", function(d) { return d.x; })
-		.attr("cy", function(d) { return d.y; })
-		.attr("r", function(d) { return d.r + 20; })
-		.attr("fill", "none")
-		.attr("stroke", "magenta");
+
+  annotationAnchor = annotationAnchor.data(annotations, function(d) { return d.id; });
+  annotationAnchor.exit().remove();
+
+  var makeAnnotations = d3.annotation().annotations(annotations).accessors({ x: function x(d) {
+    return d.x;
+  }, y: function y(d) {
+    return d.y;
+  } });
+  annotationAnchor.enter().call(makeAnnotations);
 }
+
 
 // used to generate random nodes
 var index = 1;

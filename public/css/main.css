@@ -258,17 +258,39 @@ nav a:hover {
    width: 1.5px;
  }
 
+ .annotation path {
+   stroke: #E8336D;
+   fill: rgba(0,0,0,0);
+ }
 
+ .annotation path.connector-arrow{
+   fill: #E8336D;
+ }
 
+ .annotation text {
+   fill: #E8336D;
+ }
 
+ .annotation-title {
+   font-weight: bold;
+ }
 
+ circle.handle {
+   stroke-dasharray: 5;
+   stroke: #E8336D;
+   fill: rgba(255, 255, 255, .5);
+   cursor: move;
 
+   stroke-opacity: .4;
+ }
 
+ circle.handle.highlight {
+   stroke-opacity: 1;
+ }
 
-
-
-
-
+ .annotation-note-bg {
+   fill: rgba(255, 255, 255, 0);
+ }
 
 
 
