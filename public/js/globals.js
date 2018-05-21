@@ -1,4 +1,3 @@
-/* global d3:false _:false */
 
 var ZOOM_AMOUNT = 0.5;
 //location where my (ME) node will be fixed when it is drawn to screen
@@ -12,7 +11,7 @@ var MAX_EDGE_STRENGTH = 9;
 //default starting strength for each node
 var INITIAL_NODE_SCORE = 8;
 //the default amount of "life-force" a network receives
-var GIVER_POWER = 0.5;
+var GIVER_POWER = 0.4;
 //the default amount of "life force" decayed by entropy/destroyer
 var DESTROYER_POWER = 0.5;
 //the "life force" a player trades to strengthen a edge

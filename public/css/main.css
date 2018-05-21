@@ -228,15 +228,6 @@ nav a:hover {
     font: 16px sans-serif;
     /* position: absolute; */
     /* z-index: -1; */
-
-  }
-
-  #chart {
-    position: fixed;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
   }
 
   .control-button {
@@ -249,8 +240,6 @@ nav a:hover {
     margin-left: 0em;
     margin-right: .05em;
     /* background-color: #d1c2d2; */
-
-
   }
 
   .nav-buttons {
