@@ -213,15 +213,15 @@ function draw() {
   var annotations = enclosedCircles.map(function(circle,index) {
     return {
       id: "annotation-" + index,
-      note: { label: 10, title: "Score" },
-      dy: 93,
-      dx: -176,
+      note: {  title: "10" },
+      dy: -circle.r - 30,
+      dx: 0,
       x: circle.x,
       y: circle.y,
       type: d3.annotationCalloutCircle,
       subject: {
         radius: circle.r,
-        radiusPadding: 10
+        radiusPadding: 5 
       }
     };
   });
@@ -295,9 +295,9 @@ function ticked(e) {
   var annotations = enclosedCircles.map(function(circle,index) {
     return {
       id: "annotation-" + index,
-      note: { label: 10, title: "Score" },
-      dy: 93,
-      dx: -176,
+      note: { title: "10" },
+      dy: -circle.r - 30,
+      dx: 0,
       x: circle.x,
       y: circle.y,
       type: d3.annotationCalloutCircle,
