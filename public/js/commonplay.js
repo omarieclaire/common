@@ -90,7 +90,14 @@ var node = g
 	.append("g")
 	.attr("stroke", "#fff")
 	.attr("stroke-width", 1.5)
+	.attr("id", "g-node")
 	.selectAll(".node");
+
+var networkCircle = g
+	.append("g")
+	.attr("stroke", "#fff")
+	.attr("stroke-width", 1.5)
+	.selectAll(".blah");
 
 // create a <g> element, append it to the first g
 var label = g
@@ -184,6 +191,24 @@ function draw() {
 	//what does this mean?
 		.merge(node);
 
+		var circles = [];
+		document.getElementById("g-node").childNodes.forEach(function(n){
+			var x = +n.getAttribute("cx");
+			var y = +n.getAttribute("cy");
+			var r = +n.getAttribute("r");
+			circles.push({x: x, y: y, r: r});
+		});
+		var enclosed = d3.packEnclose(circles);
+		enclosed.id = "enclosing-network";
+		networkCircle = networkCircle.data([enclosed], function(d) { return d.id;});
+		networkCircle.exit().remove();
+		networkCircle = networkCircle.enter()
+			.append("circle")
+			.attr("fill", "#000000")
+			.attr("r", function(d) {return d.r + 50;})
+			.merge(networkCircle);
+
+
 	// do the same thing for the labels
 	label = label.data(nodes, function(d) { return d.id;});
 
@@ -215,6 +240,10 @@ function draw() {
 	// can we instead call nodes.length and edges.length?
 	nc.textContent = Object.keys(seenNodes).length;
 	ec.textContent = Object.keys(seenEdges).length;
+
+	//var enclosed = d3.packEnclose(circles.each(function(c){ return {x: c.cx, y: c.cy, r: c.r};}));
+	//svg.append("circle").attr("fill", "none").attr("stroke", "black").attr("r", enclosed.r).attr("cx",enclosed.x + svgWidth/2).attr("cy", enclosed.y + svgHeight / 2);
+
 }
 
 // function called on every "tick" of d3 like a clock or gameloop
@@ -224,7 +253,7 @@ function ticked(e) {
 		.attr("cx", function(d) { return d.x; })
 		.attr("cy", function(d) { return d.y; })
 		.attr("r", function(d) { return d.score; })
-		.attr("fill", function(d) { return d.color;})
+		.attr("fill", function(d) { return d.color;});
 
 	edge
 		.attr("x1", function(d) { return d.source.x; })
@@ -235,6 +264,14 @@ function ticked(e) {
 	label
 		.attr("x", function(d) { return d.x + 5; })
 		.attr("y", function(d) { return d.y - 5; });
+
+	networkCircle
+	//cx is the relative position of the node
+		.attr("cx", function(d) { return d.x; })
+		.attr("cy", function(d) { return d.y; })
+		.attr("r", function(d) { return d.r + 20; })
+		.attr("fill", "none")
+		.attr("stroke", "red");
 }
 
 // used to generate random nodes
