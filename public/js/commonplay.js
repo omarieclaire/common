@@ -195,7 +195,7 @@ function draw() {
 	//fill takes a color but instead of giving a color I give it
 	// an anon function that returns a color
 		.attr("fill", function(d) { return d.color; })
-		.attr("r", 8)
+		.attr("r", function(d) { return d.score; })
 		// add an id attribute to each node, so we can access/select it later
 		.attr("id", util.nodeIdAttr)
 	//we added the onclick to the circle, but maybe we should have added it to the node
@@ -213,7 +213,6 @@ function draw() {
   var networkScores = scores.calculateNetworkScoresByNode(edges,nodes, ui.renderNetworkScores);
   // add a radius to the data
   node.data().forEach(function(d) {
-    d.r = d.score;
     // This is slow; we should improve this.
     networkScores.forEach(function(network) {
       if(network.people.indexOf(d.id) != -1) {
@@ -265,10 +264,6 @@ function draw() {
 	// can we instead call nodes.length and edges.length?
 	nc.textContent = Object.keys(seenNodes).length;
 	ec.textContent = Object.keys(seenEdges).length;
-
-	//var enclosed = d3.packEnclose(circles.each(function(c){ return {x: c.cx, y: c.cy, r: c.r};}));
-	//svg.append("circle").attr("fill", "none").attr("stroke", "black").attr("r", enclosed.r).attr("cx",enclosed.x + svgWidth/2).attr("cy", enclosed.y + svgHeight / 2);
-
 }
 
 // function called on every "tick" of d3 like a clock or gameloop
