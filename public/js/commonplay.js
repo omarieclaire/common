@@ -20,9 +20,9 @@ var edges = [];
 //   _
 // }
 
-function getNode(id){
-	return seenNodes[id];
-}
+// function getNode(id){
+// 	return seenNodes[id];
+// }
 
 // add a bunch of edges for the example
 util.addEdge("i", "d", 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
@@ -38,13 +38,19 @@ util.addEdge("e", "b", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, s
 util.addEdge("i", "c", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
 util.addEdge("i", "d", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
 
-// create a d3 simulation object?
+// create a d3 simulation object
 var simulation = d3.forceSimulation(nodes)
-	.force("charge", d3.forceManyBody().strength(-500))
+	//for making elements attract or repel one another
+	.force("charge", d3.forceManyBody().strength(20))
+	//for creating a fixed distance between connected elements
 	.force("link", d3.forceLink(edges).distance(200))
-	.force("center", d3.forceCenter())
+	//for setting the center of gravity of the system
+	.force("center", d3.forceCenter(50))
+	//for preventing elements overlapping
 	.force("collide", d3.forceCollide(40))
+	//for attracting elements to a given point
 	.force("x", d3.forceX())
+	//for attracting elements to a given point
 	.force("y", d3.forceY())
 	.alphaTarget(0.0)
 	.on("tick", ticked);
@@ -275,7 +281,7 @@ window.onload = function() {
 	      console.log("destroying %o", edge);
 				// how does this work? Should we use our deleteEdge function?
 				util.deleteEdge(edge, edges, seenEdges);
-	      destroyEdge(edge);
+	      //destroyEdge(edge);
 	    } else {
 	      console.log("weakening %o", edge);
 	      edge.strength -= DESTROYER_POWER;
