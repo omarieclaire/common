@@ -1,27 +1,5 @@
 /* global d3:false _:false */
 
-var ZOOM_AMOUNT = 0.5;
-
-var MY_FIXED_X = 0;
-var MY_FIXED_Y = 0;
-//default starting strength for each edge
-var DEFAULT_STRENGTH = 1;
-//capping the strength of each edge
-var MAX_EDGE_STRENGTH = 9;
-//default starting strength for each node
-var INITIAL_NODE_SCORE = 8;
-//the default amount of "life-force" a network receives
-var GIVER_POWER = 0.5;
-//the default amount of "life force" decayed by entropy/destroyer
-var DESTROYER_POWER = 0.5;
-//the "life force" a player trades to strengthen a edge
-var CLICK_NODE_DESTROYER_POWER = 2;
-//the edge-strength increase-when the node is clicked
-var CLICK_EDGE_INCREMENTER = 0.5;
-
-//pretend we know who the user is, "i"
-var ME = "i";
-
 // this is the svg canvas to draw onto
 var svg = d3.select("svg");
 
@@ -30,8 +8,6 @@ var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
 var colorPicker = d3.scaleOrdinal(d3.schemeCategory10);
 
-
-
 // set of nodes/edges we have already seen (objects)
 var seenNodes = {};
 var seenEdges = {};
@@ -39,242 +15,6 @@ var seenEdges = {};
 // list of node/edge data used by the force-directed graph
 var nodes = [];
 var edges = [];
-
-//create html id for each edge so we can change visuals
-function edgeIdAttr(edge) {
-	return "edge-" + edge.id;
-}
-
-//create html id for each node so we can change visuals
-function nodeIdAttr(node) {
-	return "node-" + node.id;
-}
-
-// Given a node and edges, find all connected edges to that node.
-function getEdgesForNode(node, edges) {
-	var connectedEdgesForNode = edges.filter(function(edge){
-		return edge.source.id == node.id || edge.target.id == node.id;
-	});
-
-	return connectedEdgesForNode;
-}
-
-
-function renderMyScore() {
-	var myNode = seenNodes[ME];
-	if(myNode) {
-		var html = document.getElementById("node-score-me");
-		html.textContent = myNode.score;
-	} else {
-		console.log("can't find ME :(");
-	}
-}
-//draw network scores to screen
-function renderNetworkScores(networkScores) {
-	var scoreHtml = document.getElementById("network-score");
-	// clear the html elements
-	while(scoreHtml.firstChild){
-    scoreHtml.removeChild(scoreHtml.firstChild);
-	}
-	_.each(networkScores, function(networkScore) {
-		var liHtml = document.createElement("LI");
-		liHtml.textContent =
-			"network: " +
-			networkScore.network +
-			" score: " +
-			networkScore.score +
-			" health: " +
-			networkScore.health.toFixed(2) +
-			" people: " +
-			networkScore.people.toString();
-		scoreHtml.appendChild(liHtml);
-	});
-}
-//calculate the health of the network (factors: number of edges,
-// strength of edges, and number of people)
-function calculateNetworkHealth(numEdges, sumEdgesStrength, numPeople) {
-	var averageEdgePerPerson = sumEdgesStrength / numPeople;
-	return averageEdgePerPerson;
-}
-
-//find the network score of a given node
-function calculateNetworkScoresByNode(edges, nodes) {
-
-  // first, build a dictionary which associates each node ID with the
-  // IDs it is directly connected to. sometimes this would be called
-  // an "adjacency matrix".
-  var dict = {};
-  _.each(edges, function (edge) {
-
-    const targets = dict[edge.source.id] || [];
-    targets.push({dest: edge.target.id, strength: edge.strength});
-    dict[edge.source.id] = targets;
-
-    const sources = dict[edge.target.id] || [];
-    sources.push({dest: edge.source.id, strength: edge.strength});
-    dict[edge.target.id] = sources;
-  });
-
-  var networks = [];
-  var seen = {}
-
-  // in-progress
-  var currentNetworkId = 1;
-
-  //var networkQueue = nodes.slice(0, nodes.length);
-  var networkQueue = _.sortBy(nodes, function (node) { return node.id });
-  while (networkQueue.length > 0) {
-    var node = networkQueue.pop();
-    if (!seen[node.id]) {
-      var currentPeople = [];
-      var currentScore = 0;
-			var currentNumEdges = 0;
-
-      var queue = [{dest: node.id}];
-      while (queue.length > 0) {
-        var obj = queue.pop();
-        var id = obj.dest;
-        if (!seen[id]) {
-          currentPeople.push(id);
-          var neighbors = dict[id] || [];
-          _.each(neighbors, function (neighbor) {
-            currentScore += neighbor.strength;
-						currentNumEdges++;
-          });
-          queue = queue.concat(neighbors);
-          seen[id] = 1;
-        }
-      }
-
-			var health = calculateNetworkHealth(currentNumEdges, currentScore, currentPeople.length);
-
-      networks.push({
-				network: currentNetworkId,
-				people: currentPeople,
-				score: currentScore,
-				numEdges: currentNumEdges,
-				health: health
-			});
-      currentNetworkId += 1;
-    }
-  }
-	renderNetworkScores(networks);
-  return networks;
-}
-
-// edges: [a -> b, a -> c, b -> d, c -> d]
-//
-// dict: { a -> [b, c], b -> [d], c -> [d] }
-
-// each edge has:
-// - {source: nodeId, target: nodeId, strength: number}
-function calculateCommonScore(edges, id) {
-
-  // first, build a dictionary which associates each node ID with the
-  // IDs it is directly connected to. sometimes this would be called
-  // an "adjacency matrix".
-  var dict = {};
-  _.each(edges, function (edge) {
-
-    const targets = dict[edge.source.id] || [];
-    targets.push({dest: edge.target.id, strength: edge.strength});
-    dict[edge.source.id] = targets;
-
-    const sources = dict[edge.target.id] || [];
-    sources.push({dest: edge.source.id, strength: edge.strength});
-    dict[edge.target.id] = sources;
-  });
-
-  var score = 0;
-  var seen = {}; // nodes we've already counted
-  var queue = [{dest: id}]; // nodes we need to count
-  while (queue.length > 0) {
-    var obj = queue.pop();
-    var id = obj.dest;
-    if (!seen[id]) {
-      var neighbors = dict[id] || [];
-      _.each(neighbors, function (neighbor) {
-        score += neighbor.strength;
-      });
-      queue = queue.concat(neighbors);
-      seen[id] = 1;
-    }
-  }
-
-  //console.log("score = %o", score);
-  document.getElementById("iscore").textContent = score.toString();
-
-  var networkScores = calculateNetworkScoresByNode(edges, nodes);
-  console.log("network scores = %o", networkScores);
-
-	return score;
-};
-
-// given two node IDs, produce a consistent edge ID.
-function edgeId(from, to) {
-	if (from < to) {
-		return from + "-" + to;
-	} else {
-		return to + "-" + from;
-	}
-}
-
-// given a node id, add a node
-// this function returns the node
-function addNode(id) {
-	// check if the id was already added
-	if (seenNodes[id]) {
-		// the id was added, so return the node
-		return seenNodes[id];
-	} else {
-		// create a new node object
-		var o = {
-			"id": id,
-			color: colorPicker(id),
-			score: INITIAL_NODE_SCORE
-		};
-
-		if (id === ME) {
-			o.fx = MY_FIXED_X;
-			o.fy = MY_FIXED_Y;
-		}
-		// add the new node to the array of nodes
-		nodes.push(o);
-		// add the id and node to the seenNodes object
-		seenNodes[id] = o;
-		// return the node
-		return o;
-	}
-}
-
-// Given a 'from' id and a 'to' id, add an edge
-// this function returns nothing
-function addEdge(from, to, strength) {
-	// calculate the edge id
-	var id = edgeId(from, to);
-	if (from === to) {
-		// if 'from' id is equal to 'to' id, assume we're adding
-		// a node and not an edge.
-		addNode(from);
-	} else if (seenEdges[id]) {
-		// if 'from' and 'to' are different, but
-		// we've seen the id before, do nothing
-		//console.log("edge %o -> %o already exists", from, to);
-	} else {
-		// if 'from' and 'to' are different and ne
-		// add a node for 'from' in case it doesn't exist
-		var x = addNode(from);
-		// add a node for 'to' in case it doesn't exist
-		var y = addNode(to);
-		// create a new edge
-		var o = {id: id, source: x, target: y, strength: strength};
-		// add the edges to the array of edges
-		edges.push(o);
-		// add the edge id to the seenEdges object
-		seenEdges[id] = 1;
-    calculateCommonScore(edges, "i");
-	}
-}
 
 function destroyEdge(edge) {
   _
@@ -285,18 +25,18 @@ function getNode(id){
 }
 
 // add a bunch of edges for the example
-addEdge("i", "d", 3);
-addEdge("b", "c", 1);
-addEdge("d", "e", 3);
-addEdge("i", "f", 1);
-addEdge("d", "g", 1);
-addEdge("i", "h", 2);
-addEdge("h", "i", 1);
-addEdge("h", "b", 2);
-addEdge("i", "a", 1);
-addEdge("e", "b", 1);
-addEdge("i", "c", 2);
-addEdge("i", "d", 1);
+util.addEdge("i", "d", 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("b", "c", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("d", "e", 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("i", "f", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("d", "g", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("i", "h", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("h", "i", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("h", "b", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("i", "a", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("e", "b", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("i", "c", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+util.addEdge("i", "d", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
 
 // create a d3 simulation object?
 var simulation = d3.forceSimulation(nodes)
@@ -310,7 +50,6 @@ var simulation = d3.forceSimulation(nodes)
 	.on("tick", ticked);
 
 
-
 // create a <g> element and append it into <svg>
 //create the graph itself
 var g = svg
@@ -321,7 +60,6 @@ var g = svg
 var zoomFunction = function() {
 	g.attr("transform", d3.event.transform);
 };
-
 
 // call zooming function when d3 detects a zoom
 //svg.call(d3.zoom().on("zoom", zoomFunction));
@@ -356,32 +94,6 @@ var nc = document.getElementById("nodecount");
 // get the edgecount HTML node
 var ec = document.getElementById("edgecount");
 
-// Deletes edges
-function deleteEdge(edge) {
-	var index = edges.indexOf(edge);
-	console.log("DELETE EDGE: " + edge + " at index " + index);
-	delete seenEdges[edge.id];
-	edges.splice(index,1);
-}
-
-// Deletes nodes
-function deleteNode(node) {
-	// first delete all the edges that refer to this node
-	_.each(edges, function(edge) {
-		if(edge) {
-			if(edge.source.id == node.id || edge.target.id == node.id) {
-				deleteEdge(edge);
-			}
-		}
-	});
-
-	// now delete the node
-	delete seenNodes[node.id];
-	var index = nodes.indexOf(node);
-	console.log("DELETE NODE: " + node + " at index " + index);
-	nodes.splice(index,1);
-}
-
 //nodeclick function
 //why isn't it redrawing!!!?
 function nodeClick(d) {
@@ -404,23 +116,23 @@ function nodeClick(d) {
 			// decrement our score
 			ourNode.score = ourNode.score - CLICK_NODE_DESTROYER_POWER;
 			if(ourNode.score <= 0) {
-				deleteNode(ourNode);
+				util.deleteNode(ourNode, nodes, seenNodes, edges, seenEdges);
 			}
 
 			// begin edge animation
-			var htmlEdge = document.getElementById(edgeIdAttr(ouredge));
+			var htmlEdge = document.getElementById(util.edgeIdAttr(ouredge));
 			d3.select(htmlEdge).transition().duration(1000).attr("stroke-dasharray", "5, 5").transition().duration(1500).attr("stroke-dasharray", null);
 	  }
 
 		// begin node animation
-		var htmlNode = document.getElementById(nodeIdAttr(d));
+		var htmlNode = document.getElementById(util.nodeIdAttr(d));
 		d3.select(htmlNode).transition().duration(10).style("fill","#000000").transition().duration(1500).style("fill", d.color);
 
 	} else {
 		console.log(d, "No edge!");
 	}
 
-	calculateCommonScore(edges, ME);
+	scores.calculateCommonScore(edges, ME, ui.renderNetworkScores);
 	draw();
 }
 
@@ -433,7 +145,7 @@ function edgeStrength(d) {
 draw();
 
 // render the score for the first time
-renderMyScore();
+ui.renderMyScore(ME, seenNodes);
 
 // function to refresh d3 (for any changes to the graph)?
 function draw() {
@@ -452,7 +164,7 @@ function draw() {
 		.attr("fill", function(d) { return d.color; })
 		.attr("r", 8)
 		// add an id attribute to each node, so we can access/select it later
-		.attr("id", nodeIdAttr)
+		.attr("id", util.nodeIdAttr)
 	//we added the onclick to the circle, but maybe we should have added it to the node
 		.on("click", nodeClick)
 	//what does this mean?
@@ -477,7 +189,7 @@ function draw() {
 	edge = edge.enter()
 		.append("line")
 		.attr("stroke-width", edgeStrength)
-		.attr("id", edgeIdAttr)
+		.attr("id", util.edgeIdAttr)
 		.merge(edge);
 
 	// Update and restart the simulation.
@@ -526,7 +238,7 @@ window.onload = function() {
 		//console.log("click %o %o", from, to);
 
 		// add an edge between `from` and `to`
-		addEdge(from, to, DEFAULT_STRENGTH);
+    util.addEdge(from, to, DEFAULT_STRENGTH, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
 
 		// redraw.
 		draw();
@@ -558,7 +270,7 @@ window.onload = function() {
 	    if (edge.strength <= DESTROYER_POWER) {
 	      console.log("destroying %o", edge);
 				// how does this work? Should we use our deleteEdge function?
-				deleteEdge(edge);
+				util.deleteEdge(edge, edges, seenEdges);
 	      destroyEdge(edge);
 	    } else {
 	      console.log("weakening %o", edge);
@@ -571,16 +283,16 @@ window.onload = function() {
 		node.score = node.score - DESTROYER_POWER;
 		if(node.score <= 0) {
 			console.log("deleting node: " + node);
-			deleteNode(node);
+			util.deleteNode(node, nodes, seenNodes, edges, seenEdges);
 		}
 
-		calculateNetworkScoresByNode(edges, nodes);
-		renderMyScore();
+		scores.calculateNetworkScoresByNode(edges, nodes, ui.renderNetworkScores);
+		ui.renderMyScore(ME, seenNodes);
 		draw();
   });
 
 	document.getElementById("giver").addEventListener("click", function() {
-		var networkScores = calculateNetworkScoresByNode(edges,nodes);
+		var networkScores = scores.calculateNetworkScoresByNode(edges,nodes, ui.renderNetworkScores);
 		_.each(nodes, function(node) {
 			var network = networkScores.filter(function(network) {
 				return network.people.indexOf(node.id) != -1;
@@ -591,7 +303,7 @@ window.onload = function() {
 				console.log("YIKES! Could not find a network for node " + node.id);
 			}
 		});
-		renderMyScore();
+		ui.renderMyScore(ME, seenNodes);
 		draw();
 	});
 
