@@ -6,7 +6,10 @@ var svg = d3.select("svg");
 // attributes of the svg canvas as variables
 var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
+
 var colorPicker = d3.scaleOrdinal(d3.schemeCategory10);
+//var colorPicker = d3.scaleOrdinal.range(["#A07A19", "#AC30C0", "#EB9A72", "#BA86F5", "#EA22A8"]);
+
 
 // set of nodes/edges we have already seen (objects)
 var seenNodes = {};
@@ -43,7 +46,7 @@ var simulation = d3.forceSimulation(nodes)
 	//for making elements attract or repel one another
 	.force("charge", d3.forceManyBody().strength(20))
 	//for creating a fixed distance between connected elements
-	.force("link", d3.forceLink(edges).distance(200))
+	.force("link", d3.forceLink(edges).distance(-600))
 	//for setting the center of gravity of the system
 	.force("center", d3.forceCenter(50))
 	//for preventing elements overlapping
