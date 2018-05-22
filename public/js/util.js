@@ -60,6 +60,28 @@ var util = (function() {
     }
   }
 
+  function newConnection(sender, recipient, amount){
+    console.log("new connection");
+  }
+
+  function giveStrength(sender, recipient, amount){
+    console.log("give strength");
+  }
+
+  function sendInvite(sender, recipient, email){
+    firebase.database().ref('players/' + recipient).set({
+    lastSeen: 0,
+    email: email,
+  });
+  var newLogKey = firebase.database().ref().child('log').push().key;
+    firebase.database().ref('log/' + newLogKey).set({
+    type: "invite",
+    email: email,
+    sender: sender,
+    recipient: recipient
+  });
+    console.log("send invite");
+  }
   // Given a 'from' id and a 'to' id, add an edge
   // this function returns nothing
   function addEdge(from, to, strength, myId, nodes, edges, seenNodes, seenEdges, colorPicker, commonScoreCalculator, networkScoreRender) {
@@ -146,6 +168,9 @@ var util = (function() {
     addEdge: addEdge,
     deleteEdge: deleteEdge,
     deleteNode: deleteNode,
-    nodesByNetwork: nodesByNetwork
+    nodesByNetwork: nodesByNetwork,
+    sendInvite: sendInvite,
+    newConnection: newConnection,
+    giveStrength: giveStrength
   };
 })();
