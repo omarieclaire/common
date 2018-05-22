@@ -50,7 +50,12 @@
         </header>
           <!-- <h2>To play you must find an active player</h2>
           <p>Click <a href="https://twitter.com/hashtag/commonplay?src=hash " target="_blank">here</a> to find an active player</p> -->
-        <section>
+
+       <section>
+
+         <div id="chart"></div>
+              <script src="https://d3js.org/d3.v4.min.js"></script>
+
           <button id="destroy" class="control-button">Destroyer</button>
           <button id="giver" class="control-button">Giver</button>
           <button id="zoom-in" class="zoom-button">Zoom In</button>
@@ -58,10 +63,9 @@
           <button id="reset-button" class="zoom-button">Reset Zoom</button>
         </section>
 
-        <!-- <div id="chart"></div> -->
 
-        <svg id="d3viz" width="500" height="300">
-        </svg>
+
+
 
         <section>
         # people: <span id="nodecount">0</span><br> # connections: <span id="edgecount">0</span><br> edge from <input id="from" type="text"> to <input id="to" type="text">
@@ -74,8 +78,6 @@
         node score for i: <span id="node-score-me">0</span><br>
         network score: <br>
         <ul id="network-score"></ul><br>
-
-      <script src="https://d3js.org/d3.v4.min.js"></script>
 
       <footer>
         <!-- <h3>Credits</h3> -->
@@ -104,6 +106,7 @@
             ga('create','UA-XXXXX-X','auto');ga('send','pageview');
         </script> -->
 
+  <script src="js/svgCreation.js"></script>
   <!-- define all the html and then define interactivity -->
   <script src="js/underscore-min.js"></script>
   <!-- order matters: global imported first -->

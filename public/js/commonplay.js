@@ -7,12 +7,14 @@ var util = importUtil(scores, ui);
 var db = importDb(scores, ui, util);
 var action = importAction(ui, util, db);
 
+/*
 // this is the svg canvas to draw onto
 var svg = d3.select("svg");
 
 // attributes of the svg canvas as variables
 var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
+*/
 
 svg.append("rect")
     .attr("width", "100%")
@@ -105,7 +107,7 @@ var label = g
 	.append("g")
 	.attr("stroke", "#fff")
 	.attr("stroke-width", 1.5)
-	.selectAll(".node");
+	.selectAll(".label");
 
 // get the nodecount HTML node
 var nc = document.getElementById("nodecount");

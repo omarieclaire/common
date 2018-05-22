@@ -215,11 +215,14 @@ nav a:hover {
   width: 960px;
   } */
 
-  /* svg {
-      position: absolute;
-      left: 0;
-      top: 0;
-  } */
+  /* Make the chart container fill the page using CSS. */
+      #chart {
+        position: fixed;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+      }
 
   #d3viz {
     max-width: 100%;
