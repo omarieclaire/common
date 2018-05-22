@@ -216,13 +216,13 @@ nav a:hover {
   } */
 
   /* Make the chart container fill the page using CSS. */
-      #chart {
-        position: fixed;
-        left: 0px;
-        right: 0px;
-        top: 375px;
-        bottom: 0px;
-      }
+  #chart {
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 375px;
+    bottom: 0px;
+  }
 
   #d3viz {
     max-width: 100%;
@@ -233,72 +233,77 @@ nav a:hover {
     /* z-index: -1; */
   }
 
-  .control-button {
-    margin-left: 0em;
-    margin-right: .05em;
-    background-color: #d8c4c7;
-  }
-
-  .zoom-button {
-    margin-left: 0em;
-    margin-right: .05em;
-    /* background-color: #d1c2d2; */
-  }
-
-  .nav-buttons {
-    position: absolute;
-    right: 30px;
-    top: 10px;
-  }
-
-  .edges line {
-   color: #999;
-   opacity: 0.6;
- }
-
  .nodes circle {
-   /* color: #fff; */
    width: 1.5px;
  }
 
  .annotation path {
-   stroke: #E8336D;
-   fill: rgba(0,0,0,0);
- }
-
- .annotation path.connector-arrow{
-   fill: #E8336D;
- }
-
- .annotation text {
-   fill: #E8336D;
- }
-
- .annotation-title {
-   font-weight: bold;
- }
-
- circle.handle {
-   stroke-dasharray: 5;
-   stroke: #E8336D;
-   fill: rgba(255, 255, 255, .5);
-   cursor: move;
-
-   stroke-opacity: .4;
- }
-
- circle.handle.highlight {
-   stroke-opacity: 1;
- }
-
- .annotation-note-bg {
-   fill: rgba(255, 255, 255, 0);
+   stroke: grey;
+   fill: black;
  }
 
 
+ /* buttons */
 
+ /* .control-button {
+   margin-left: 0em;
+   margin-right: .05em;
+   background-color: #d8c4c7;
+ }
 
+ .zoom-button {
+   margin-left: 0em;
+   margin-right: .05em;
+ }
 
+ .nav-buttons {
+   position: absolute;
+   right: 30px;
+   top: 10px;
+ } */
+
+ #button {
+   position: absolute;
+   margin-left: 0em;
+   margin-right: .05em;
+   /* bottom: 1em; */
+   font: 16px Helvetica Neue;
+   width: 200px;
+ }
+
+ button {
+  background: #222 url(http://bost.ocks.org/button-overlay.png) repeat-x;
+  color: #fff;
+  text-rendering: optimizeLegibility;
+  text-shadow: 0 -1px 1px #222;
+  padding: 6px 10px 6px 10px;
+  border: 0;
+  border-bottom: 1px solid #222;
+  -moz-border-radius: 5px;
+  -moz-box-shadow: 0 1px 3px #999;
+  -moz-transition: background-color 250ms linear;
+  -webkit-border-radius: 5px;
+  -webkit-box-shadow: 0 1px 3px #999;
+  -webkit-transition: background-color 250ms linear;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+button.confirm {
+  background-color: brown;
+  -webkit-animation-name: pulse;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-delay: 250ms;
+  -webkit-animation-duration: 1000ms;
+  -webkit-animation-direction: alternate;
+}
+
+@-webkit-keyframes pulse {
+  0% { background-color: brown; }
+  100% { background-color: red; }
+}
 
 
 /* ==========================================================================
