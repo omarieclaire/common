@@ -1,5 +1,10 @@
 /* global d3:false _:false */
 
+// IMPORT
+var ui = importUi();
+var scores = importScores(ui);
+var util = importUtil(scores, ui);
+
 // Initialize Firebase
 var config = {
   apiKey: "AIzaSyAtKnQw8v9xdpSTPBZwFj3CcIjnugqIxUg",
@@ -13,7 +18,6 @@ var config = {
   console.log(defaultApp.name);  // "[DEFAULT]"
   var database = defaultApp.database();
   console.log(database);
-
 
 // this is the svg canvas to draw onto
 var svg = d3.select("svg");
@@ -62,21 +66,18 @@ database.ref('/log').once('value').then(function(snapshot) {
     draw();
 });
 
-
-
-
-// util.addEdge("i", "d", 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("b", "c", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("d", "e", 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("i", "f", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("d", "g", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("i", "h", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("h", "i", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("h", "b", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("i", "a", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("e", "b", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("i", "c", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
-// util.addEdge("i", "d", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+// util.addEdge("i", "d", 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("b", "c", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("d", "e", 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("i", "f", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("d", "g", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("i", "h", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("h", "i", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("h", "b", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("i", "a", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("e", "b", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("i", "c", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// util.addEdge("i", "d", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
 
 // create a d3 simulation object
 var simulation = d3.forceSimulation(nodes)
@@ -223,7 +224,7 @@ function nodeClick(d) {
 		//console.log(d, "Not our edge!");
 	}
 
-	scores.calculateCommonScore(edges, ME, ui.renderNetworkScores);
+	scores.calculateCommonScore(edges, ME);
 	draw();
 }
 
@@ -268,7 +269,7 @@ function draw() {
   // Then we use that group and d3.packEnclose to encircle the networks.
   // TODO it would be good to find a better place to calculate this stuff
   // rather than in draw
-  var networkScores = scores.calculateNetworkScoresByNode(edges,nodes, ui.renderNetworkScores);
+  var networkScores = scores.calculateNetworkScoresByNode(edges,nodes);
   // add a radius to the data
   node.data().forEach(function(d) {
     // This is slow; TODO we should improve this.
@@ -365,7 +366,7 @@ window.onload = function() {
       util.sendInvite(from, to, to+"@fake.com");
       console.log("need to invite to = %o", to);
     }
-    util.addEdge(from, to, DEFAULT_STRENGTH, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+    util.addEdge(from, to, DEFAULT_STRENGTH, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
 		// redraw.
 		draw();
 	});
@@ -385,7 +386,7 @@ window.onload = function() {
 			from = _.sample(seenNodes).id;
 		}
 		var to = _.sample(seenNodes).id;
-		util.addEdge(from, to, DEFAULT_STRENGTH, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+		util.addEdge(from, to, DEFAULT_STRENGTH, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
 		draw();
 	});
 
@@ -412,13 +413,13 @@ window.onload = function() {
 			util.deleteNode(node, nodes, seenNodes, edges, seenEdges);
 		}
 
-		scores.calculateNetworkScoresByNode(edges, nodes, ui.renderNetworkScores);
+		scores.calculateNetworkScoresByNode(edges, nodes);
 		ui.renderMyScore(ME, seenNodes);
 		draw();
   });
 
 	document.getElementById("giver").addEventListener("click", function() {
-		var networkScores = scores.calculateNetworkScoresByNode(edges,nodes, ui.renderNetworkScores);
+		var networkScores = scores.calculateNetworkScoresByNode(edges,nodes);
 		_.each(nodes, function(node) {
 			var network = networkScores.filter(function(network) {
 				return network.people.indexOf(node.id) != -1;

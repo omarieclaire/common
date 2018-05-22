@@ -1,4 +1,4 @@
-var ui = (function() {
+var importUi = function() {
 
   function renderMyScore(myId, seenNodes) {
     var myNode = seenNodes[myId];
@@ -36,4 +36,4 @@ var ui = (function() {
     renderMyScore: renderMyScore,
     renderNetworkScores: renderNetworkScores,
   };
-})();
+};
