@@ -1,4 +1,4 @@
-var util = (function() {
+var importUtil = function(scores, ui) {
   //create html id for each edge so we can change visuals
   function edgeIdAttr(edge) {
     return "edge-" + edge.id;
@@ -84,7 +84,7 @@ var util = (function() {
   }
   // Given a 'from' id and a 'to' id, add an edge
   // this function returns nothing
-  function addEdge(from, to, strength, myId, nodes, edges, seenNodes, seenEdges, colorPicker, commonScoreCalculator, networkScoreRender) {
+  function addEdge(from, to, strength, myId, nodes, edges, seenNodes, seenEdges, colorPicker) {
     // calculate the edge id
     var id = edgeId(from, to);
     if (from === to) {
@@ -107,8 +107,7 @@ var util = (function() {
       edges.push(o);
       // add the edge id to the seenEdges object
       seenEdges[id] = 1;
-      //scores.calculateCommonScore(edges, myId, ui.renderNetworkScores);
-      commonScoreCalculator(edges, myId, networkScoreRender);
+      scores.calculateCommonScore(edges, myId, ui.renderNetworkScores);
     }
   }
 
@@ -173,4 +172,4 @@ var util = (function() {
     newConnection: newConnection,
     giveStrength: giveStrength
   };
-})();
+};

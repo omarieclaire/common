@@ -1,4 +1,4 @@
-var scores = (function() {
+var importScores = function(ui) {
 
   //calculate the health of the network (factors: number of edges,
   // strength of edges, and number of people)
@@ -10,7 +10,7 @@ var scores = (function() {
   //find the network score of a given node
   // also pass in a render function that will
   // accept a networks as an argument.
-  function calculateNetworkScoresByNode(edges, nodes, renderFunction) {
+  function calculateNetworkScoresByNode(edges, nodes) {
 
     // first, build a dictionary which associates each node ID with the
     // IDs it is directly connected to. sometimes this would be called
@@ -70,7 +70,7 @@ var scores = (function() {
         currentNetworkId += 1;
       }
     }
-    renderFunction(networks);
+    ui.renderNetworkScores(networks);
     return networks;
   };
 
@@ -80,7 +80,7 @@ var scores = (function() {
 
   // each edge has:
   // - {source: nodeId, target: nodeId, strength: number}
-  function calculateCommonScore(edges, id, renderNetworkScores) {
+  function calculateCommonScore(edges, id) {
 
     // first, build a dictionary which associates each node ID with the
     // IDs it is directly connected to. sometimes this would be called
@@ -116,7 +116,7 @@ var scores = (function() {
     //console.log("score = %o", score);
     document.getElementById("iscore").textContent = score.toString();
 
-    var networkScores = scores.calculateNetworkScoresByNode(edges, nodes, renderNetworkScores);
+    var networkScores = calculateNetworkScoresByNode(edges, nodes);
     console.log("network scores = %o", networkScores);
 
     return score;
@@ -129,4 +129,4 @@ var scores = (function() {
     calculateCommonScore: calculateCommonScore
   };
 
-})();
+};
