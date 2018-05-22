@@ -80,7 +80,7 @@ var importScores = function(ui) {
 
   // each edge has:
   // - {source: nodeId, target: nodeId, strength: number}
-  function calculateCommonScore(edges, id) {
+  function calculateCommonScore(edges, nodes, id) {
 
     // first, build a dictionary which associates each node ID with the
     // IDs it is directly connected to. sometimes this would be called
@@ -117,7 +117,7 @@ var importScores = function(ui) {
     document.getElementById("iscore").textContent = score.toString();
 
     var networkScores = calculateNetworkScoresByNode(edges, nodes);
-    console.log("network scores = %o", networkScores);
+    //console.log("network scores = %o", networkScores);
 
     return score;
   };

@@ -29,16 +29,17 @@ var importUtil = function(scores, ui) {
 
   // given a node id, add a node
   // this function returns the node
-  function addNode(id, myId, nodes, seenNodes, colorPicker) {
+  //function addNode(id, myId, nodes, seenNodes, colorPicker) {
+  function addNode(id, state) {
     // check if the id was already added
-    if (seenNodes[id]) {
+    if (state.seenNodes[id]) {
       // the id was added, so return the node
-      return seenNodes[id];
+      return state.seenNodes[id];
     } else {
       // create a new node object
       var o = {
         "id": id,
-        color: colorPicker(id),
+        color: state.colorPicker(id),
         score: INITIAL_NODE_SCORE,
         x: 0,
         y:0,
@@ -47,67 +48,46 @@ var importUtil = function(scores, ui) {
         }
       };
 
-      if (id === myId) {
+      if (id === state.selfId) {
         o.fx = MY_FIXED_X;
         o.fy = MY_FIXED_Y;
       }
       // add the new node to the array of nodes
-      nodes.push(o);
+      state.nodes.push(o);
       // add the id and node to the seenNodes object
-      seenNodes[id] = o;
+      state.seenNodes[id] = o;
       // return the node
       return o;
     }
   }
 
-  function newConnection(sender, recipient, amount){
-    console.log("new connection");
-  }
-
-  function giveStrength(sender, recipient, amount){
-    console.log("give strength");
-  }
-
-  function sendInvite(sender, recipient, email){
-    firebase.database().ref('players/' + recipient).set({
-    lastSeen: 0,
-    email: email,
-  });
-  var newLogKey = firebase.database().ref().child('log').push().key;
-    firebase.database().ref('log/' + newLogKey).set({
-    type: "invite",
-    email: email,
-    sender: sender,
-    recipient: recipient
-  });
-    console.log("send invite");
-  }
   // Given a 'from' id and a 'to' id, add an edge
   // this function returns nothing
-  function addEdge(from, to, strength, myId, nodes, edges, seenNodes, seenEdges, colorPicker) {
+  //function addEdge(from, to, strength, myId, nodes, edges, seenNodes, seenEdges, colorPicker) {
+  function addEdge(from, to, strength, state) {
     // calculate the edge id
     var id = edgeId(from, to);
     if (from === to) {
       // if 'from' id is equal to 'to' id, assume we're adding
       // a node and not an edge.
-      addNode(from, myId, nodes, seenNodes, colorPicker);
-    } else if (seenEdges[id]) {
+      addNode(from, state);
+    } else if (state.seenEdges[id]) {
       // if 'from' and 'to' are different, but
       // we've seen the id before, do nothing
       //console.log("edge %o -> %o already exists", from, to);
     } else {
       // if 'from' and 'to' are different and ne
       // add a node for 'from' in case it doesn't exist
-      var x = addNode(from, myId, nodes, seenNodes, colorPicker);
+      var x = addNode(from, state);
       // add a node for 'to' in case it doesn't exist
-      var y = addNode(to, myId, nodes, seenNodes, colorPicker);
+      var y = addNode(to, state);
       // create a new edge
       var o = {id: id, source: x, target: y, strength: strength};
       // add the edges to the array of edges
-      edges.push(o);
+      state.edges.push(o);
       // add the edge id to the seenEdges object
-      seenEdges[id] = 1;
-      scores.calculateCommonScore(edges, myId, ui.renderNetworkScores);
+      state.seenEdges[id] = 1;
+      scores.calculateCommonScore(state.edges, state.selfId, ui.renderNetworkScores);
     }
   }
 
@@ -167,9 +147,6 @@ var importUtil = function(scores, ui) {
     addEdge: addEdge,
     deleteEdge: deleteEdge,
     deleteNode: deleteNode,
-    nodesByNetwork: nodesByNetwork,
-    sendInvite: sendInvite,
-    newConnection: newConnection,
-    giveStrength: giveStrength
+    nodesByNetwork: nodesByNetwork
   };
 };

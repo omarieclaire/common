@@ -4,20 +4,8 @@
 var ui = importUi();
 var scores = importScores(ui);
 var util = importUtil(scores, ui);
-
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyAtKnQw8v9xdpSTPBZwFj3CcIjnugqIxUg",
-  authDomain: "common-d2ecf.firebaseapp.com",
-  databaseURL: "https://common-d2ecf.firebaseio.com",
-  projectId: "common-d2ecf",
-  storageBucket: "common-d2ecf.appspot.com",
-  messagingSenderId: "462000767544"
-};
-  var defaultApp = firebase.initializeApp(config);
-  console.log(defaultApp.name);  // "[DEFAULT]"
-  var database = defaultApp.database();
-  console.log(database);
+var db = importDb(scores, ui, util);
+var action = importAction(ui, util, db);
 
 // this is the svg canvas to draw onto
 var svg = d3.select("svg");
@@ -31,60 +19,41 @@ svg.append("rect")
     .attr("height", "100%")
     .attr("fill", "#F8F8F8");
 
-//colors
-var colorPicker = d3.scaleOrdinal(["#A07A19", "#AC30C0", "#EB9A72", "#BA86F5", "#EA22A8"]);
+var state = {
+  // index used by random button
+  randomIndex: 1,
+  // tracks if we are done loading yet (true) or not (false)
+  loaded: false,
+  // id of the current user (same as ME)
+  selfId: "omarieclaire",
+  // reference to SVG node and info
+  svg: svg,
+  svgWidth: svgWidth,
+  svgHeight: svgHeight,
+  // color picker
+  colorPicker: d3.scaleOrdinal(["#A07A19", "#AC30C0", "#EB9A72", "#BA86F5", "#EA22A8"]),
+  // directory of known players
+  players: {},
+  // set of nodes/edges we have already seen (objects)
+  seenNodes: {},
+  seenEdges: {},
+  // list of node/edge data used by the force-directed graph
+  nodes: [],
+  edges: [],
+  // method used to draw the graph
+  draw: draw
+};
 
-// set of nodes/edges we have already seen (objects)
-var seenNodes = {};
-var seenEdges = {};
-
-// list of node/edge data used by the force-directed graph
-var nodes = [];
-var edges = [];
-
-var players = null;
-
-database.ref('/players').once('value').then(function(snapshot) {
-  players = snapshot.val();
-  console.log("players = %o", players);
-})
-
-database.ref('/log').once('value').then(function(snapshot) {
-    var log = snapshot.val();
-    _.each(log, function(item){
-      if (item.type == "invite" ) {
-        console.log(item);
-        if (item.sender == null) {
-          util.addNode(item.recipient, ME, nodes, seenNodes, colorPicker);
-        } else {
-          util.addEdge(item.sender, item.recipient, 3, ME, nodes, edges, seenNodes, seenEdges);
-        }
-      } else {
-        console.log(item.type);
-      }
-    });
-    draw();
-});
-
-// util.addEdge("i", "d", 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("b", "c", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("d", "e", 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("i", "f", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("d", "g", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("i", "h", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("h", "i", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("h", "b", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("i", "a", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("e", "b", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("i", "c", 2, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-// util.addEdge("i", "d", 1, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
+// start listening to DB updates
+db.initPlayers(state);
+db.initLog(state);
 
 // create a d3 simulation object
-var simulation = d3.forceSimulation(nodes)
+var simulation = d3.forceSimulation(state.nodes)
 	//for making elements attract or repel one another
 	.force("charge", d3.forceManyBody().strength(-500))
 	//for creating a fixed distance between connected elements
-	.force("link", d3.forceLink(edges).distance(1))
+	.force("link", d3.forceLink(state.edges).distance(1))
 	//for setting the center of gravity of the system
 	.force("center", d3.forceCenter())
 	//for preventing elements overlapping
@@ -188,46 +157,6 @@ function doAnnotations(enclosedCircles, annotationAnchor) {
   annotationAnchor.enter().call(makeAnnotations);
 }
 
-
-//nodeclick function
-function nodeClick(d) {
-
-	var target = d.id;
-	//reference to the edge between me and the target
-	var ouredge = edges.filter(function (edge) {
-		return edge.source.id == ME && edge.target.id == target ||
-      edge.target.id == ME && edge.source.id == target;
-	})[0];
-
-	// if clicking on a edge attached to our nodes
-	// decrement our score
-	if (ouredge){
-		// get our node from the seenNodes object (efficient)
-		var ourNode = seenNodes[ME];
-		console.log(ourNode.score);
-		if(ouredge.strength < MAX_EDGE_STRENGTH && ourNode.score > 2) {
-		  ouredge.strength = ouredge.strength + CLICK_EDGE_INCREMENTER;
-			// decrement our score
-			ourNode.score = ourNode.score - CLICK_NODE_DESTROYER_POWER;
-
-			// begin edge animation
-			var htmlEdge = document.getElementById(util.edgeIdAttr(ouredge));
-			d3.select(htmlEdge).transition().duration(1000).attr("stroke", "magenta").transition().duration(1500).attr("stroke", null);
-			// d3.select(htmlEdge).transition().duration(1000).attr("stroke-dasharray", "5, 5").transition().duration(1500).attr("stroke-dasharray", null);
-
-			// begin node animation
-			var htmlNode = document.getElementById(util.nodeIdAttr(d));
-			d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
-
-			 }
-	} else {
-		//console.log(d, "Not our edge!");
-	}
-
-	scores.calculateCommonScore(edges, ME);
-	draw();
-}
-
 //getting the strength of an edge by its id
 function edgeStrength(d) {
 	return d.strength;
@@ -237,13 +166,13 @@ function edgeStrength(d) {
 draw();
 
 // render the score for the first time
-ui.renderMyScore(ME, seenNodes);
+ui.renderMyScore(state.selfId, state.seenNodes);
 
 // function to refresh d3 (for any changes to the graph)?
 function draw() {
 	// Apply the update to the nodes.
 	// get nodes array, extract ids, and draw them
-	node = node.data(nodes, function(d) { return d.id;});
+	node = node.data(state.nodes, function(d) { return d.id;});
 	// exit and remove before redrawing?
 	node.exit().remove();
 	// redraw the nodes
@@ -258,7 +187,8 @@ function draw() {
 		// add an id attribute to each node, so we can access/select it later
 		.attr("id", util.nodeIdAttr)
 	//we added the onclick to the circle, but maybe we should have added it to the node
-		.on("click", nodeClick)
+		//.on("click", nodeClick)
+		.on("click", function (d) { action.nodeClicked(state, d) })
 	//what does this mean?
 		.merge(node);
 
@@ -269,7 +199,7 @@ function draw() {
   // Then we use that group and d3.packEnclose to encircle the networks.
   // TODO it would be good to find a better place to calculate this stuff
   // rather than in draw
-  var networkScores = scores.calculateNetworkScoresByNode(edges,nodes);
+  var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
   // add a radius to the data
   node.data().forEach(function(d) {
     // This is slow; TODO we should improve this.
@@ -286,7 +216,7 @@ function draw() {
   doAnnotations(enclosedCircles, annotationAnchor);
 
 	// do the same thing for the labels
-	label = label.data(nodes, function(d) { return d.id;});
+	label = label.data(state.nodes, function(d) { return d.id;});
 
 	//I removed line below because it didn't do anything?
 	label.exit().remove();
@@ -298,7 +228,7 @@ function draw() {
 		.merge(label);
 
 	// do the same thing for the edges
-	edge = edge.data(edges, function(d) {	return d.source.id + "-" + d.target.id;	});
+	edge = edge.data(state.edges, function(d) {	return d.source.id + "-" + d.target.id;	});
 	edge.exit().remove();
 	//before .merge is where I can add the viz representation of the stroke/edge
 	edge = edge.enter()
@@ -308,14 +238,14 @@ function draw() {
 		.merge(edge);
 
 	// Update and restart the simulation.
-	simulation.nodes(nodes);
-	simulation.force("link").links(edges);
+	simulation.nodes(state.nodes);
+	simulation.force("link").links(state.edges);
 	simulation.alpha(1).restart();
 
 	// update the node and edge counts
 	// can we instead call nodes.length and edges.length?
-	nc.textContent = Object.keys(seenNodes).length;
-	ec.textContent = Object.keys(seenEdges).length;
+	nc.textContent = Object.keys(state.seenNodes).length;
+	ec.textContent = Object.keys(state.seenEdges).length;
 }
 
 // function called on every "tick" of d3 like a clock or gameloop
@@ -350,54 +280,28 @@ var index = 1;
 // when the window is ready, call the function below
 window.onload = function() {
 
-	// add a function when "add" button is clicked
-	document.getElementById("add").addEventListener("click", function() {
-		// get the text from the 'from' form
-		var from = document.getElementById("from").value;
-		// get the text from the to' form
-		var to = document.getElementById("to").value;
-		//console.log("click %o %o", from, to);
-    if (players[from] == null) {
-      util.sendInvite("omarieclaire", from, from+"@fake.com");
-      console.log("need to invite from = %o", from);
-    }
-		// add an edge between `from` and `to`
-    if (players[to] == null) {
-      util.sendInvite(from, to, to+"@fake.com");
-      console.log("need to invite to = %o", to);
-    }
-    util.addEdge(from, to, DEFAULT_STRENGTH, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-		// redraw.
-		draw();
-	});
+  // add a function when "add" button is clicked
+  document.getElementById("add").addEventListener("click", function() {
+    action.addClicked(state);
+  });
 
-	// add a function when the `random` button is clicked
-	document.getElementById("random").addEventListener("click", function() {
+  // add a function when the `random` button is clicked
+  document.getElementById("random").addEventListener("click", function() {
+    action.randomClicked(state);
+  });
 
-		// create a random name for a new node
-		// find an existing node to connect it
-		// connect the nodes
-		var from;
-		if (_.random(1) === 0) {
-			// create a new node
-			from = "rr" + index;
-			index += 1;
-		} else {
-			from = _.sample(seenNodes).id;
-		}
-		var to = _.sample(seenNodes).id;
-		util.addEdge(from, to, DEFAULT_STRENGTH, ME, nodes, edges, seenNodes, seenEdges, colorPicker);
-		draw();
-	});
+  document.getElementById("reinitialize").addEventListener("click", function () {
+    action.reinitializeClicked(state);
+  });
 
   document.getElementById("destroy").addEventListener("click", function () {
-    var index = _.random(0, edges.length - 1);
-    var edge = edges[index];
+    var index = _.random(0, state.edges.length - 1);
+    var edge = state.edges[index];
 		if(edge) {
 	    if (edge.strength <= DESTROYER_POWER) {
 	      console.log("destroying %o", edge);
 				// how does this work? Should we use our deleteEdge function?
-				util.deleteEdge(edge, edges, seenEdges);
+				util.deleteEdge(edge, state.edges, state.seenEdges);
 	      //destroyEdge(edge);
 	    } else {
 	      console.log("weakening %o", edge);
@@ -405,22 +309,22 @@ window.onload = function() {
 	    }
 		}
 
-		var randomNodeIndex = _.random(0, nodes.length -1);
-		var node = nodes[randomNodeIndex];
+		var randomNodeIndex = _.random(0, state.nodes.length -1);
+		var node = state.nodes[randomNodeIndex];
 		node.score = node.score - DESTROYER_POWER;
 		if(node.score <= 0) {
 			console.log("deleting node: " + node);
-			util.deleteNode(node, nodes, seenNodes, edges, seenEdges);
+			util.deleteNode(node, state.nodes, state.seenNodes, state.edges, state.seenEdges);
 		}
 
-		scores.calculateNetworkScoresByNode(edges, nodes);
-		ui.renderMyScore(ME, seenNodes);
+		scores.calculateNetworkScoresByNode(state.edges, state.nodes);
+		ui.renderMyScore(state.selfId, state.seenNodes);
 		draw();
   });
 
 	document.getElementById("giver").addEventListener("click", function() {
-		var networkScores = scores.calculateNetworkScoresByNode(edges,nodes);
-		_.each(nodes, function(node) {
+		var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
+		_.each(state.nodes, function(node) {
 			var network = networkScores.filter(function(network) {
 				return network.people.indexOf(node.id) != -1;
 			})[0]
@@ -430,7 +334,7 @@ window.onload = function() {
 				console.log("YIKES! Could not find a network for node " + node.id);
 			}
 		});
-		ui.renderMyScore(ME, seenNodes);
+		ui.renderMyScore(state.selfId, state.seenNodes);
 		draw();
 	});
 
@@ -456,4 +360,5 @@ window.onload = function() {
 		svg.transition().duration(500).call(zoomCall.scaleTo, currentScale - ZOOM_AMOUNT).transition();
 	});
 
+  state.loaded = true;
 };
