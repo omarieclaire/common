@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<svg width="960" height="500"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-
-<style>
-  path {
-    fill: none;
-    stroke: steelblue;
-    stroke-width: 2;
-}
-
 .axis path, .axis line {
     fill: none;
     shape-rendering: crispEdges;
@@ -82,5 +71,3 @@ for (var i = 0; i < numSamples; i++)
 
 svg.append("path") // Add the valueline path.
     .attr("d", valueline(data));
-
-</script>

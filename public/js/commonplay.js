@@ -237,7 +237,8 @@ function draw() {
 		.append("line")
 		.attr("stroke-width", edgeStrength)
 		.attr("id", util.edgeIdAttr)
-		.merge(edge);
+
+    .merge(edge);
 
 	// Update and restart the simulation.
 	simulation.nodes(state.nodes);
@@ -260,10 +261,12 @@ function ticked(e) {
 		.attr("fill", function(d) { return d.color;});
 
 	edge
-		.attr("x1", function(d) { return d.source.x; })
+
+    .attr("x1", function(d) { return d.source.x; })
 		.attr("y1", function(d) { return d.source.y; })
 		.attr("x2", function(d) { return d.target.x; })
 		.attr("y2", function(d) { return d.target.y; })
+
 		.attr("stroke-width", edgeStrength);
 	label
 		.attr("x", function(d) { return d.x + 5; })
