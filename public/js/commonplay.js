@@ -1,5 +1,26 @@
 /* global d3:false _:false */
 
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyAtKnQw8v9xdpSTPBZwFj3CcIjnugqIxUg",
+  authDomain: "common-d2ecf.firebaseapp.com",
+  databaseURL: "https://common-d2ecf.firebaseio.com",
+  projectId: "common-d2ecf",
+  storageBucket: "common-d2ecf.appspot.com",
+  messagingSenderId: "462000767544"
+};
+  var defaultApp = firebase.initializeApp(config);
+  console.log(defaultApp.name);  // "[DEFAULT]"
+  var database = defaultApp.database();
+  console.log(database);
+
+database.ref('/players').once('value').then(function(snapshot) {
+  console.log(snapshot.val());
+});
+
+
+
+
 // this is the svg canvas to draw onto
 var svg = d3.select("svg");
 
