@@ -220,8 +220,12 @@ nav a:hover {
     position: fixed;
     left: 0px;
     right: 0px;
-    top: 375px;
+    top: 0px;
     bottom: 0px;
+  }
+
+  rect {
+    z-index: -1000;
   }
 
   #d3viz {
@@ -243,36 +247,38 @@ nav a:hover {
  }
 
 
- /* buttons */
-
- /* .control-button {
-   margin-left: 0em;
-   margin-right: .05em;
+ .control-button {
+   margin-left: 0.05em;
+   margin-right: 0.05em;
    background-color: #d8c4c7;
  }
 
  .zoom-button {
-   margin-left: 0em;
-   margin-right: .05em;
+   /* position: absolute; */
+   margin-left: 0.05em;
+   margin-right: 0.05em;
+   width: 200px;
+
  }
 
  .nav-buttons {
    position: absolute;
-   right: 30px;
-   top: 10px;
- } */
+ }
 
- #button {
+ .ui {
    position: absolute;
-   margin-left: 0em;
-   margin-right: .05em;
-   /* bottom: 1em; */
-   font: 16px Helvetica Neue;
-   width: 200px;
+ }
+
+ .zoom {
+   position: absolute;
+ }
+
+ .gd {
+   position: absolute;
  }
 
  button {
-  background: #222;
+  background: grey;
   color: #fff;
   text-rendering: optimizeLegibility;
   text-shadow: 0 -1px 1px #222;
@@ -288,17 +294,17 @@ nav a:hover {
 }
 
 button:hover {
-  background-color: #555;
+  background-color: black;
 }
 
-button.confirm {
+/* button.confirm {
   background-color: brown;
   -webkit-animation-name: pulse;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-delay: 250ms;
   -webkit-animation-duration: 1000ms;
   -webkit-animation-direction: alternate;
-}
+} */
 
 @-webkit-keyframes pulse {
   0% { background-color: brown; }

@@ -362,10 +362,6 @@ window.onload = function() {
 		svg.transition().duration(500).call(zoomCall.scaleTo, currentScale - ZOOM_AMOUNT).transition();
 	});
 
-//button
-  var button = document.getElementById("button").addEventListener("click", function(){
-    console.log("hello button");
-});
 
   state.loaded = true;
 };
