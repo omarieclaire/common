@@ -363,40 +363,9 @@ window.onload = function() {
 	});
 
 //button
-  var button = document.getElementById("button");
-  button.addEventListener("click", confirm(button), false);
-
-  function confirm(button) {
-    var className = button.getAttribute("class"),
-        html = button.innerHTML,
-        then,
-        state = 0;
-
-    button.addEventListener("mouseout", function() {
-      if (state == 1) cancel();
-    }, false);
-
-    function cancel() {
-      state = 0;
-      button.setAttribute("class", className);
-      button.innerHTML = html;
-    }
-
-    return function() {
-      if (state) {
-        if (new Date() - then > 500) {
-          state = 2; // launched
-          button.innerHTML = "Missile launched!";
-          setTimeout(cancel, 5000); // reset
-        }
-      } else {
-        state = 1; // confirming
-        then = +new Date();
-        button.setAttribute("class", className + " confirm");
-        button.innerHTML = "Are you sure?";
-      }
-    };
-  }
+  var button = document.getElementById("button").addEventListener("click", function(){
+    console.log("hello button");
+});
 
   state.loaded = true;
 };

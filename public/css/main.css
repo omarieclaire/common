@@ -272,7 +272,7 @@ nav a:hover {
  }
 
  button {
-  background: #222 url(http://bost.ocks.org/button-overlay.png) repeat-x;
+  background: #222;
   color: #fff;
   text-rendering: optimizeLegibility;
   text-shadow: 0 -1px 1px #222;
