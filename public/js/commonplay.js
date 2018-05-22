@@ -57,7 +57,7 @@ database.ref('/log').once('value').then(function(snapshot) {
         if (item.sender == null) {
           util.addNode(item.recipient, ME, nodes, seenNodes, colorPicker);
         } else {
-          util.addEdge(item.sender, item.recipient, 3, ME, nodes, edges, seenNodes, seenEdges, colorPicker, scores.calculateCommonScore, ui.renderNetworkScores);
+          util.addEdge(item.sender, item.recipient, 3, ME, nodes, edges, seenNodes, seenEdges);
         }
       } else {
         console.log(item.type);
