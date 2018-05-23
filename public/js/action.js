@@ -1,4 +1,4 @@
-var importAction = function(ui, util, db) {
+var importAction = function(ui, util, scores, db) {
 
   function addEdge(from, to, state) {
     if (state.players[from] == null) {

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var scores = importScores(ui);
   var util = importUtil(scores, ui);
   var db = importDb(scores, ui, util, firebase);
-  var action = importAction(ui, util, db);
+  var action = importAction(ui, util, scores, db);
 
   svg.append("rect")
     .attr("width", "100%")
