@@ -170,8 +170,60 @@ draw();
 // render the score for the first time
 ui.renderMyScore(state.selfId, state.seenNodes);
 
+function lerp (value1, value2, amount) {
+	amount = amount < 0 ? 0 : amount;
+	amount = amount > 1 ? 1 : amount;
+	return value1 + (value2 - value1) * amount;
+}
+
+function wave(x1,y1,x2,y2) {
+  var xStart = x1;
+  var yStart = y1;
+
+  var xEnd = x2;
+  var yEnd = y2;
+
+  var numSamples = 100;
+
+  var data = [];
+  var amplitude = 3.0;
+  var frequency = 5.0;
+
+  for (var i = 0; i < numSamples; i++)
+  {
+    var progress = (i.toFixed(10) / numSamples);
+
+    var xpos = lerp(xStart, xEnd, progress);// progress * width;
+    var ypos = lerp(yStart, yEnd, progress);// height/2.0 + Math.sin(progress * Math.PI * 2.0 * frequency ) * amplitude;
+
+    var xDelta = xEnd - xStart;
+    var yDelta = yStart - yEnd;
+
+    var vecLength = Math.sqrt(xDelta*xDelta + yDelta*yDelta);
+    // Avoid divide by zero
+    vecLength = Math.max(vecLength, 0.0001);
+
+    // normalize it
+    xDelta = xDelta / vecLength;
+    yDelta = yDelta / vecLength;
+
+    var angle = Math.atan2(yDelta, xDelta);
+    var wave = Math.sin(d3.now()*0.01 + progress * Math.PI * 2.0 * frequency ) * amplitude;
+
+    xpos += Math.sin(angle) * wave * 0.5; //perpendicularVecX * wave*0.5;
+    ypos += Math.cos(angle) * wave * 0.5; //perpendicularVecY * wave*0.5;
+
+    var entry = { xVal:xpos, yVal:ypos };
+
+    data.push(entry);
+  }
+  return data;
+}
+
 // function to refresh d3 (for any changes to the graph)?
 function draw() {
+  console.log(d3.now());
+
 	// Apply the update to the nodes.
 	// get nodes array, extract ids, and draw them
 	node = node.data(state.nodes, function(d) { return d.id;});
@@ -233,12 +285,13 @@ function draw() {
 	edge = edge.data(state.edges, function(d) {	return d.source.id + "-" + d.target.id;	});
 	edge.exit().remove();
 	//before .merge is where I can add the viz representation of the stroke/edge
-	edge = edge.enter()
-		.append("line")
-		.attr("stroke-width", edgeStrength)
-		.attr("id", util.edgeIdAttr)
 
+  edge = edge.enter()
+    .append("path")
+    .attr("stroke-width", edgeStrength)
     .merge(edge);
+
+
 
 	// Update and restart the simulation.
 	simulation.nodes(state.nodes);
@@ -260,13 +313,19 @@ function ticked(e) {
 		.attr("r", function(d) { return d.score; })
 		.attr("fill", function(d) { return d.color;});
 
-	edge
+    var valueline = d3.line()
+        .x(function (d) {
+            return d.xVal;
+        })
+        .y(function (d) {
+            return d.yVal;
+        });
 
-    .attr("x1", function(d) { return d.source.x; })
-		.attr("y1", function(d) { return d.source.y; })
-		.attr("x2", function(d) { return d.target.x; })
-		.attr("y2", function(d) { return d.target.y; })
-
+  edge
+  .attr("d", function(d) {
+    var waveData = wave(d.source.x, d.source.y, d.target.x, d.target.y);
+    return valueline(waveData);
+   } )
 		.attr("stroke-width", edgeStrength);
 	label
 		.attr("x", function(d) { return d.x + 5; })
