@@ -1,16 +1,6 @@
-var importDb = function(scores, ui, util) {
+var importDb = function(scores, ui, util, firebase) {
 
-  var config = {
-    apiKey: "AIzaSyAtKnQw8v9xdpSTPBZwFj3CcIjnugqIxUg",
-    authDomain: "common-d2ecf.firebaseapp.com",
-    databaseURL: "https://common-d2ecf.firebaseio.com",
-    projectId: "common-d2ecf",
-    storageBucket: "common-d2ecf.appspot.com",
-    messagingSenderId: "462000767544"
-  };
-
-  var app = firebase.initializeApp(config);
-  var database = app.database();
+  var database = firebase.database();
 
   /**
    * Do an initial read of /players/* and set up a listener to notice

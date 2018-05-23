@@ -80,7 +80,7 @@ var importAction = function(ui, util, db) {
   }
 
   function reinitializeClicked(state) {
-    db.reinitialize();
+    db.reinitialize(state);
   }
 
   return {
