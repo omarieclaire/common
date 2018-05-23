@@ -23,3 +23,5 @@ Run
 ```shell
 ./node_modules/.bin/firebase serve --project common-d2ecf
 ```
+
+This will allow you to access common at [http://localhost:5000](http://localhost:5000). You need to work this way so we can access `firebase` and allow it to vendor credentials.
