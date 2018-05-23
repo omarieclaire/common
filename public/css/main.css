@@ -241,11 +241,55 @@ nav a:hover {
    width: 1.5px;
  }
 
+ .nodeLabel {
+   stroke: black;
+   font-family: Helvetica;
+   font-size: 14px;
+   margin-bottom: 0px;
+   margin-top: 0px;
+   min-height: 1px;
+   padding-left: 15px;
+   padding-right: 15px;
+   padding-top: 7px;
+   text-align: right;
+ }
+
+ .nodeLabelContainer {
+   .attr("stroke", "#fff")
+   .attr("stroke-width", 1.5)
+ }
+
  .annotation path {
    stroke: grey;
    fill: black;
  }
 
+ .annotation-note {
+   margin-right: 5em;
+ }
+
+
+.annotation-note-title {
+  font-weight: lighter;
+  /* font-size: 5em; */
+}
+
+.annotationBox {
+  stroke: none;
+  /* fill: black; */
+  /* padding: 2em 2em 2em 2em; */
+}
+
+.annotation path {
+  /* stroke: blue; */
+  fill: blue;
+  stroke: none;
+  fill-opacity: 0.2;
+}
+
+.annotation-connector path {
+  stroke: black;
+}
 
  .control-button {
    margin-left: 0.05em;

@@ -85,21 +85,18 @@ document.addEventListener('DOMContentLoaded', function() {
     .selectAll(".edge");
 
   // create a <g> element for annotations, append it to the first g
-  var annotationAnchor = g.append("g").attr("stroke", "#E8336D").selectAll(".anchor");
+  var annotationAnchor = g.append("g").attr("class", "annotationBox").selectAll(".anchor");
 
   // create a <g> element for nodes, append it to the first g
   var node = g
     .append("g")
-    .attr("stroke", "#fff")
-    .attr("stroke-width", 1.5)
     .attr("id", "g-node")
     .selectAll(".node");
 
   // create a <g> element for labels, append it to the first g
   var label = g
     .append("g")
-    .attr("stroke", "#fff")
-    .attr("stroke-width", 1.5)
+    .attr("class", "nodeLabelContainer")
     .selectAll(".label");
 
   // get the nodecount HTML node
@@ -128,14 +125,14 @@ document.addEventListener('DOMContentLoaded', function() {
       return {
         id: "annotation-" + index,
         note: {  title: "10" },
-        dy: -circle.r - 3,
+        dy: -(circle.r + 20) - 3,
         dx: 0,
         x: circle.x,
         y: circle.y,
         type: d3.annotationCalloutCircle,
         subject: {
-          radius: circle.r,
-          radiusPadding: 15
+          radius: circle.r + 20,
+          radiusPadding: 20
         }
       };
     });
@@ -179,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // an anon function that returns a color
       .attr("fill", function(d) { return d.color; })
       .attr("r", function(d) { return d.score; })
+      .attr("stroke", "pink")
     // add an id attribute to each node, so we can access/select it later
       .attr("id", util.nodeIdAttr)
     //we added the onclick to the circle, but maybe we should have added it to the node
@@ -217,9 +215,8 @@ document.addEventListener('DOMContentLoaded', function() {
     label.exit().remove();
     label = label.enter()
       .append("text")
+      .attr("class", "nodeLabel")
       .text(function(d) {return d.id;})
-      .style("fill", "#000000")
-      .style("stroke", "#000000")
       .merge(label);
 
     // do the same thing for the edges
@@ -254,16 +251,15 @@ document.addEventListener('DOMContentLoaded', function() {
       .attr("fill", function(d) { return d.color;});
 
     edge
-
       .attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; })
-
       .attr("stroke-width", edgeStrength);
+
     label
-      .attr("x", function(d) { return d.x + 5; })
-      .attr("y", function(d) { return d.y - 5; });
+      .attr("x", function(d) { return d.x + 9; })
+      .attr("y", function(d) { return d.y - 4; });
 
     var nodesByNetwork = util.nodesByNetwork(node.data());
     var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork)
