@@ -291,25 +291,26 @@ nav a:hover {
 
  .modalButtons {
    position: fixed;
-   right: 40px;
-   top: 40px;
-   margin-left: 0.05em;
-   margin-right: 0.05em;
+   right: 2em;
+   top: 2em;
 }
 
- /* .adminButtons {
-   position: absolute;
-   left: 0px;
-   top: 0px;
- } */
 
- .zoomButtons {
-   position: fixed;
-   right: 40px;
-   bottom: 40px;
-   margin-left: 0.05em;
-   margin-right: 0.05em;
- }
+  .zoomButtons {
+    position: fixed;
+    right: 2em;
+    bottom: 2em;
+  }
+
+  .zoomButtons button, .modalButtons button {
+      display: block;
+      border: solid 1px #aaa;
+      overflow: hidden;
+      width: 3em;
+      height: 3em;
+      margin: 0.75em;
+      text-indent: -1000em;
+   }
 
  /* button {
   background: grey;
