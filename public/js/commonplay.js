@@ -72,6 +72,12 @@ document.addEventListener('DOMContentLoaded', function() {
     .attr("stroke-width", 1.5)
     .selectAll(".edge");
 
+  // create a <g> element for labels, append it to the first g
+  var label = g
+    .append("g")
+    .attr("class", "nodeLabelContainer")
+    .selectAll(".label");
+
   // create a <g> element for annotations, append it to the first g
   var annotationAnchor = g.append("g").attr("class", "annotationBox").selectAll(".anchor");
 
@@ -81,11 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .attr("id", "g-node")
     .selectAll(".node");
 
-  // create a <g> element for labels, append it to the first g
-  var label = g
-    .append("g")
-    .attr("class", "nodeLabelContainer")
-    .selectAll(".label");
 
   // get the nodecount HTML node
   var nc = document.getElementById("nodecount");
@@ -215,7 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
       .append("line")
       .attr("stroke-width", edgeStrength)
       .attr("id", util.edgeIdAttr)
-
       .merge(edge);
 
     // Update and restart the simulation.
