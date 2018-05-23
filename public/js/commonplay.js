@@ -354,7 +354,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.body.addEventListener("keydown", function(e) {
       // console.log(e);
-      if (e.key === "8") {
+      //prevents accidental zooming
+      if (e.target !== document.body){
+        return;
+      } else if (e.key === "8") {
         zoomIn();
       } else if (e.key === "9") {
         resetZoom();
