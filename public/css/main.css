@@ -177,8 +177,8 @@ nav a:hover {
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
-    margin: 10% auto; /* 15% from the top and centered */
-    padding: 20px;
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 15px;
     border: 1px solid #888;
     width: 40%; /* Could be more or less, depending on screen size */
 }
@@ -215,7 +215,7 @@ nav a:hover {
   width: 960px;
   } */
 
-  /* Make the chart container fill the page using CSS. */
+  /* Make the chart container - SVG - fill the page using CSS. */
   #chart {
     position: fixed;
     left: 0px;
@@ -228,30 +228,23 @@ nav a:hover {
     z-index: -1000;
   }
 
-  #d3viz {
+  /* #d3viz {
     max-width: 100%;
     border: solid black 1px;
     background: aliceblue;
     font: 16px sans-serif;
-    /* position: absolute; */
-    /* z-index: -1; */
-  }
+
+  } */
 
  .nodes circle {
    width: 1.5px;
  }
 
  .nodeLabel {
-   stroke: black;
+   stroke: #1f0535;
    font-family: Helvetica;
-   font-size: 14px;
-   margin-bottom: 0px;
-   margin-top: 0px;
-   min-height: 1px;
-   padding-left: 15px;
-   padding-right: 15px;
-   padding-top: 7px;
-   text-align: right;
+   font-size: 12px;
+   letter-spacing:  0.02em;;
  }
 
  .nodeLabelContainer {
@@ -265,13 +258,14 @@ nav a:hover {
  }
 
  .annotation-note {
-   margin-right: 5em;
+   margin-left: 10em;
  }
 
 
 .annotation-note-title {
   font-weight: lighter;
-  /* font-size: 5em; */
+  padding-left: 10em;
+  font-size: 3em;
 }
 
 .annotationBox {
@@ -284,44 +278,40 @@ nav a:hover {
   /* stroke: blue; */
   fill: blue;
   stroke: none;
-  fill-opacity: 0.2;
+  fill-opacity: 0.05;
 }
 
 .annotation-connector path {
   stroke: black;
 }
 
- .control-button {
+.ui {
+  position: absolute;
+}
+
+ .modalButtons {
+   position: fixed;
+   right: 40px;
+   top: 40px;
    margin-left: 0.05em;
    margin-right: 0.05em;
-   background-color: #d8c4c7;
- }
+}
 
- .zoom-button {
-   /* position: absolute; */
+ /* .adminButtons {
+   position: absolute;
+   left: 0px;
+   top: 0px;
+ } */
+
+ .zoomButtons {
+   position: fixed;
+   right: 40px;
+   bottom: 40px;
    margin-left: 0.05em;
    margin-right: 0.05em;
-   width: 200px;
-
  }
 
- .nav-buttons {
-   position: absolute;
- }
-
- .ui {
-   position: absolute;
- }
-
- .zoom {
-   position: absolute;
- }
-
- .gd {
-   position: absolute;
- }
-
- button {
+ /* button {
   background: grey;
   color: #fff;
   text-rendering: optimizeLegibility;
@@ -335,10 +325,10 @@ nav a:hover {
   -webkit-border-radius: 5px;
   -webkit-box-shadow: 0 1px 3px #999;
   -webkit-transition: background-color 250ms linear;
-}
+} */
 
 button:hover {
-  background-color: black;
+  background-color: grey;
 }
 
 /* button.confirm {
@@ -350,10 +340,10 @@ button:hover {
   -webkit-animation-direction: alternate;
 } */
 
-@-webkit-keyframes pulse {
+/* @-webkit-keyframes pulse {
   0% { background-color: brown; }
   100% { background-color: red; }
-}
+} */
 
 
 /* ==========================================================================
