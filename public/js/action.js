@@ -79,6 +79,20 @@ var importAction = function(ui, util, scores, db) {
     addEdge(from, to, state);
   }
 
+  function runDestroyer(state) {
+    var i = _.random(0, state.edges.length - 1);
+    var edge = state.edges[i];
+    if (edge) {
+      db.weakenEdge(edge.source, edge.target, DESTROYER_POWER);
+    }
+
+    var j = _.random(0, state.nodes.length -1);
+    var node = state.nodes[j];
+    if (node) {
+      db.weakenNode(node.id, DESTROYER_POWER);
+    }
+  }
+
   function reinitializeClicked(state) {
     db.reinitialize(state);
   }
@@ -88,6 +102,7 @@ var importAction = function(ui, util, scores, db) {
     addClicked: addClicked,
     randomClicked: randomClicked,
     reinitializeClicked: reinitializeClicked,
-    nodeClicked: nodeClicked
+    nodeClicked: nodeClicked,
+    runDestroyer: runDestroyer
   };
 };

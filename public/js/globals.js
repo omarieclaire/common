@@ -18,3 +18,6 @@ var DESTROYER_POWER = 0.5;
 var CLICK_NODE_DESTROYER_POWER = 2;
 //the edge-strength increase-when the node is clicked
 var CLICK_EDGE_INCREMENTER = 0.5;
+
+// starting life
+var STARTING_LIFE = 30;

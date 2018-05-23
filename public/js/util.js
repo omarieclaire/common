@@ -63,7 +63,6 @@ var importUtil = function(scores, ui) {
 
   // Given a 'from' id and a 'to' id, add an edge
   // this function returns nothing
-  //function addEdge(from, to, strength, myId, nodes, edges, seenNodes, seenEdges, colorPicker) {
   function addEdge(from, to, strength, state) {
     // calculate the edge id
     var id = edgeId(from, to);
@@ -86,40 +85,40 @@ var importUtil = function(scores, ui) {
       // add the edges to the array of edges
       state.edges.push(o);
       // add the edge id to the seenEdges object
-      state.seenEdges[id] = 1;
+      state.seenEdges[id] = o;
       scores.calculateCommonScore(state.edges, state.selfId, ui.renderNetworkScores);
     }
   }
 
   // Deletes edges
-  function deleteEdge(edge, edges, seenEdges) {
-    var index = edges.indexOf(edge);
+  function deleteEdge(edge, state) {
+    var index = state.edges.indexOf(edge);
     console.log("DELETE EDGE: " + edge + " at index " + index);
-    delete seenEdges[edge.id];
-    edges.splice(index,1);
+    delete state.seenEdges[edge.id];
+    state.edges.splice(index,1);
   }
 
   // Deletes nodes
-  function deleteNode(node, nodes, seenNodes, edges, seenEdges) {
+  function deleteNode(node, state) {
     // first, clone the array (this fixed a bug where looping
     // and slicing over the array caused an issue)
     // This is potentially expensive if we have a lot of edges.
-    var clonedEdges = edges.slice(0);
+    var clonedEdges = state.edges.slice(0);
 
     // first delete all the edges that refer to this node
     _.each(clonedEdges, function(edge) {
       if(edge) {
         if(edge.source.id == node.id || edge.target.id == node.id) {
-          deleteEdge(edge, edges, seenEdges);
+          deleteEdge(edge, state);
         }
       }
     });
 
     // now delete the node
-    delete seenNodes[node.id];
-    var index = nodes.indexOf(node);
+    delete state.seenNodes[node.id];
+    var index = state.nodes.indexOf(node);
     console.log("DELETE NODE: " + node + " at index " + index);
-    nodes.splice(index,1);
+    state.nodes.splice(index,1);
   }
 
   // Small helper function to calculate nodes by network
