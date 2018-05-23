@@ -289,12 +289,11 @@ nav a:hover {
   position: absolute;
 }
 
- .modalButtons {
-   position: fixed;
-   right: 2em;
-   top: 2em;
-}
-
+  .modalButtons {
+    position: fixed;
+    right: 2em;
+    top: 2em;
+  }
 
   .zoomButtons {
     position: fixed;
@@ -303,14 +302,30 @@ nav a:hover {
   }
 
   .zoomButtons button, .modalButtons button {
-      display: block;
-      border: solid 1px #aaa;
-      overflow: hidden;
-      width: 3em;
-      height: 3em;
-      margin: 0.75em;
-      text-indent: -1000em;
+    display: block;
+    border: none;
+    overflow: hidden;
+    width: 3em;
+    height: 3em;
+    margin: 0.75em;
+    text-indent: -1000em;
+    background-color: transparent;
    }
+
+  #zoom-in {
+    background-image: url(/img/zoom-in.svg);
+  }
+
+  #zoom-out {
+    background-image: url(/img/zoom-out.svg);
+  }
+
+  #reset-button {
+    background-image: url(/img/reload.svg);
+    background-size: 75%;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 
  /* button {
   background: grey;
