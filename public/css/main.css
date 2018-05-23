@@ -1,7 +1,7 @@
 /*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
 
 html {
-    color: black;
+    color: #333;
     background-color: inherit;
     font-size: 1em;
     line-height: 1.7;
@@ -52,7 +52,6 @@ textarea {
     padding: 0.2em 0;
 }
 
-
 /* ===== Initializr Styles ==================================================
    Author: Jonathan Verrecchia - verekia.com/initializr/responsive-template
    ========================================================================== */
@@ -67,27 +66,11 @@ body {
     margin: 0 5%;
 }
 
-/* ===================
-    ALL: Orange Theme
-   =================== */
-
-.header-container {
-    border-bottom: 20px solid #e1e1e1;
-}
-
-.footer-container,
-.main aside {
-    border-top: 20px solid #e1e1e1;
-}
-
-.header-container,
-.footer-container,
-.main aside {
-    background: #e1e1e1;
-}
-
 .title {
-    color: black;
+  color: #333;
+  z-index: 2;
+  display: inline-block;
+  position: relative;
 }
 
 /* ==============
@@ -113,14 +96,6 @@ nav a {
     background: #e1e1e1;
 }
 
-nav a:hover,
-nav a:visited {
-    color: white;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
 
 /* ==============
     MOBILE: Main
@@ -128,36 +103,6 @@ nav a:hover {
 
 .main {
     padding: 30px 0;
-}
-
-.main article h1 {
-    font-size: 1em;
-}
-
-.main article h2 {
-    font-size: 1em;
-}
-
-.main article h3 {
-    font-size: 1em;
-}
-
-.main aside {
-    color: white;
-    padding: 0px 5% 10px;
-}
-
-.footer-container footer {
-    color: white;
-    padding: 20px 0;
-}
-
-/* ===============
-    ALL: IE Fixes
-   =============== */
-
-.ie7 .title {
-    padding-top: 20px;
 }
 
 /* The Modal (background) */
@@ -333,131 +278,8 @@ nav a:hover {
     background-position: center;
   }
 
- /* button {
-  background: grey;
-  color: #fff;
-  text-rendering: optimizeLegibility;
-  text-shadow: 0 -1px 1px #222;
-  padding: 6px 10px 6px 10px;
-  border: 0;
-  border-bottom: 1px solid #222;
-  -moz-border-radius: 5px;
-  -moz-box-shadow: 0 1px 3px #999;
-  -moz-transition: background-color 250ms linear;
-  -webkit-border-radius: 5px;
-  -webkit-box-shadow: 0 1px 3px #999;
-  -webkit-transition: background-color 250ms linear;
-} */
-
 button:hover {
   background-color: grey;
-}
-
-/* button.confirm {
-  background-color: brown;
-  -webkit-animation-name: pulse;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-delay: 250ms;
-  -webkit-animation-duration: 1000ms;
-  -webkit-animation-direction: alternate;
-} */
-
-/* @-webkit-keyframes pulse {
-  0% { background-color: brown; }
-  100% { background-color: red; }
-} */
-
-
-/* ==========================================================================
-   Media Queries
-   ========================================================================== */
-
-@media only screen and (min-width: 480px) {
-
-/* ====================
-    INTERMEDIATE: Menu
-   ==================== */
-
-    nav a {
-        float: left;
-        width: 27%;
-        margin: 0 1.7%;
-        padding: 25px 2%;
-        margin-bottom: 0;
-    }
-
-    nav li:first-child a {
-        margin-left: 0;
-    }
-
-    nav li:last-child a {
-        margin-right: 0;
-    }
-
-/* ========================
-    INTERMEDIATE: IE Fixes
-   ======================== */
-
-    nav ul li {
-        display: inline;
-    }
-
-    .oldie nav a {
-        margin: 0 0.7%;
-    }
-}
-
-@media only screen and (min-width: 768px) {
-
-/* ====================
-    WIDE: CSS3 Effects
-   ==================== */
-
-    .header-container,
-    .main aside {
-        -webkit-box-shadow: 0 0px 0px #aaa;
-           -moz-box-shadow: 0 0px 0px #aaa;
-                box-shadow: 0 0px 0px #aaa;
-    }
-
-/* ============
-    WIDE: Menu
-   ============ */
-
-    .title {
-        float: left;
-    }
-
-    nav {
-        float: right;
-        width: 38%;
-    }
-
-/* ============
-    WIDE: Main
-   ============ */
-
-    .main article {
-        float: left;
-        width: 57%;
-    }
-
-    .main aside {
-        float: right;
-        width: 28%;
-    }
-}
-
-@media only screen and (min-width: 1140px) {
-
-/* ===============
-    Maximal Width
-   =============== */
-
-    .wrapper {
-        width: 1026px; /* 1140px - 10% for margins */
-        margin: 0 auto;
-    }
 }
 
 /* ==========================================================================
@@ -506,70 +328,4 @@ button:hover {
 
 .clearfix {
     *zoom: 1;
-}
-
-/* ==========================================================================
-   Print styles
-   ========================================================================== */
-
-@media print {
-    *,
-    *:before,
-    *:after {
-        background: transparent !important;
-        color: #000 !important;
-        box-shadow: none !important;
-        text-shadow: none !important;
-    }
-
-    a,
-    a:visited {
-        text-decoration: underline;
-    }
-
-    a[href]:after {
-        content: " (" attr(href) ")";
-    }
-
-    abbr[title]:after {
-        content: " (" attr(title) ")";
-    }
-
-    a[href^="#"]:after,
-    a[href^="javascript:"]:after {
-        content: "";
-    }
-
-    pre,
-    blockquote {
-        border: 1px solid #999;
-        page-break-inside: avoid;
-    }
-
-    thead {
-        display: table-header-group;
-    }
-
-    tr,
-    img {
-        page-break-inside: avoid;
-    }
-
-    img {
-        max-width: 100% !important;
-    }
-
-    p,
-    h2,
-    h3 {
-        orphans: 3;
-        widows: 3;
-    }
-
-    h2,
-    h3 {
-        page-break-after: avoid;
-    }
-
-
 }
