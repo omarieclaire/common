@@ -72,10 +72,11 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   // call zooming function when d3 detects a zoom
-  //svg.call(d3.zoom().on("zoom", zoomFunction));
   var zoomCall = d3.zoom().scaleExtent([1 / 4, 4]).on("zoom", zoomFunction);
   svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight / 2) );
   svg.call(zoomCall);
+  svg.on("dblclick.zoom", null);
+
 
   // create a <g> element for edges, append it to the previous g
   var edge = g
@@ -303,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
       //     edge.strength -= DESTROYER_POWER;
       //   }
       // }
-      // 
+      //
       // var randomNodeIndex = _.random(0, state.nodes.length -1);
       // var node = state.nodes[randomNodeIndex];
       // node.score = node.score - DESTROYER_POWER;
@@ -311,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
       //   console.log("deleting node: " + node);
       //   util.deleteNode(node, state);
       // }
-      // 
+      //
       // scores.calculateNetworkScoresByNode(state.edges, state.nodes);
       // ui.renderMyScore(state.selfId, state.seenNodes);
       // draw();
