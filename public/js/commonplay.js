@@ -65,19 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var g = svg
     .append("g");
 
-  // zooming funtion given to d3
-  // <svg transform="translate(10) + scale(2)">;
-  var zoomFunction = function() {
-    g.attr("transform", d3.event.transform);
-  };
-
-  // call zooming function when d3 detects a zoom
-  var zoomCall = d3.zoom().scaleExtent([1 / 4, 4]).on("zoom", zoomFunction);
-  svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight / 2) );
-  svg.call(zoomCall);
-  svg.on("dblclick.zoom", null);
-
-
   // create a <g> element for edges, append it to the previous g
   var edge = g
     .append("g")
@@ -334,28 +321,47 @@ document.addEventListener('DOMContentLoaded', function() {
       draw();
     });
 
-    // Get the "reset-button" add a function to be executed on click
-    document.getElementById("reset-button").addEventListener("click", function () {
-      // https://stackoverflow.com/questions/46342757/d3-v4-zoom-using-transitions-doesnt-seem-to-work
-      // svg is the d3 selection of our svg html element.
-      // creating a transition on the svg, for a duration of 500ms
-      //svg.call(zoomCall.scaleTo, 1) is equivalent to zoomCall.scaleTo(svg,1)
-      // create a transition element of duration 500ms with initial state
-      // the current svg, and final state the svg after calling zoomCall.scaleTo(1)
-      // and begin transition
-      svg.transition().duration(500).call(zoomCall.translateTo,MY_FIXED_X,MY_FIXED_Y).transition().duration(500).call(zoomCall.scaleTo, 1).transition();
-    });
+    // zooming funtion given to d3
+    // <svg transform="translate(10) + scale(2)">;
+    var zoomFunction = function() {
+      g.attr("transform", d3.event.transform);
+    };
 
-    document.getElementById("zoom-in").addEventListener("click", function() {
+    // call zooming function when d3 detects a zoom
+    var zoomCall = d3.zoom().scaleExtent([1 / 4, 4]).on("zoom", zoomFunction);
+    svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight / 2) );
+    svg.call(zoomCall);
+    svg.on("dblclick.zoom", null);
+
+    var zoomIn = function() {
       var currentScale = d3.zoomTransform(svg.node()).k;
       svg.transition().duration(500).call(zoomCall.scaleTo, currentScale + ZOOM_AMOUNT).transition();
-    });
+    };
 
-    document.getElementById("zoom-out").addEventListener("click", function() {
+    var resetZoom = function () {
+      svg.transition().duration(500).call(zoomCall.translateTo,MY_FIXED_X,MY_FIXED_Y).transition().duration(500).call(zoomCall.scaleTo, 1).transition();
+    };
+
+    var zoomOut = function() {
       var currentScale = d3.zoomTransform(svg.node()).k;
       svg.transition().duration(500).call(zoomCall.scaleTo, currentScale - ZOOM_AMOUNT).transition();
-    });
+    };
 
+    document.getElementById("zoom-in").addEventListener("click", zoomIn);
+    document.getElementById("reset-button").addEventListener("click", resetZoom);
+    document.getElementById("zoom-out").addEventListener("click", zoomOut);
+
+
+    document.body.addEventListener("keydown", function(e) {
+      // console.log(e);
+      if (e.key === "8") {
+        zoomIn();
+      } else if (e.key === "9") {
+        resetZoom();
+      } else if (e.key === "0") {
+        zoomOut();
+      }
+    });
 
     state.loaded = true;
   };
