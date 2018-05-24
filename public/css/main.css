@@ -264,14 +264,18 @@ nav a {
     opacity: 1;
   }
 
-  /* I put the *about* svg in place so you can see that it doesn't work */
   #aboutBtn {
     background-image: url(/img/about.svg);
+    background-position: center;
+    background-size: 80%;
+    background-repeat: no-repeat;
   }
 
-  /* I left the file below wrong on purpose to show that the *zoom-out* svg works perfectly */
   #settingsBtn {
-    background-image: url(/img/zoom-out.svg);
+    background-image: url(/img/settings.svg);
+    background-position: center;
+    background-size: 80%;
+    background-repeat: no-repeat;
   }
 
   #zoom-in {
