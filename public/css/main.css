@@ -255,6 +255,16 @@ nav a {
     opacity: 1;
   }
 
+  #toggleDebug {
+  }
+
+  #toggleDebugBtn {
+    border: none;
+    margin: 0.75em;
+    background-color: transparent;
+    opacity: 0.5;
+  }
+
   #aboutBtn {
     background-image: url(/img/about.svg);
     background-position: center;
@@ -300,7 +310,7 @@ button:hover {
    ========================================================================== */
 
 .hidden {
-    display: none !important;
+    /* display: none !important; */
     visibility: hidden;
 }
 
