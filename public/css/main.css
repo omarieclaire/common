@@ -59,7 +59,7 @@ textarea {
 body {
     font: 10px/14px "Helvetica", "Helvetica Neue", "Arial";
     line-height: 1.8;
-    background-image: url(/img/common-background);
+    /* background-image: url(/img/common-background); */
 }
 
 .wrapper {
