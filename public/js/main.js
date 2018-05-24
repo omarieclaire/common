@@ -29,3 +29,12 @@ createModal('aboutModal', 'aboutBtn', 0);
 createModal('settingsModal', 'settingsBtn', 1);
 
 // var myData = [];
+
+function toggleDebug() {
+    var x = document.getElementById("toggleDebug");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}

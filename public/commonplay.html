@@ -34,39 +34,45 @@
 
          <div class ="zoomButtons">
            <button id="zoom-in">Zoom In</button>
-           <button id="zoom-out">Zoom Out</button>
            <button id="reset-button">Reset Zoom</button>
+           <button id="zoom-out">Zoom Out</button>
          </div>
 
          <div class="modalButtons">
-           <button id="aboutBtn">About</button>
-           <div id="aboutModal" class="modal">
-             <div class="modal-content">
-               <span class="close">&times;</span>
-               <p>Common is a game for communities. To join, please click here.</p>
-             </div>
-           </div>
 
-           <button id="settingsBtn">Settings</button>
-           <div id="settingsModal" class="modal">
-             <div class="modal-content">
-               <span class="close">&times;</span>
-               <p>Change your settings here</p>
-             </div>
+         <button id="aboutBtn">About</button>
+         <div id="aboutModal" class="modal">
+           <div class="modal-content">
+             <span class="close">&times;</span>
+             <p>Common is a game for communities. To join, please click here.</p>
            </div>
          </div>
 
+         <button id="settingsBtn">Settings</button>
+         <div id="settingsModal" class="modal">
+           <div class="modal-content">
+             <span class="close">&times;</span>
+             <p>Change your settings here</p>
+           </div>
+         </div>
+       </div>
+
+
         <div class="adminButtons">
-          <button id="destroy">Destroyer</button>
-          <button id="giver" class="control-button">Giver</button>
-          # people: <span id="nodecount">0</span><br> # connections: <span id="edgecount">0</span><br> edge from <input id="from" type="text"> to <input id="to" type="text">
-          <input id="add" type="button" value="add">
-          <input id="random" type="button" value="random"><br>
-          <input id="reinitialize" type="button" value="reinitialize"><br>
-          network score for i: <span id="iscore">0</span><br>
-          node score for i: <span id="node-score-me">0</span><br>
-          network score: <br>
-          <ul id="network-score"></ul><br>
+          My Common: <span id="iscore">0</span><br>
+          Me: <span id="node-score-me">0</span><br>
+          <button onclick="toggleDebug()">Toggle Debug</button></br></br>
+
+          <div id="toggleDebug">
+            <button id="destroy">Destroyer</button>
+            <button id="giver" class="control-button">Giver</button>
+            # people: <span id="nodecount">0</span><br> # connections: <span id="edgecount">0</span><br> edge from <input id="from" type="text"> to <input id="to" type="text">
+            <input id="add" type="button" value="add">
+            <input id="random" type="button" value="random"><br>
+            <input id="reinitialize" type="button" value="reinitialize"><br>
+            Each Common: <br>
+            <ul id="network-score"></ul><br>
+          </div>
         </div>
 
       </div>

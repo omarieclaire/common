@@ -135,6 +135,7 @@ nav a {
     float: right;
     font-size: 28px;
     font-weight: bold;
+    line-height: 0.5;
 }
 
 .close:hover,
@@ -174,14 +175,6 @@ nav a {
     z-index: -1000;
   }
 
-  /* #d3viz {
-    max-width: 100%;
-    border: solid black 1px;
-    background: aliceblue;
-    font: 16px sans-serif;
-
-  } */
-
  .nodes circle {
    width: 1.5px;
  }
@@ -194,8 +187,8 @@ nav a {
  }
 
  .nodeLabelContainer {
-   .attr("stroke", "#fff")
-   .attr("stroke-width", 1.5)
+   stroke: #fff;
+   stroke-width 1.5;
  }
 
  .annotation path {
@@ -206,7 +199,6 @@ nav a {
  .annotation-note {
    margin-left: 10em;
  }
-
 
 .annotation-note-title {
   font-weight: lighter;
@@ -248,7 +240,6 @@ nav a {
   }
 
   .zoomButtons button, .modalButtons button {
-    display: block;
     border: none;
     overflow: hidden;
     width: 3em;
@@ -267,23 +258,28 @@ nav a {
   #aboutBtn {
     background-image: url(/img/about.svg);
     background-position: center;
-    background-size: 80%;
+    background-size: 90%;
     background-repeat: no-repeat;
+
   }
 
   #settingsBtn {
     background-image: url(/img/settings.svg);
     background-position: center;
-    background-size: 80%;
+    background-size: 90%;
     background-repeat: no-repeat;
   }
 
   #zoom-in {
     background-image: url(/img/zoom-in.svg);
+    display: block;
+
   }
 
   #zoom-out {
     background-image: url(/img/zoom-out.svg);
+    display: block;
+
   }
 
   #reset-button {
@@ -291,6 +287,8 @@ nav a {
     background-size: 75%;
     background-repeat: no-repeat;
     background-position: center;
+    display: block;
+
   }
 
 button:hover {
