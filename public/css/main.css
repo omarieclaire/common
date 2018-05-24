@@ -263,6 +263,14 @@ nav a {
     opacity: 1;
   }
 
+  #aboutBtn {
+    background-image: url(/img/about.svg);
+  }
+
+  #settingsBtn {
+    background-image: url(/img/zoom-out.svg);
+  }
+
   #zoom-in {
     background-image: url(/img/zoom-in.svg);
   }
