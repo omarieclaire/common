@@ -245,6 +245,7 @@ nav a {
     width: 3em;
     height: 3em;
     margin: 0.75em;
+    display: block;
     text-indent: -1000em;
     background-color: transparent;
     opacity: 0.5;
@@ -282,14 +283,11 @@ nav a {
 
   #zoom-in {
     background-image: url(/img/zoom-in.svg);
-    display: block;
 
   }
 
   #zoom-out {
     background-image: url(/img/zoom-out.svg);
-    display: block;
-
   }
 
   #reset-button {
@@ -297,8 +295,13 @@ nav a {
     background-size: 75%;
     background-repeat: no-repeat;
     background-position: center;
-    display: block;
+  }
 
+  #add-player {
+    background-image: url(/img/reload.svg);
+    background-size: 75%;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
 button:hover {
