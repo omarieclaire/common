@@ -1,4 +1,4 @@
-var importAction = function(ui, util, db) {
+var importAction = function(ui, util, scores, db) {
 
   function addEdge(from, to, state) {
     if (state.players[from] == null) {
@@ -79,8 +79,22 @@ var importAction = function(ui, util, db) {
     addEdge(from, to, state);
   }
 
+  function runDestroyer(state) {
+    var i = _.random(0, state.edges.length - 1);
+    var edge = state.edges[i];
+    if (edge) {
+      db.weakenEdge(edge.source, edge.target, DESTROYER_POWER);
+    }
+
+    var j = _.random(0, state.nodes.length -1);
+    var node = state.nodes[j];
+    if (node) {
+      db.weakenNode(node.id, DESTROYER_POWER);
+    }
+  }
+
   function reinitializeClicked(state) {
-    db.reinitialize();
+    db.reinitialize(state);
   }
 
   return {
@@ -88,6 +102,7 @@ var importAction = function(ui, util, db) {
     addClicked: addClicked,
     randomClicked: randomClicked,
     reinitializeClicked: reinitializeClicked,
-    nodeClicked: nodeClicked
+    nodeClicked: nodeClicked,
+    runDestroyer: runDestroyer
   };
 };

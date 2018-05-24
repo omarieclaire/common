@@ -11,96 +11,70 @@
   <link rel="stylesheet" href="css/normalize.min.css">
   <link rel="stylesheet" href="css/main.css">
   <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-  <!-- <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script> -->
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="js/vendor/d3-annotations.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase.js"></script>
+  <script defer src="/__/firebase/5.0.1/firebase-app.js"></script>
+  <script defer src="/__/firebase/5.0.1/firebase-auth.js"></script>
+  <script defer src="/__/firebase/5.0.1/firebase-database.js"></script>
+  <script defer src="/__/firebase/init.js"></script>
 </head>
 
 <body>
 
-  <div class="header-container">
-    <header class="wrapper clearfix">
-      <h1 class="title">Common</h1>
-
-      <nav class>
-        <button id="aboutBtn" >About</button>
-          <div id="aboutModal" class="modal">
-          <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>Common is a game for communities. To join, please click here.</p>
-          </div>
-        </div>
-        <button id="settingsBtn">Settings</button>
-        <div id="settingsModal" class="modal">
-          <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>Change your settings here</p>
-          </div>
-        </div>
-      </nav>
-    </header>
-  </div>
+  <header class="wrapper clearfix">
+    <h1 class="title">Common</h1>
+  </header>
 
   <div class="main-container">
     <div class="main wrapper clearfix">
-        <header>
-          <!-- <h1>Welcome to Common</h1>
-          <p>A game for communities</p> -->
-        </header>
-          <!-- <h2>To play you must find an active player</h2>
-          <p>Click <a href="https://twitter.com/hashtag/commonplay?src=hash " target="_blank">here</a> to find an active player</p> -->
 
-        <div id="chart"></div>
+       <div id="chart"></div>
 
-        <button id="button2">Test Button!</button>
+       <div class="ui">
 
-        <section class="ui">
-        <button id="destroy">Destroyer</button>
-        <button id="giver" class="control-button">Giver</button>
-        <button id="zoom-in">Zoom In</button>
-        <button id="zoom-out">Zoom Out</button>
-        <button id="reset-button">Reset Zoom</button>
-        # people: <span id="nodecount">0</span><br> # connections: <span id="edgecount">0</span><br> edge from <input id="from" type="text"> to <input id="to" type="text">
-        <input id="add" type="button" value="add">
-        <input id="random" type="button" value="random"><br>
-        <input id="reinitialize" type="button" value="reinitialize"><br>
-      </section>
+         <div class ="zoomButtons">
+           <button id="zoom-in">Zoom In</button>
+           <button id="zoom-out">Zoom Out</button>
+           <button id="reset-button">Reset Zoom</button>
+         </div>
 
-        network score for i: <span id="iscore">0</span><br>
-        node score for i: <span id="node-score-me">0</span><br>
-        network score: <br>
-        <ul id="network-score"></ul><br>
+         <div class="modalButtons">
 
-      <script src="https://d3js.org/d3.v4.min.js"></script>
+           <button id="aboutBtn" >About</button>
+           <div id="aboutModal" class="modal">
+             <div class="modal-content">
+               <span class="close">&times;</span>
+               <p>Common is a game for communities. To join, please click here.</p>
+             </div>
+           </div>
 
-      <footer>
-        <!-- <h3>Credits</h3> -->
-        <!-- <p>.</p> -->
-      </footer>
+           <button id="settingsBtn">Settings</button>
+           <div id="settingsModal" class="modal">
+             <div class="modal-content">
+               <span class="close">&times;</span>
+               <p>Change your settings here</p>
+             </div>
+           </div>
+         </div>
+
+        <div class="adminButtons">
+          <button id="destroy">Destroyer</button>
+          <button id="giver" class="control-button">Giver</button>
+          # people: <span id="nodecount">0</span><br> # connections: <span id="edgecount">0</span><br> edge from <input id="from" type="text"> to <input id="to" type="text">
+          <input id="add" type="button" value="add">
+          <input id="random" type="button" value="random"><br>
+          <input id="reinitialize" type="button" value="reinitialize"><br>
+          network score for i: <span id="iscore">0</span><br>
+          node score for i: <span id="node-score-me">0</span><br>
+          network score: <br>
+          <ul id="network-score"></ul><br>
+        </div>
+
+      </div>
     </div> <!-- #main -->
   </div> <!-- #main-container -->
 
-  <div class="footer-container">
-    <footer class="wrapper">
-      <h3>footer</h3>
-    </footer>
-  </div>
-
-  <!--         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
- -->
-
-  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-  <!--        <script>
-            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-            e.src='//www.google-analytics.com/analytics.js';
-            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-            ga('create','UA-XXXXX-X','auto');ga('send','pageview');
-        </script> -->
-
+  <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="js/svgCreation.js"></script>
   <!-- define all the html and then define interactivity -->
   <script src="js/underscore-min.js"></script>

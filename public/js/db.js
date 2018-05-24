@@ -1,16 +1,6 @@
-var importDb = function(scores, ui, util) {
+var importDb = function(scores, ui, util, firebase) {
 
-  var config = {
-    apiKey: "AIzaSyAtKnQw8v9xdpSTPBZwFj3CcIjnugqIxUg",
-    authDomain: "common-d2ecf.firebaseapp.com",
-    databaseURL: "https://common-d2ecf.firebaseio.com",
-    projectId: "common-d2ecf",
-    storageBucket: "common-d2ecf.appspot.com",
-    messagingSenderId: "462000767544"
-  };
-
-  var app = firebase.initializeApp(config);
-  var database = app.database();
+  var database = firebase.database();
 
   /**
    * Do an initial read of /players/* and set up a listener to notice
@@ -98,6 +88,34 @@ var importDb = function(scores, ui, util) {
     } else if (msg.type === "newConnection") {
       util.addEdge(msg.sender, msg.recipient, 3, state);
     } else if (msg.type === "giveStrength") {
+      var eid = util.edgeId(msg.source, msg.target);
+      var edge = state.seenEdges[eid];
+      var node = state.seenNodes[msg.id];
+      if (!edge) {
+        console.log("%o gave strength to missing edge: %o", msg.id, msg);
+      } else if (node.score <= msg.amount) {
+        console.log("%o (%o) was too weak to give strength: %o", msg.id, node, msg);
+      } else {
+        node.score -= msg.amount;
+        edge.strength += msg.amount;
+      }
+    } else if (msg.type === "weakenEdge") {
+      var eid = util.edgeId(msg.source, msg.target);
+      var edge = state.seenEdges[eid];
+      if (edge) {
+        if (edge.strength <= msg.power) {
+          util.deleteEdge(edge, state);
+        } else {
+          edge.strength -= msg.power;
+        }
+      }
+    } else if (msg.type === "weakenNode") {
+      var node = state.seenNodes[msg.id];
+      if (node.score <= msg.power) {
+        util.deleteNode(node, state);
+      } else {
+        node.score -= msg.power;
+      }
     } else {
       console.log("unknown msg type %o: %o", msg.type, msg);
     }
@@ -129,7 +147,8 @@ var importDb = function(scores, ui, util) {
       type: "invite",
       email: email,
       sender: sender,
-      recipient: recipient
+      recipient: recipient,
+      startingLife: STARTING_LIFE
     });
   }
 
@@ -162,12 +181,31 @@ var importDb = function(scores, ui, util) {
     });
   }
 
+  function weakenEdge(source, target, power) {
+    sendLog({
+      type: "weakenEdge",
+      source: source,
+      target: target,
+      power: power
+    });
+  }
+
+  function weakenNode(id, power) {
+    sendLog({
+      type: "weakenNode",
+      id: id,
+      power: power
+    });
+  }
+
   return {
     initPlayers: initPlayers,
     initLog: initLog,
     sendInvite: sendInvite,
     newConnection: newConnection,
     giveStrength: giveStrength,
+    weakenEdge: weakenEdge,
+    weakenNode: weakenNode,
     reinitialize: reinitialize
   };
 };
