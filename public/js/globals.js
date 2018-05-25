@@ -5,7 +5,7 @@ var MY_FIXED_X = 0;
 //location where MY node will be fixed when it is drawn to screen
 var MY_FIXED_Y = 0;
 //default starting strength for each edge
-var DEFAULT_STRENGTH = 1;
+var DEFAULT_STRENGTH = 0.5;
 //capping the strength of each edge
 var MAX_EDGE_STRENGTH = 9;
 //default starting strength for each node

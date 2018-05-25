@@ -32,7 +32,8 @@ window.addEventListener("load", function() {
       svgWidth: svgWidth,
       svgHeight: svgHeight,
       // color picker
-      colorPicker: d3.scaleOrdinal(["#A07A19", "#AC30C0", "#EB9A72", "#BA86F5", "#EA22A8"]),
+      colorPicker: d3.scaleOrdinal(["#47ade0","#be73e6","#86e570","#e466be","#62b134","#738ae8","#db8f2e","#4be0d9","#ee5679","#6de8a6",
+"#ea6941","#54b385","#e07aa0","#5dad5c","#c792d6","#90a44a","#dc8869","#cfe48c","#caa74e"]),
       // directory of known players
       players: {},
       // set of nodes/edges we have already seen (objects)
@@ -75,7 +76,7 @@ window.addEventListener("load", function() {
     var edge = g
       .append("g")
       .attr("stroke", "#000")
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 0.5)
       .selectAll(".edge");
 
     // create a <g> element for labels, append it to the first g

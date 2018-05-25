@@ -157,10 +157,6 @@ nav a {
       d3 styles
       ========================================================================== */
 
-  /* body {
-  position: relative;
-  width: 960px;
-  } */
 
   /* Make the chart container - SVG - fill the page using CSS. */
   #chart {
@@ -171,9 +167,9 @@ nav a {
     bottom: 0px;
   }
 
-  rect {
+  /* rect {
     z-index: -1000;
-  }
+  } */
 
  .nodes circle {
    width: 1.5px;
@@ -182,20 +178,16 @@ nav a {
  .nodeLabel {
    font-family: Helvetica;
    font-size: 12px;
-   letter-spacing:  0.02em;
+   letter-spacing: 0.02em;
  }
 
  .nodeLabelContainer {
-   stroke-width 1.5;
  }
 
  .annotation path {
-   stroke: grey;
-   fill: black;
  }
 
  .annotation-note {
-   margin-left: 10em;
  }
 
 .annotation-note-title {
@@ -205,7 +197,6 @@ nav a {
 }
 
 .annotationBox {
-  stroke: none;
   /* fill: black; */
   /* padding: 2em 2em 2em 2em; */
 }
