@@ -15,6 +15,16 @@ window.addEventListener("load", function() {
     var db = importDb(scores, ui, util, firebase);
     var action = importAction(ui, util, scores, db);
 
+    console.log(user);
+
+    var username = window.localStorage.getItem("username");
+    var usernameSet = window.localStorage.getItem("username-set");
+    // the user is logged in and has a username ready to set.
+    if(user && !usernameSet) {
+      db.setUsername(username, user);
+      window.localStrage.setItem("username-set", false);
+    }
+
     svg.append("rect")
       .attr("width", "100%")
       .attr("height", "100%")
@@ -26,7 +36,7 @@ window.addEventListener("load", function() {
       // tracks if we are done loading yet (true) or not (false)
       loaded: false,
       // id of the current user (same as ME)
-      selfId: "omarieclaire",
+      selfId: username,
       // reference to SVG node and info
       svg: svg,
       svgWidth: svgWidth,
