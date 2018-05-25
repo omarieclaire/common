@@ -15,10 +15,10 @@ window.addEventListener("load", function() {
     var db = importDb(scores, ui, util, firebase);
     var action = importAction(ui, util, scores, db);
 
-    svg.append("rect")
-      .attr("width", "100%")
-      .attr("height", "100%")
-      .attr("fill", "#F8F8F8");
+    // svg.append("rect")
+    //   .attr("width", "100%")
+    //   .attr("height", "100%")
+    //   .attr("fill", "#F8F8F8");
 
     var state = {
       // index used by random button
