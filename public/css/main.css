@@ -180,14 +180,12 @@ nav a {
  }
 
  .nodeLabel {
-   stroke: #1f0535;
    font-family: Helvetica;
    font-size: 12px;
-   letter-spacing:  0.02em;;
+   letter-spacing:  0.02em;
  }
 
  .nodeLabelContainer {
-   stroke: #fff;
    stroke-width 1.5;
  }
 
