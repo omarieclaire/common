@@ -298,8 +298,8 @@ nav a {
   }
 
   #add-player {
-    background-image: url(/img/reload.svg);
-    background-size: 75%;
+    background-image: url(/img/add-player.svg);
+    background-size: 95%;
     background-repeat: no-repeat;
     background-position: center;
   }

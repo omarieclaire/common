@@ -38,3 +38,12 @@ function toggleDebug() {
         x.style.display = "none";
     }
 }
+
+function addPlayer() {
+    var x = document.getElementById("add-player");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
