@@ -73,33 +73,6 @@ var importDb = function(scores, ui, util, firebase) {
   }
 
   /**
-   * Add a username to a logged-in user
-   */
-  function setUsername(username, authenticatedUser) {
-
-    database.ref('/players/' + username).once("value").then(function(snapshot) {
-      var player = snapshot.val();
-      // this username exists, do nothing.
-      if(player) {
-        console.log("attempted to set username " + username + ", it already exists");
-      } else {
-        database.ref('/players/' + username).set({
-          email: authenticatedUser.email,
-          username: username,
-          lastSeen: 0
-        });
-        sendLog({
-          type: "set-username",
-          email: authenticatedUser.email,
-          username: username,
-        });
-      }
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    });
-  }
-
-  /**
    * Handle a single log message (msg).
    *
    * This method handles updating our local graph based on information
@@ -233,7 +206,6 @@ var importDb = function(scores, ui, util, firebase) {
     giveStrength: giveStrength,
     weakenEdge: weakenEdge,
     weakenNode: weakenNode,
-    reinitialize: reinitialize,
-    setUsername: setUsername
+    reinitialize: reinitialize
   };
 };

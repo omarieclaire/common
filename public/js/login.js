@@ -1,7 +1,5 @@
 //when the dom content is loaded, do the following
 document.addEventListener('DOMContentLoaded', function() {
-  var localStorage = window.localStorage;
-
 
   // log the user out when clicking on the link.
   document.getElementById("logout").addEventListener(
@@ -20,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // store the username in local storage
   usernameElement.addEventListener("input", function(e) {
     var text = e.target.value;
-    localStorage.setItem("username", text);
+    window.localStorage.setItem("username", text);
   });
 
   // handle the click to login, but don't allow if username is empty
