@@ -1,110 +1,69 @@
-// //mouse states and mouse events on sprites
-// //click and hold the mouse button while overing on the sprites
+var colors;
+var leftButton;
+var rightButton;
+var leftButtonX = 100;
+var leftButtonY = 100;
+var rightButtonX = 500;
+var rightButtonY = 100;
+var buttonWidth = 100;
+var leftButtonBar;
+var rightButtonBar;
+var leftBarWidth = 50;
+var rightBarWidth = 50;
 
-// var asterisk;
-// var ghost;
-// var ghostBar;
+function setup() {
+  // Make the canvas the size of the mobile device screen
+  createCanvas(800, 600);
+  background(200);
 
-// function setup() {
-//   createCanvas(800,400);
+  // leftButton = createSprite(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
+  // rightButton = createSprite(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
+  // leftButtonBar = createSprite(leftButtonX + buttonWidth, leftButtonY+buttonWidth, 10, 5);
+  // rightButtonBar = createSprite(leftButtonX, leftButtonY+buttonWidth, 10, 5);
+  // leftButtonBar.visible = true;
+  // rightButtonBar.visible = true;
 
-//   ghost = createSprite(200, 200);
-//   ghost.addAnimation("normal", "img/ghost_spin0001.png",  "img/ghost_spin0003.png");
-//   //detect the mouse position and click on this sprite
-//   //if no collider is defined, the image bounding box will be checked
-//   ghost.mouseActive = true;
-
-//   asterisk = createSprite(600, 200);
-//   asterisk.addAnimation("normal", "img/asterisk_normal0001.png", "img/asterisk_normal0003.png");
-//   asterisk.addAnimation("stretch", "img/asterisk_stretching0001.png", "img/asterisk_stretching0008.png");
-//   var anim = asterisk.addAnimation("transform", "img/asterisk_circle0001.png", "img/asterisk_circle0008.png");
-
-//   //if defined, the collider will be used for mouse events
-//   asterisk.setCollider("circle", 0,0,64);
-//     ghost.setCollider("circle", 0, 0, 64);
-//   //I can assign functions to be called upon specific mouse events
-//   //within the function "this" will reference the sprite that triggered the event
-//   asterisk.onMouseOver = function() {
-//   this.changeAnimation("stretch");
-//   }
-
-//   asterisk.onMouseOut = function() {
-//   this.changeAnimation("normal");
-//   }
-
-//   asterisk.onMousePressed = function() {
-//   this.changeAnimation("transform");
-//   this.animation.goToFrame(this.animation.getLastFrame());
-//   }
-
-//   asterisk.onMouseReleased = function() {
-//   this.changeAnimation("transform");
-//   this.animation.goToFrame(0);
-//   }
-
-//     ghostBar = createSprite(200, 200, 10, 50)
-//     //ghostBar.addImage("img/asterisk_normal0001.png")
-//     ghostBar.grow = false
-//     ghostBar.visible = false
-//     ghost.onMousePressed = function() {
-//         ghostBar.visible = true
-//         ghostBar.grow = true
-//     }
-
-//     ghost.onMouseReleased = function() {
-//         ghostBar.visible = false
-//         ghostBar.grow = false
-//     }
-
-// }
-
-// function draw() {
-//   background(255,255,255);
-
-//   //if a sprite is mouseActive true I can check if the mouse is over its collider
-//   //and if the button is pressed
-//   if(ghost.mouseIsOver)
-//       ghost.rotation-= 10;
-
-//     //  ghost.visible = !ghost.mouseIsPressed;
-//     if(ghostBar.grow)
-//         ghostBar.width += 10
-
-//   drawSprites();
-// }
-
-var spr;
-
-
-function setup(){
-  createCanvas(640, 480)
+  // An array of five colors, one for each finger
+  // colors = [color(255,0,0), color(0,255,0), color(0,0,255), color(255, 255,0), color(0,255,255)];
 }
 
 function draw() {
-  background(255)
-    fill(0)
-    text("load", 25, 10);
-  for (var i=0; i<touches.length; i++) {
-    ellipse(touches[i].x,touches[i].y,80,80)
-      ellipse(mouseX, mouseY,80,80)
-      text("touch = " + touches[i].x + " " + touches[i].y, 25, 25);
-  }
+  // background(black);
 
+  fill(0);
+  textAlign(CENTER);
+  rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
+  rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
+  rect(leftButtonX + buttonWidth, leftButtonY + buttonWidth / 2, leftBarWidth, 50);
+  rect(rightButtonX - rightBarWidth, rightButtonY + buttonWidth /2, rightBarWidth, 50);
+
+  // The touches array holds an object for each and every touch
+  // The array length is dynamic and tied to the number of fingers
+  // currently touching
+
+  for (var i = 0; i < touches.length; i++) {
+    noStroke();
+    if ((touches[i].x > leftButtonX && touches[i].x < leftButtonX + buttonWidth)&&(touches[i].y > buttonY && touches[i].y < buttonY + buttonWidth)) {
+      leftBarWidth = leftBarWidth + 2
+    }
+    if ((touches[i].x > rightButtonX && touches[i].x < rightButtonX + buttonWidth)&&(touches[i].y > buttonY && touches[i].y < buttonY + buttonWidth)) {
+      rightButtonBar.visible = true
+      rightBarWidth = rightBarWidth + 2
+
+    }
+    text("touched", width/2, height/2);
+
+
+// if left bar width is greater than half of the distance between the buttons
+    // One color per finger
+    // fill(colors[i]);
+    // Draw a circle at each finger
+  }
   drawSprites();
 
 }
 
-function touchStarted() {
-// you can leave this empty
-//create sprite (link between players)
-
-  spr = createSprite(
-    width/2, height/2, 40, 40);
-  spr.shapeColor = color(255);
-  spr.velocity.y = 0.5;
-}
-
-function mousePressed() {
-  spr.position.x = mouseX;
-  spr.position.y = mouseY;
+// this prevents dragging screen around
+function touchMoved() {
+  return false;
 }
