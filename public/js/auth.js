@@ -9,10 +9,22 @@ var importAuth = function(firebase, dbModule) {
     window.localStorage.setItem("current-email", authResult.user.email);
 
     if(authResult.additionalUserInfo.isNewUser) {
+      var email = authResult.user.email;
       if(username) {
-        dbModule.createPlayer(username, authResult.user.email);
+        dbModule
+          .createPlayer(username, email)
+          .then(function() {
+            dbModule.sendLog({
+              type: "invite",
+              email: email,
+              sender: null,
+              recipient: username,
+              startingLife: STARTING_LIFE
+            })
+          });
       } else {
         console.log("could not find username after login, this is bad.");
+        return false;
       }
     }
     return true;

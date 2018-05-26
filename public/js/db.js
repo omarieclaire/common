@@ -68,7 +68,7 @@ var importDb = function(util, firebase) {
     database.ref('/players').set({});
     database.ref('/log').set({});
     sendInvite(null, "omarieclaire", "marieflanagan@gmail.com");
-    sendInvite("omarieclaire", "vilevin", "aaronmichaelbenjaminlevin@gmail.com");
+    sendInvite("omarieclaire", "vilevin", "vilevin@gmail.com");
     sendInvite("vilevin", "erik", "stark.fist@gmail.com");
   }
 
@@ -129,25 +129,19 @@ var importDb = function(util, firebase) {
    * "send" methods.
    */
   function sendLog(msg) {
-    database.ref('/log').push().set(msg);
+    return database.ref('/log').push().set(msg);
   }
 
   /**
    * Create a new player
    */
   function createPlayer(username, email) {
-    database.ref('/players/' + username).set({
+    var promise = database.ref('/players/' + username).set({
       email: email,
       username: username,
       lastSeen: 0
     });
-    sendLog({
-      type: "invite",
-      email: email,
-      sender: null,
-      recipient: username,
-      startingLife: STARTING_LIFE
-    });
+    return promise;
   }
 
   /**
@@ -227,6 +221,7 @@ var importDb = function(util, firebase) {
   return {
     initPlayers: initPlayers,
     initLog: initLog,
+    sendLog: sendLog,
     sendInvite: sendInvite,
     newConnection: newConnection,
     giveStrength: giveStrength,
