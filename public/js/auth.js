@@ -1,4 +1,4 @@
-var importAuth = function(firebase) {
+var importAuth = function(firebase, dbModule) {
 
   var database = firebase.database();
 
@@ -10,11 +10,7 @@ var importAuth = function(firebase) {
 
     if(authResult.additionalUserInfo.isNewUser) {
       if(username) {
-        database.ref('/players/' + username).set({
-          email: authResult.user.email,
-          username: username,
-          lastSeen: 0
-        });
+        dbModule.createPlayer(username, authResult.user.email);
       } else {
         console.log("could not find username after login, this is bad.");
       }

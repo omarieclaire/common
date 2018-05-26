@@ -1,4 +1,4 @@
-var importDb = function(scores, ui, util, firebase) {
+var importDb = function(util, firebase) {
 
   var database = firebase.database();
 
@@ -133,16 +133,42 @@ var importDb = function(scores, ui, util, firebase) {
   }
 
   /**
+   * Create a new player
+   */
+  function createPlayer(username, email) {
+    database.ref('/players/' + username).set({
+      email: email,
+      username: username,
+      lastSeen: 0
+    });
+    sendLog({
+      type: "invite",
+      email: email,
+      sender: null,
+      recipient: username,
+      startingLife: STARTING_LIFE
+    });
+  }
+
+  /**
    * Send an invite to a player.
    *
    * In addition to sending a log message, this method must also add
    * the new player to our existing /players DB.
    */
   function sendInvite(sender, recipient, email) {
-    database.ref('/players/' + recipient).set({
-      email: email,
-      lastSeen: 0
-    });
+    // First check if the recipient already exists
+    database
+      .ref("/players/" + recipient)
+      .once("value")
+      .then(function(player) {
+        // If the
+        if(player.val() === null) {
+          console.log("Creating new player: " + recipient);
+          createPlayer(recipient, email);
+          console.log("Successfuly created new player: " + recipient);
+        }
+      });
     sendLog({
       type: "invite",
       email: email,
@@ -206,6 +232,7 @@ var importDb = function(scores, ui, util, firebase) {
     giveStrength: giveStrength,
     weakenEdge: weakenEdge,
     weakenNode: weakenNode,
-    reinitialize: reinitialize
+    reinitialize: reinitialize,
+    createPlayer: createPlayer
   };
 };

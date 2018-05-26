@@ -12,8 +12,11 @@ window.addEventListener("load", function() {
     var ui = importUi();
     var scores = importScores(ui);
     var util = importUtil(scores, ui);
-    var db = importDb(scores, ui, util, firebase);
+    var db = importDb(util, firebase);
     var action = importAction(ui, util, scores, db);
+
+    // Create modals
+    ui.createModals();
 
     // If the user was logged in, we set `currentUser` in local storage.
     // Note: if the user logs out, we should unset this.
