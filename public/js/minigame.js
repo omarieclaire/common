@@ -96,9 +96,6 @@ function draw() {
 
 function touchStarted() {
 // you can leave this empty
-}
-
-
 //create sprite (link between players)
 
   spr = createSprite(
