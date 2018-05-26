@@ -1,20 +1,24 @@
 var colors;
+var screenW = window.innerWidth;
+var screenH = window.innerHeight;
+var buttonWidth = 100;
+
 var leftButton;
 var rightButton;
-var leftButtonX = 100;
-var leftButtonY = 100;
-var rightButtonX = 500;
-var rightButtonY = 100;
-var buttonWidth = 100;
+
+var leftButtonX = 50;
+var leftButtonY = screenH/2 - buttonWidth/2;
+var rightButtonX = screenW - button - 50;
+var rightButtonY = screenH/2 - buttonWidth/2;
 var leftButtonBar;
 var rightButtonBar;
 var leftBarWidth = 50;
 var rightBarWidth = 50;
 
+
 function setup() {
-  // Make the canvas the size of the mobile device screen
-  createCanvas(800, 600);
-  background(200);
+  createCanvas(screenW, screenH);
+  //background(200);
 
   // leftButton = createSprite(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   // rightButton = createSprite(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
@@ -31,7 +35,10 @@ function draw() {
   // background(black);
 
   fill(0);
+  strokeWeight(2);
+
   textAlign(CENTER);
+
   rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
   rect(leftButtonX + buttonWidth, leftButtonY + buttonWidth / 2, leftBarWidth, 50);
@@ -59,9 +66,22 @@ function draw() {
     // fill(colors[i]);
     // Draw a circle at each finger
   }
-  drawSprites();
 
 }
+
+// When the user clicks the mouse
+function mousePressed() {
+  // Check if mouse is inside the circle
+  var d = dist(mouseX, mouseY, 360, 200);
+  if (d < 100) {
+    // Pick new random color values
+    r = random(255);
+    g = random(255);
+    b = random(255);
+  }
+}
+
+  // drawSprites();
 
 // this prevents dragging screen around
 function touchMoved() {
