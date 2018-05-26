@@ -15,14 +15,22 @@ window.addEventListener("load", function() {
     var db = importDb(scores, ui, util, firebase);
     var action = importAction(ui, util, scores, db);
 
-    console.log(user);
+    // If the user was logged in, we set `currentUser` in local storage.
+    // Note: if the user logs out, we should unset this.
+    var currentUser = {
+      username: window.localStorage.getItem("current-username"),
+      email: window.localStorage.getItem("current-email")
+    };
 
-    var username = window.localStorage.getItem("username");
-    var usernameSet = window.localStorage.getItem("username-set");
-    // the user is logged in and has a username ready to set.
-    if(user && !usernameSet) {
-      db.setUsername(username, user);
-      window.localStrage.setItem("username-set", false);
+    if(currentUser.username && currentUser.email) {
+      console.log("current user is: ");
+      console.log(currentUser.username);
+      console.log(currentUser.email);
+    } else {
+      currentUser = {
+        email: "unknown@null.void",
+        username: "anonymous-" + Date.now()
+      };
     }
 
     var state = {
@@ -31,7 +39,7 @@ window.addEventListener("load", function() {
       // tracks if we are done loading yet (true) or not (false)
       loaded: false,
       // id of the current user (same as ME)
-      selfId: username,
+      selfId: currentUser.username,
       // reference to SVG node and info
       svg: svg,
       svgWidth: svgWidth,
