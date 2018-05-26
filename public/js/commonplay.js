@@ -15,10 +15,23 @@ window.addEventListener("load", function() {
     var db = importDb(scores, ui, util, firebase);
     var action = importAction(ui, util, scores, db);
 
-    // svg.append("rect")
-    //   .attr("width", "100%")
-    //   .attr("height", "100%")
-    //   .attr("fill", "#F8F8F8");
+    // If the user was logged in, we set `currentUser` in local storage.
+    // Note: if the user logs out, we should unset this.
+    var currentUser = {
+      username: window.localStorage.getItem("current-username"),
+      email: window.localStorage.getItem("current-email")
+    };
+
+    if(currentUser.username === null || currentUser.email === null) {
+      currentUser = {
+        email: "unknown@null.void",
+        username: "anonymous-" + Date.now()
+      };
+    }
+
+    console.log("current user is: ");
+    console.log(currentUser.username);
+    console.log(currentUser.email);
 
     var state = {
       // index used by random button
@@ -26,7 +39,7 @@ window.addEventListener("load", function() {
       // tracks if we are done loading yet (true) or not (false)
       loaded: false,
       // id of the current user (same as ME)
-      selfId: "omarieclaire",
+      selfId: currentUser.username,
       // reference to SVG node and info
       svg: svg,
       svgWidth: svgWidth,
