@@ -22,16 +22,16 @@ window.addEventListener("load", function() {
       email: window.localStorage.getItem("current-email")
     };
 
-    if(currentUser.username && currentUser.email) {
-      console.log("current user is: ");
-      console.log(currentUser.username);
-      console.log(currentUser.email);
-    } else {
+    if(currentUser.username === null || currentUser.email === null) {
       currentUser = {
         email: "unknown@null.void",
         username: "anonymous-" + Date.now()
       };
     }
+
+    console.log("current user is: ");
+    console.log(currentUser.username);
+    console.log(currentUser.email);
 
     var state = {
       // index used by random button
