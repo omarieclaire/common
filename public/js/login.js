@@ -2,16 +2,16 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   // log the user out when clicking on the link.
-  document.getElementById("logout").addEventListener(
-    'click', function() {
-      firebase.auth().signOut().then(function() {
-        console.log("sign-out success!");
-        document.getElementById('auth-msg').innerHTML = "";
-      }).catch(function(error) {
-        console.log("sign-out error!");
-      });
-    }
-  );
+  document.getElementById("logout").addEventListener("click", function() {
+    firebase.auth().signOut().then(function() {
+      document.getElementById('auth-msg').innerHTML = "";
+      window.localStorage.removeItem("current-username");
+      window.localStorage.removeItem("current-email");
+      console.log("sign-out success!");
+    }).catch(function(error) {
+      console.log("sign-out error!");
+    });
+  });
 
   var usernameElement = document.getElementById("username");
 
@@ -22,17 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // handle the click to login, but don't allow if username is empty
-  document.getElementById("login-anchor").onclick = function() {
-      if(usernameElement.value === "") {
-        // do not allow click, please enter username
-        document.getElementById("username-error").style.display = "inline";
-        // return false tells the browser not to follow the redirect
-        return false;
-      } else {
-        return true;
-      }
+  document.getElementById("login-anchor").addEventListener("click", function(e) {
+    if(usernameElement.value === "" || usernameElement === null) {
+      // do not allow click, please enter username
+      document.getElementById("username-error").style.display = "inline";
+      // return false tells the browser not to follow the redirect
+      e.preventDefault();
     }
-  ;
+  });
 
   // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
   // // The Firebase SDK is initialized and available here!
