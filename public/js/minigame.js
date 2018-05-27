@@ -21,23 +21,24 @@ var lineLength2 = 0;
 
 var haveIWonYet = false;
 
-
 function setup() {
   createCanvas(screenW, screenH);
   fill(0);
   background(200);
-
   // username <input id="username" type="text">
   // email <input id="email" type="text">
   // <input id="join" type="button" value="add">
-
 }
 
 function draw() {
 
   if(haveIWonYet) {
-    background(0, 255, 255);
-    window.location.replace('minigamewin.html');
+    background(255, 0, 0);
+    // window.location.replace('minigamewin.html');
+
+   setTimeout(function() {
+   window.location.href = "minigamewin.html"; //will redirect to your blog page (an ex: blog.html)
+}, 2000); //will call the function after 2 secs.
 
   } else {
     background(200);
@@ -48,13 +49,17 @@ function draw() {
   rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
 
-  if(leftIsTouched && rightIsTouched) {
-    lineLength1 ++;
-    lineLength2 --;
-  } else {
-    if (lineLength1 > 0 || lineLength2 < 0) {
-      lineLength1--;
-      lineLength2++;
+  if (haveIWonYet == false) {
+    if(leftIsTouched && rightIsTouched) {
+      lineLength1 ++;
+      lineLength2 --;
+    } else {
+      if (lineLength1 > 0 || lineLength2 < 0) {
+        lineLength1--;
+        lineLength2++;
+      }
+    } else {
+      console.log("I won");
     }
   }
 
