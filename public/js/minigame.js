@@ -10,11 +10,6 @@ var leftButtonY = screenH/2 - buttonWidth/2;
 var rightButtonX = screenW - (buttonWidth + 50);
 var rightButtonY = screenH/2 - buttonWidth/2;
 
-var leftButtonBar;
-var rightButtonBar;
-var leftBarWidth = 10;
-var rightBarWidth = 10;
-
 var leftIsTouched = false;
 var rightIsTouched = false;
 
@@ -24,8 +19,11 @@ var line2 = 0;
 var lineLength1 = 0;
 var lineLength2 = 0;
 
+var haveIWonYet = false;
+
 function setup() {
   createCanvas(screenW, screenH);
+  fill(0);
   background(200);
 }
 
@@ -49,15 +47,19 @@ function withinRight(t) {
 }
 
 function draw() {
-  background(200);
-  fill(0);
+
+  if(haveIWonYet) {
+    background(0, 255, 255);
+  } else {
+    background(200);
+  }
 
   textAlign(CENTER);
 
   rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
-  rect(leftButtonX + buttonWidth, leftButtonY + buttonWidth/2, leftBarWidth, 10);
-  rect(rightButtonX - rightBarWidth, rightButtonY + buttonWidth/2, rightBarWidth, 10);
+  // rect(leftButtonX + buttonWidth, leftButtonY + buttonWidth/2, leftBarWidth, 10);
+  // rect(rightButtonX - rightBarWidth, rightButtonY + buttonWidth/2, rightBarWidth, 10);
 
   if(leftIsTouched && rightIsTouched) {
     lineLength1 ++;
@@ -77,7 +79,7 @@ function draw() {
   line2 = line(rightButtonX, rightButtonY, rightButtonX + lineLength2, leftButtonY);
 
   // console.log(lineLength1, lineLength2);
-  winState(distanceBetweenButtons / 2);
+  haveIWonYet = winState(distanceBetweenButtons / 2);
 
 }
 
@@ -111,16 +113,20 @@ function touchMoved() {
 function winState(distance) {
   if (lineLength1 > distance && (-1)*lineLength2 > distance) {
     console.log("win");
+
+    return true;
+    // leftButton.changeColour();
+    // fill(255,200,200);
+
   } else {
     console.log("not winning yet")
+
+    return false;
+
+    // fill(0);
+
   }
 }
-
-// var line1 = 0;
-// var line2 = 0;
-//
-// var lineLength1;
-// var lineLength2;
 
 // this prevents dragging screen around
 // function touchMoved() {
