@@ -42,7 +42,7 @@ function createFirebaseUser(email, username, sender) {
 
   var password = generatePassphrase();
 
-  admin.auth().getUserByEmail(email).then((user) => {
+  var promise = admin.auth().getUserByEmail(email).then((user) => {
     console.log("getUserByEmail(" + email + "): user already exists");
     console.log(user);
     return user;
@@ -103,17 +103,20 @@ function createFirebaseUser(email, username, sender) {
     console.log("FAILURE");
     return {success: false};
   });
+
+  return promise;
 }
 
 exports.createUserAndInvite = functions.https.onCall((data, context) => {
   var result =
-    createFirebaseUser(data.email, data.username, data.sender).then((result) => {
-      return {success: result.success};
-    }).catch((error) => {
-      return {success: false};
-    });
+    createFirebaseUser(data.email, data.username, data.sender)
 
-  return result;
+  return result.then((result) => {
+    return {success: result.success};
+  },((error) => {
+    return {success: false};
+  }));
+
 });
 
 exports.sendWelcomeEmail =
@@ -129,7 +132,8 @@ exports.sendWelcomeEmail =
         from: 'Common Play <play@mail.commonplay.ca>',
         to: user.email,
         subject: "Welcome to Common!",
-        text: "Welcome to Common! Your password is: " + password
+        text: "Hello " + user.username + "! Welcome to Common! Your password is: " + password + ' . Try logging in at https://commonplay.ca and update your password!',
+        html: "<!DOCTYPE html><html><body><p>Hello <strong>" + user.username + "</strong>!</p><p>Welcome to Common! Your password is: <code>" + password + '</code>. Try logging in at <a href="http://commonplay.ca/" target="_blank">https://commonplay.ca</a> and update your password!</p></body></html>'
       };
 
       var result = new Promise((resolve, reject) => {
