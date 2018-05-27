@@ -31,7 +31,6 @@ admin.initializeApp({
 });
 
 function createFirebaseUser(email, username, sender) {
-  // Generate Firebase user's uid based on LINE's mid
   admin.auth().getUserByEmail(email).catch((error) => {
     if(error.code === "auth/user-not-found") {
 
@@ -63,7 +62,7 @@ function createFirebaseUser(email, username, sender) {
     return result.then((r) => { return password; });
   }).then((password) => {
 
-    var result = functions.database('/players/' + username).set({
+    var result = admin.database().ref('/players/' + username).set({
       email: email,
       username: username,
       lastSeen: 0,
