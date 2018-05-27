@@ -18,7 +18,9 @@ var rightBarWidth = 10;
 var leftIsTouched = false;
 var rightIsTouched = false;
 
-var lineLength = 0;
+var lineLength1 = 0;
+var lineLength2 = 0;
+
 
 function setup() {
   createCanvas(screenW, screenH);
@@ -56,18 +58,23 @@ function draw() {
   rect(rightButtonX - rightBarWidth, rightButtonY + buttonWidth/2, rightBarWidth, 10);
 
   if(leftIsTouched && rightIsTouched) {
-    lineLength++;
+    lineLength1 ++;
+    lineLength2 --;
   } else {
-    if(lineLength > 0) {
-      lineLength--;
+    if (lineLength1 > 0 || lineLength2 < 0) {
+      lineLength1--;
+      lineLength2++;
     }
   }
 
   strokeWeight(4);
   // strokeColor(0);
 
-  line(leftButtonX + buttonWidth, leftButtonY, leftButtonX + buttonWidth + lineLength, leftButtonY);
+  line1 = line(leftButtonX + buttonWidth, leftButtonY, leftButtonX + buttonWidth + lineLength1, leftButtonY);
       // rightButtonBar.visible = true
+
+  line2= line(rightButtonX, rightButtonY, rightButtonX + lineLength2, leftButtonY);
+
 
 }
 
