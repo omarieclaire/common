@@ -22,13 +22,18 @@ var lineLength2 = 0;
 var haveIWonYet = false;
 
 function setup() {
-  console.log("can anybody hear me")
   createCanvas(screenW, screenH);
   fill(0);
   background(200);
-  // username <input id="username" type="text">
-  // email <input id="email" type="text">
-  // <input id="join" type="button" value="add">
+  player1Sound = loadSound('/sounds/player1-sound.mp3');
+  player2Sound = loadSound('/sounds/player2-sound.mp3');
+
+
+  // <audio id="reinforcing-connection-sound" src="/sounds/creinforcing-connection-sound.mp3" preload="auto"></audio>
+  // <audio id="connection-forming-sound" src="/sounds/connection-forming-sound.mp3" preload="auto"></audio>
+  //
+  // <audio id="new-connection-sound" src="/sounds/new-connection-sound.mp3" preload="auto"></audio>
+
 }
 
 function draw() {
@@ -50,6 +55,10 @@ function draw() {
   rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
 
+
+
+
+
   if (haveIWonYet == false) {
     if(leftIsTouched && rightIsTouched) {
       lineLength1 ++;
@@ -59,6 +68,18 @@ function draw() {
         lineLength1--;
         lineLength2++;
       }
+    }
+
+    if (leftIsTouched) {
+      player1Sound.play();
+    } else {
+      player1Sound.stop();
+    }
+
+    if (rightIsTouched) {
+      player2Sound.play();
+    } else {
+      player2Sound.stop();
     }
   }
 
@@ -122,26 +143,11 @@ function touchMoved() {
 
 function winState(distance) {
   if (lineLength1 > distance && (-1)*lineLength2 > distance) {
-    console.log("win");
-
     return true;
-    // leftButton.changeColour();
-    // fill(255,200,200);
-
   } else {
     console.log("not winning yet")
 
     return false;
 
-    // fill(0);
-
   }
 }
-
-
-
-
-// this prevents dragging screen around
-// function touchMoved() {
-//   return false;
-// }
