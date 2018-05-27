@@ -70,19 +70,19 @@ document.addEventListener('DOMContentLoaded', function() {
     .append("g")
     .attr("stroke", "#000")
     .attr("stroke-width", 1.5)
-    .selectAll(".edge");
+    .selectAll(".edge1");
 
   var edge2 = g
     .append("g")
     .attr("stroke", "#000")
     .attr("stroke-width", 1.5)
-    .selectAll(".edge");
+    .selectAll(".edge2");
 
   var edge3 = g
     .append("g")
     .attr("stroke", "#000")
     .attr("stroke-width", 1.5)
-    .selectAll(".edge");
+    .selectAll(".edge3");
 
   // create a <g> element for labels, append it to the first g
   var label = g
@@ -284,7 +284,6 @@ function wave(phase,x1,y1,x2,y2) {
 
     edge2 = edge2.data(state.edges, function(d) {	return d.source.id + "-" + d.target.id;	});
     edge2.exit().remove();
-    //before .merge is where I can add the viz representation of the stroke/edge
     edge2 = edge2.enter()
     .append("path")
     .attr("stroke-width", edgeStrength)
@@ -294,7 +293,6 @@ function wave(phase,x1,y1,x2,y2) {
       
     edge3 = edge3.data(state.edges, function(d) {	return d.source.id + "-" + d.target.id;	});
     edge3.exit().remove();
-    //before .merge is where I can add the viz representation of the stroke/edge
     edge3 = edge3.enter()
     .append("path")
     .attr("stroke-width", edgeStrength)
