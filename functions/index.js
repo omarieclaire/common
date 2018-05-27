@@ -25,7 +25,11 @@ function generatePassphrase() {
   var randomVerb = getRandomInt(passgen.verbs.length);
   var randomNoun = getRandomInt(passgen.nouns.length);
 
-  return randomAdjective + "-" + randomVerb + "-" + randomNoun;
+  var adj = passgen.adjectives[randomAdjective];
+  var verb = passgen.verbs[randomVerb];
+  var noun = passgen.nouns[randomNoun];
+
+  return adj + "-" + verb + "-" + noun;
 }
 
 try {
@@ -35,10 +39,17 @@ try {
 }
 
 function createFirebaseUser(email, username, sender) {
-  admin.auth().getUserByEmail(email).catch((error) => {
+
+  var password = generatePassphrase();
+
+  admin.auth().getUserByEmail(email).then((user) => {
+    console.log("getUserByEmail(" + email + "): user already exists");
+    console.log(user);
+    return user;
+  }, (error) => {
     if(error.code === "auth/user-not-found") {
 
-      var password = generatePassphrase();
+      console.log("User at " + email + " was not found")
 
       var result = admin.auth().createUser({
         //uid: username,
@@ -49,11 +60,17 @@ function createFirebaseUser(email, username, sender) {
         disabled: false
       });
 
-      return result.then((r) => { return password; });
+      return result;
     }
 
+    console.log("Error fetching user");
+    console.log(error);
     return Promise.reject(error);
-  }).then((password) => {
+  }).then((previous) => {
+
+    console.log("successfully created user");
+    console.log(previous);
+    console.log("now pushing to log");
 
     var result = admin.database().ref('/log').push().set({
       type: "invite",
@@ -63,8 +80,12 @@ function createFirebaseUser(email, username, sender) {
       startingLife: 0
     });
 
-    return result.then((r) => { return password; });
-  }).then((password) => {
+    return result;
+  }).then((previous) => {
+
+    console.log("Successfully pushed to log");
+    console.log(previous);
+    console.log("now creating player");
 
     var result = admin.database().ref('/players/' + username).set({
       email: email,
@@ -76,15 +97,11 @@ function createFirebaseUser(email, username, sender) {
 
     return result;
   }).then((result) => {
-
+    console.log("SUCCESS");
     return {success: true};
-
   }).catch((error) => {
-    console.log("Error creating user?");
-    console.log(error);
-    return {
-      success: false
-    };
+    console.log("FAILURE");
+    return {success: false};
   });
 }
 
