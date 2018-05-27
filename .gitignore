@@ -4,3 +4,4 @@ node_modules/*
 firebase-debug.log
 serviceAccountKey.json
 functions/node_modules/*
+functions/gmail.json
