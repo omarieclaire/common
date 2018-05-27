@@ -3,3 +3,4 @@ node_modules/*
 .eslintrc.js
 firebase-debug.log
 serviceAccountKey.json
+functions/node_modules/*
