@@ -24,6 +24,12 @@ Run
 ./node_modules/.bin/firebase deploy --project common-d2ecf
 ```
 
+You may need the following to deploy the cloud functions:
+
+* `functions/gmail.json` containing a `json` object like `{ "email": "", "password": ""}`
+* `functions/serviceAccountKey.json` which you need to get from `firebase`.
+* ensure the `functions/node_modules` has all the right dependencies, i.e. `nodemailer`
+
 ## Developing
 
 Run
