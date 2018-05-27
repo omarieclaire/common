@@ -51,7 +51,7 @@ function createFirebaseUser(email, username, sender) {
     return Promise.reject(error);
   }).then((password) => {
 
-    var result = functions.database('/log').push().set({
+    var result = admin.database().ref('/log').push().set({
       type: "invite",
       email: email,
       sender: sender,
