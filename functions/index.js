@@ -92,6 +92,8 @@ exports.createUserAndInvite = functions.https.onCall((data, context) => {
   var result =
     createFirebaseUser(data.email, data.username, data.sender).then((result) => {
       return {success: result.success};
+    }).catch((error) => {
+      return {success: false};
     });
 
   return result;
