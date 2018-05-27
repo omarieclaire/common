@@ -21,7 +21,7 @@ npm install firebase-tools
 Run
 
 ```shell
-./node_modules/.bin/firebase deploy --project common-d2ecf
+./node_modules/.bin/firebase deploy --project common-d2ecf --only hosting
 ```
 
 You may need the following to deploy the cloud functions:
@@ -29,6 +29,12 @@ You may need the following to deploy the cloud functions:
 * `functions/gmail.json` containing a `json` object like `{ "email": "", "password": ""}`
 * `functions/serviceAccountKey.json` which you need to get from `firebase`.
 * ensure the `functions/node_modules` has all the right dependencies, i.e. `nodemailer`
+
+To deploy the cloud functions:
+
+```shell
+./node_modules/.bin/firebase deploy --project common-d2ecf --only functions
+```
 
 ## Developing
 
