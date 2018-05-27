@@ -102,11 +102,13 @@ exports.sendWelcomeEmail =
 
       var user = snapshot.val();
 
+      var password = user.initialPassword || "UNKNOWN";
+
       var mailOptions = {
         from: '"Common Play" <marieflanagan@gmail.com>',
         to: user.email,
         subject: "Welcome to Common!",
-        text: "Welcome to Common! Your password is: " + user.initialPassword
+        text: "Welcome to Common! Your password is: " + password;
       };
 
       return mailTransport.sendMail(mailOptions)
