@@ -22,9 +22,14 @@ var lineLength2 = 0;
 var haveIWonYet = false;
 
 function setup() {
-  createCanvas(screenW, screenH);
-  fill(0);
-  background(200);
+ // createCanvas(screenW, screenH);
+  //fill(0);
+  //background(200);
+
+  //var inp = createInput('blah');
+  //inp.input(myInputEvent);
+
+  //document.getElementById("winBox").style.display = "block";
 }
 
 function withinXLeftBoundary(t) {
@@ -47,14 +52,17 @@ function withinRight(t) {
 }
 
 function draw() {
-
+  /*
   if(haveIWonYet) {
     background(0, 255, 255);
+   // document.getElementById("winBox").style.display = "block";
+
+    //display a message -> button -> username and email
   } else {
     background(200);
   }
 
-  textAlign(CENTER);
+ // textAlign(CENTER);
 
   rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
@@ -78,9 +86,8 @@ function draw() {
   line1 = line(leftButtonX + buttonWidth, leftButtonY, leftButtonX + buttonWidth + lineLength1, leftButtonY);
   line2 = line(rightButtonX, rightButtonY, rightButtonX + lineLength2, leftButtonY);
 
-  // console.log(lineLength1, lineLength2);
   haveIWonYet = winState(distanceBetweenButtons / 2);
-
+*/
 }
 
 function leftReducer(accumulator, currentValue) {
@@ -115,17 +122,16 @@ function winState(distance) {
     console.log("win");
 
     return true;
-    // leftButton.changeColour();
-    // fill(255,200,200);
 
   } else {
-    console.log("not winning yet")
-
+    //console.log("not winning yet")
     return false;
 
-    // fill(0);
-
   }
+}
+
+function myInputEvent() {
+  console.log('you are typing: ', this.value());
 }
 
 // this prevents dragging screen around
