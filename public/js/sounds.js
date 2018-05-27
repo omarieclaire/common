@@ -15,7 +15,7 @@ gameSounds.forEach(function (path) {
   var audio = document.createElement("audio");
   audio.id = path;
   audio.src = "/sounds/" + path + ".mp3";
-  audio.preload = true;
+  audio.preload = "auto";
   document.body.appendChild(audio);
 });
 
