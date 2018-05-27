@@ -21,35 +21,24 @@ var lineLength2 = 0;
 
 var haveIWonYet = false;
 
+
 function setup() {
   createCanvas(screenW, screenH);
   fill(0);
   background(200);
-}
 
-function withinXLeftBoundary(t) {
-  return t.x > leftButtonX && t.x < leftButtonX + buttonWidth;
-}
-function withinYLeftBoundary(t) {
-  return t.y > leftButtonY && t.y < leftButtonY + buttonWidth;
-}
-function withinXRightBoundary(t) {
-  return t.x > rightButtonX && t.x < rightButtonX + buttonWidth;
-}
-function withinYRightBoundary(t) {
-  return t.y > rightButtonY && t.y < rightButtonY + buttonWidth;
-}
-function withinLeft(t) {
-  return withinXLeftBoundary(t) && withinYLeftBoundary(t);
-}
-function withinRight(t) {
-  return withinXRightBoundary(t) && withinYRightBoundary(t);
+  // username <input id="username" type="text">
+  // email <input id="email" type="text">
+  // <input id="join" type="button" value="add">
+
 }
 
 function draw() {
 
   if(haveIWonYet) {
     background(0, 255, 255);
+    window.location.replace('minigamewin.html');
+
   } else {
     background(200);
   }
@@ -58,8 +47,6 @@ function draw() {
 
   rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
-  // rect(leftButtonX + buttonWidth, leftButtonY + buttonWidth/2, leftBarWidth, 10);
-  // rect(rightButtonX - rightBarWidth, rightButtonY + buttonWidth/2, rightBarWidth, 10);
 
   if(leftIsTouched && rightIsTouched) {
     lineLength1 ++;
@@ -81,6 +68,25 @@ function draw() {
   // console.log(lineLength1, lineLength2);
   haveIWonYet = winState(distanceBetweenButtons / 2);
 
+}
+
+function withinXLeftBoundary(t) {
+  return t.x > leftButtonX && t.x < leftButtonX + buttonWidth;
+}
+function withinYLeftBoundary(t) {
+  return t.y > leftButtonY && t.y < leftButtonY + buttonWidth;
+}
+function withinXRightBoundary(t) {
+  return t.x > rightButtonX && t.x < rightButtonX + buttonWidth;
+}
+function withinYRightBoundary(t) {
+  return t.y > rightButtonY && t.y < rightButtonY + buttonWidth;
+}
+function withinLeft(t) {
+  return withinXLeftBoundary(t) && withinYLeftBoundary(t);
+}
+function withinRight(t) {
+  return withinXRightBoundary(t) && withinYRightBoundary(t);
 }
 
 function leftReducer(accumulator, currentValue) {
@@ -127,6 +133,9 @@ function winState(distance) {
 
   }
 }
+
+
+
 
 // this prevents dragging screen around
 // function touchMoved() {
