@@ -22,6 +22,7 @@ var lineLength2 = 0;
 var haveIWonYet = false;
 
 function setup() {
+  console.log("can anybody hear me")
   createCanvas(screenW, screenH);
   fill(0);
   background(200);
@@ -33,7 +34,7 @@ function setup() {
 function draw() {
 
   if(haveIWonYet) {
-    background(255, 0, 0);
+    background(0, 255, 255);
     // window.location.replace('minigamewin.html');
 
    setTimeout(function() {
@@ -58,8 +59,6 @@ function draw() {
         lineLength1--;
         lineLength2++;
       }
-    } else {
-      console.log("I won");
     }
   }
 
