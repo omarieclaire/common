@@ -10,18 +10,14 @@ var leftButtonY = screenH/2 - buttonWidth/2;
 var rightButtonX = screenW - (buttonWidth + 50);
 var rightButtonY = screenH/2 - buttonWidth/2;
 
-// p1bounds = font.textBounds(message,x,y,fontsize);
-
-
-// var leftButtonBar;
-// var rightButtonBar;
-// var leftBarWidth = 50;
-// var rightBarWidth = 50;
-
+var leftButtonBar;
+var rightButtonBar;
+var leftBarWidth = 10;
+var rightBarWidth = 10;
 
 function setup() {
   createCanvas(screenW, screenH);
-  //background(200);
+  background(200);
 }
 
 function withinXLeftBoundary(t) {
@@ -51,22 +47,10 @@ function draw() {
 
   rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
-  // rect(leftButtonX + buttonWidth, leftButtonY + buttonWidth / 2, leftBarWidth, 50);
-  // rect(rightButtonX - rightBarWidth, rightButtonY + buttonWidth /2, rightBarWidth, 50);
+  rect(leftButtonX + buttonWidth, leftButtonY + buttonWidth/2, leftBarWidth, 10);
+  rect(rightButtonX - rightBarWidth, rightButtonY + buttonWidth/2, rightBarWidth, 10);
 
-  // The touches array holds an object for each and every touch
-  // The array length is dynamic and tied to the number of fingers
-  // currently touching
-
-  // ellipse(56, 46, 55, 55);
-
-  //     // leftBarWidth = leftBarWidth + 2
-  //   } else if ((touches[i].x > rightButtonX && touches[i].x < rightButtonX + buttonWidth)&&(touches[i].y > buttonY && touches[i].y < buttonY + buttonWidth)) {
-  //     text("touched right", width/2, height/2 + 20);
-  //     // rightButtonBar.visible = true
-  //     // rightBarWidth = rightBarWidth + 2
-  //   }
-  // }
+      // rightButtonBar.visible = true
 }
 
 function touchStarted() {
@@ -105,23 +89,22 @@ function touchStarted() {
   }
 }
 
-// function mousePressed() {
-//   console.log(mouseX, mouseY);
-//   if (((mouseX > leftButtonX && mouseX < leftButtonX + buttonWidth)&&(mouseY > leftButtonY && mouseY < leftButtonY + buttonWidth))&&((mouseX > rightButtonX && mouseX < rightButtonX + buttonWidth)&&(mouseY > rightButtonY && mouseY < rightButtonY + buttonWidth))) {
-//     console.log("both button pressed");
-//   } else if ((mouseX > leftButtonX && mouseX < leftButtonX + buttonWidth)&&(mouseY > leftButtonY && mouseY < leftButtonY + buttonWidth)) {
-//     console.log("button pressed");
-//     //text("two fingers", 100, 100);
-//   } else if ((mouseX > rightButtonX && mouseX < rightButtonX + buttonWidth)&&(mouseY > rightButtonY && mouseY < rightButtonY + buttonWidth)) {
-//     console.log("r button pressed");
-//   }
-// }
+// function touchEnded() {
+//   console.log("touch ended")
+//  }
+//
+//  function touchStarted() {
+//    console.log("touch started")
+//
+//  }
 
 // this prevents dragging screen around
 // function touchMoved() {
 //   return false;
 // }
 
+
+// rightBarWidth = rightBarWidth + 2
 
 
 // if left bar width is greater than half of the distance between the buttons
