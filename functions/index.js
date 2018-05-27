@@ -105,7 +105,7 @@ exports.sendWelcomeEmail =
       var password = user.initialPassword || "UNKNOWN";
 
       var mailOptions = {
-        from: '"Common Play" <marieflanagan@gmail.com>',
+        from: '"Common Play" <aaron.michael.benjamin.levin@gmail.com>',
         to: user.email,
         subject: "Welcome to Common!",
         text: "Welcome to Common! Your password is: " + password
