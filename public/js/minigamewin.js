@@ -14,10 +14,12 @@ function joinButtonClicked() {
     return;
   }
 
-  console.log('what what')
+    var emailEntered = document.getElementById('email').value;
+    var usernameEntered = document.getElementById('username').value;
 
+    
   var createUser = firebase.functions().httpsCallable("createUserAndInvite");
-  createUser({email: "david@block-party.net", username: "david", sender: "butt"}, {}).then(function(result) {
+  createUser({email: emailEntered, username: usernameEntered, sender: "butt"}, {}).then(function(result) {
 
     // Read result of the Cloud Function.
     var sanitizedMessage = result.data.text;
