@@ -37,6 +37,7 @@ var importAction = function(ui, util, scores, db) {
         // decrement our score
         ourNode.score = ourNode.score - CLICK_NODE_DESTROYER_POWER;
 
+        playSound("reinforcing-connection-sound", 0.2);
         // begin edge animation
         var htmlEdge = document.getElementById(util.edgeIdAttr(ouredge));
         d3.select(htmlEdge).transition().duration(1000).attr("stroke", "magenta").transition().duration(1500).attr("stroke", null);
@@ -47,8 +48,12 @@ var importAction = function(ui, util, scores, db) {
         d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
 
       }
+    } else if (ourNode.score > 2) {
+      //console.log(d, "Not our edge!");
+      playSound("poor-sound", 0.2);
     } else {
       //console.log(d, "Not our edge!");
+      playSound("error-sound", 0.2);
     }
 
     scores.calculateCommonScore(state.edges, state.nodes, state.selfId);

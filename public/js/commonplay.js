@@ -102,14 +102,16 @@ window.addEventListener("load", function() {
       .selectAll(".label");
 
     // create a <g> element for annotations, append it to the first g
-    var annotationAnchor = g.append("g").attr("class", "annotationBox").selectAll(".anchor");
+    var annotationAnchor = g
+      .append("g")
+      .attr("class", "annotationBox")
+      .selectAll(".anchor");
 
     // create a <g> element for nodes, append it to the first g
     var node = g
       .append("g")
       .attr("id", "g-node")
       .selectAll(".node");
-
 
     // get the nodecount HTML node
     var nc = document.getElementById("nodecount");
@@ -220,8 +222,6 @@ window.addEventListener("load", function() {
 
       // do the same thing for the labels
       label = label.data(state.nodes, function(d) { return d.id;});
-
-      //I removed line below because it didn't do anything?
       label.exit().remove();
       label = label.enter()
         .append("text")
@@ -277,11 +277,8 @@ window.addEventListener("load", function() {
 
     }
 
-
     // used to generate random nodes
     var index = 1;
-
-
 
     // draw refreshes the graph?
     draw();
@@ -301,7 +298,7 @@ window.addEventListener("load", function() {
     });
 
     document.getElementById("destroy").addEventListener("click", function () {
-      document.querySelector("#destroyer-sound").play()
+      playSound("destroyer-sound", 0.1);
       action.runDestroyer(state);
       // var index = _.random(0, state.edges.length - 1);
       // var edge = state.edges[index];
@@ -331,9 +328,7 @@ window.addEventListener("load", function() {
     });
 
     document.getElementById("giver").addEventListener("click", function() {
-      // document.querySelector("#giver-sound").play()
-      // playSound("giver-sound", 0.2);
-
+      playSound("giver-sound", 0.1);
 
       var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
       _.each(state.nodes, function(node) {
@@ -379,7 +374,6 @@ window.addEventListener("load", function() {
     document.getElementById("zoom-in").addEventListener("click", zoomIn);
     document.getElementById("reset-button").addEventListener("click", resetZoom);
     document.getElementById("zoom-out").addEventListener("click", zoomOut);
-
 
     document.body.addEventListener("keydown", function(e) {
       // console.log(e);
