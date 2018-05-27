@@ -18,9 +18,11 @@ var rightBarWidth = 10;
 var leftIsTouched = false;
 var rightIsTouched = false;
 
+var line1 = 0;
+var line2 = 0;
+
 var lineLength1 = 0;
 var lineLength2 = 0;
-
 
 function setup() {
   createCanvas(screenW, screenH);
@@ -68,13 +70,14 @@ function draw() {
   }
 
   strokeWeight(4);
-  // strokeColor(0);
+
+  var distanceBetweenButtons = rightButtonX - leftButtonX - buttonWidth;
 
   line1 = line(leftButtonX + buttonWidth, leftButtonY, leftButtonX + buttonWidth + lineLength1, leftButtonY);
-      // rightButtonBar.visible = true
+  line2 = line(rightButtonX, rightButtonY, rightButtonX + lineLength2, leftButtonY);
 
-  line2= line(rightButtonX, rightButtonY, rightButtonX + lineLength2, leftButtonY);
-
+  // console.log(lineLength1, lineLength2);
+  winState(distanceBetweenButtons / 2);
 
 }
 
@@ -105,17 +108,21 @@ function touchMoved() {
   return false;
 }
 
+function winState(distance) {
+  if (lineLength1 > distance && (-1)*lineLength2 > distance) {
+    console.log("win");
+  } else {
+    console.log("not winning yet")
+  }
+}
+
+// var line1 = 0;
+// var line2 = 0;
+//
+// var lineLength1;
+// var lineLength2;
 
 // this prevents dragging screen around
 // function touchMoved() {
 //   return false;
 // }
-
-
-// rightBarWidth = rightBarWidth + 2
-
-
-// if left bar width is greater than half of the distance between the buttons
-    // One color per finger
-    // fill(colors[i]);
-    // Draw a circle at each finger
