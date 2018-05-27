@@ -4,6 +4,8 @@ const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
 const gmailCredentials = require('./gmail.json');
 const passgen = require('./passgen.json');
+const mailgunApiKey = require('./mailgun.json').apiKey;
+const mailgun = require('mailgun-js')({apiKey: mailgunApiKey, domain: "mail.commonplay.ca"});
 
 const nodemailer = require('nodemailer');
 const mailTransport = nodemailer.createTransport({
@@ -26,9 +28,11 @@ function generatePassphrase() {
   return randomAdjective + "-" + randomVerb + "-" + randomNoun;
 }
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+try {
+    admin.initializeApp();
+} catch(error) {
+    //TODO: ignoring until firebase-functions fix released
+}
 
 function createFirebaseUser(email, username, sender) {
   admin.auth().getUserByEmail(email).catch((error) => {
@@ -37,10 +41,10 @@ function createFirebaseUser(email, username, sender) {
       var password = generatePassphrase();
 
       var result = admin.auth().createUser({
-        uid: username,
+        //uid: username,
         email: email,
         emailVerified: false,
-        password: "i-love-common",
+        password: password,
         displayName: username,
         disabled: false
       });
@@ -55,7 +59,7 @@ function createFirebaseUser(email, username, sender) {
       type: "invite",
       email: email,
       sender: sender,
-      recipient: recipient,
+      recipient: username,
       startingLife: 0
     });
 
@@ -103,14 +107,21 @@ exports.sendWelcomeEmail =
       var password = user.initialPassword || "UNKNOWN";
 
       var mailOptions = {
-        from: '"Common Play" <aaron.michael.benjamin.levin@gmail.com>',
+        from: 'Common Play <play@mail.commonplay.ca>',
         to: user.email,
         subject: "Welcome to Common!",
         text: "Welcome to Common! Your password is: " + password
       };
 
-      return mailTransport.sendMail(mailOptions)
-        .then(() => { console.log("Successfully sent email to: " + user.email); return true;})
-        .catch((error) => console.error('There was an error while sending the email to ' + user.email + ':', error));
+      var result = new Promise((resolve, reject) => {
+        mailgun.messages().send(mailOptions, ((error, body) => {
+          if(error) {
+            reject(error);
+          } else {
+            resolve(body);
+          }
+        }));
+      });
 
+      return result;
     });
