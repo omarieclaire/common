@@ -45,7 +45,7 @@ function draw() {
     background(200);
   }
 
-  textAlign(CENTER);
+  // textAlign(CENTER);
 
   rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
@@ -62,12 +62,12 @@ function draw() {
     }
   }
 
-  strokeWeight(4);
+  strokeWeight(10);
 
   var distanceBetweenButtons = rightButtonX - leftButtonX - buttonWidth;
 
-  line1 = line(leftButtonX + buttonWidth, leftButtonY, leftButtonX + buttonWidth + lineLength1, leftButtonY);
-  line2 = line(rightButtonX, rightButtonY, rightButtonX + lineLength2, leftButtonY);
+  line1 = line(leftButtonX + buttonWidth, leftButtonY + buttonWidth/2, leftButtonX + buttonWidth + lineLength1, leftButtonY + buttonWidth/2);
+  line2 = line(rightButtonX, rightButtonY + buttonWidth/2, rightButtonX + lineLength2, leftButtonY + buttonWidth/2);
 
   // console.log(lineLength1, lineLength2);
   haveIWonYet = winState(distanceBetweenButtons / 2);
