@@ -13,10 +13,10 @@ var rightButtonY = screenH/2 - buttonWidth/2;
 // p1bounds = font.textBounds(message,x,y,fontsize);
 
 
-var leftButtonBar;
-var rightButtonBar;
-var leftBarWidth = 50;
-var rightBarWidth = 50;
+// var leftButtonBar;
+// var rightButtonBar;
+// var leftBarWidth = 50;
+// var rightBarWidth = 50;
 
 
 function setup() {
@@ -28,13 +28,13 @@ function withinXLeftBoundary(t) {
   return t.x > leftButtonX && t.x < leftButtonX + buttonWidth;
 }
 function withinYLeftBoundary(t) {
-  return t.y > buttonY && t.y < buttonY + buttonWidth;
+  return t.y > leftButtonY && t.y < leftButtonY + buttonWidth;
 }
 function withinXRightBoundary(t) {
   return t.x > rightButtonX && t.x < rightButtonX + buttonWidth;
 }
 function withinYRightBoundary(t) {
-  return t.y > buttonY && t.y < buttonY + buttonWidth;
+  return t.y > rightButtonY && t.y < rightButtonY + buttonWidth;
 }
 function withinLeft(t) {
   return withinXLeftBoundary(t) && withinYLeftBoundary(t);
@@ -70,29 +70,39 @@ function draw() {
 }
 
 function touchStarted() {
-
-  text("Number of touches: " + touches.length, 200,200);
-
-  if(touches.length >= 2) {
-
+  if(touches.length >= 1) {
     var t0 = touches[0];
-    var t1 = touches[1];
-
     var t0WithinLeft = withinLeft(t0);
     var t0WithinRight = withinRight(t0);
 
-    var t1WithinLeft = withinLeft(t1);
-    var t1WithinRight = withinRight(t1);
-
-    if(t0WithinLeft && t1WithinRight) {
-      text("two touches", 100,100);
-    } else if(t0WithinRight && t1WithinLeft) {
-      text("two touches", 100,100);
-    } else {
-      text("how many touches: " + touches.length, 200,100);
+    if (t0WithinRight) {
+      console.log("t0WithinRight is touching")
+    } else if (t0WithinLeft) {
+      console.log("t0WithinLeft is touching")
     }
-  }
+
+    if(touches.length >= 2) {
+      var t1 = touches[1];
+      var t1WithinLeft = withinLeft(t1);
+      var t1WithinRight = withinRight(t1);
+
+      if(t0WithinLeft && t1WithinRight) {
+        console.log("two things are touching - 0WithinLeft && t1WithinRight")
+        // text("two touches", 100,100);
+      } else if(t0WithinRight && t1WithinLeft) {
+        console.log("two things are touching - t0WithinRight && t1WithinLeft ")
+        // text("two touches", 100,100);
+      } else if (t1WithinRight) {
+        console.log("t1WithinRight is touching")
+      } else if (t1WithinLeft) {
+        console.log("t1WithinLeft is touching")
+      } else {
+        console.log("I'm here to take up space")
+        // text("how many touches: " + touches.length, 200,100);
+      }
+    }
   return false;
+  }
 }
 
 // function mousePressed() {
