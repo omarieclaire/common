@@ -274,6 +274,7 @@ window.addEventListener("load", function() {
       var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork)
 
       doAnnotations(enclosedCircles, annotationAnchor);
+
     }
 
 
@@ -300,6 +301,7 @@ window.addEventListener("load", function() {
     });
 
     document.getElementById("destroy").addEventListener("click", function () {
+      document.querySelector("#destroyer-sound").play()
       action.runDestroyer(state);
       // var index = _.random(0, state.edges.length - 1);
       // var edge = state.edges[index];
@@ -329,6 +331,10 @@ window.addEventListener("load", function() {
     });
 
     document.getElementById("giver").addEventListener("click", function() {
+      // document.querySelector("#giver-sound").play()
+      // playSound("giver-sound", 0.2);
+
+
       var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
       _.each(state.nodes, function(node) {
         var network = networkScores.filter(function(network) {
@@ -388,7 +394,6 @@ window.addEventListener("load", function() {
         zoomOut();
       }
     });
-
     state.loaded = true;
   });
 });
