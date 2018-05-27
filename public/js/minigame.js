@@ -15,6 +15,11 @@ var rightButtonBar;
 var leftBarWidth = 10;
 var rightBarWidth = 10;
 
+var leftIsTouched = false;
+var rightIsTouched = false;
+
+var lineLength = 0;
+
 function setup() {
   createCanvas(screenW, screenH);
   background(200);
@@ -40,8 +45,8 @@ function withinRight(t) {
 }
 
 function draw() {
+  background(200);
   fill(0);
-  strokeWeight(2);
 
   textAlign(CENTER);
 
@@ -50,53 +55,49 @@ function draw() {
   rect(leftButtonX + buttonWidth, leftButtonY + buttonWidth/2, leftBarWidth, 10);
   rect(rightButtonX - rightBarWidth, rightButtonY + buttonWidth/2, rightBarWidth, 10);
 
+  if(leftIsTouched && rightIsTouched) {
+    lineLength++;
+  } else {
+    if(lineLength > 0) {
+      lineLength--;
+    }
+  }
+
+  strokeWeight(4);
+  // strokeColor(0);
+
+  line(leftButtonX + buttonWidth, leftButtonY, leftButtonX + buttonWidth + lineLength, leftButtonY);
       // rightButtonBar.visible = true
+
+}
+
+function leftReducer(accumulator, currentValue) {
+  return accumulator || withinLeft(currentValue);
+}
+function rightReducer(accumulator, currentValue) {
+  return accumulator || withinRight(currentValue);
+}
+
+function isTouched(touches) {
+  leftIsTouched = touches.reduce(leftReducer, false);
+  rightIsTouched = touches.reduce(rightReducer, false);
 }
 
 function touchStarted() {
-  if(touches.length >= 1) {
-    var t0 = touches[0];
-    var t0WithinLeft = withinLeft(t0);
-    var t0WithinRight = withinRight(t0);
-
-    if (t0WithinRight) {
-      console.log("t0WithinRight is touching")
-    } else if (t0WithinLeft) {
-      console.log("t0WithinLeft is touching")
-    }
-
-    if(touches.length >= 2) {
-      var t1 = touches[1];
-      var t1WithinLeft = withinLeft(t1);
-      var t1WithinRight = withinRight(t1);
-
-      if(t0WithinLeft && t1WithinRight) {
-        console.log("two things are touching - 0WithinLeft && t1WithinRight")
-        // text("two touches", 100,100);
-      } else if(t0WithinRight && t1WithinLeft) {
-        console.log("two things are touching - t0WithinRight && t1WithinLeft ")
-        // text("two touches", 100,100);
-      } else if (t1WithinRight) {
-        console.log("t1WithinRight is touching")
-      } else if (t1WithinLeft) {
-        console.log("t1WithinLeft is touching")
-      } else {
-        console.log("I'm here to take up space")
-        // text("how many touches: " + touches.length, 200,100);
-      }
-    }
+  isTouched(touches);
   return false;
-  }
 }
 
-// function touchEnded() {
-//   console.log("touch ended")
-//  }
-//
-//  function touchStarted() {
-//    console.log("touch started")
-//
-//  }
+function touchEnded() {
+  isTouched(touches);
+  return false;
+}
+
+function touchMoved() {
+  isTouched(touches);
+  return false;
+}
+
 
 // this prevents dragging screen around
 // function touchMoved() {
