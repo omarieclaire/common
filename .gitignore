@@ -5,3 +5,4 @@ firebase-debug.log
 serviceAccountKey.json
 functions/node_modules/*
 functions/gmail.json
+functions/serviceAccountKey.json

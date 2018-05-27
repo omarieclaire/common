@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 // Firebase Setup
 const admin = require('firebase-admin');
-const serviceAccount = require('../node_modules/serviceAccountKey.json');
+const serviceAccount = require('./serviceAccountKey.json');
 const gmailCredentials = require('./gmail.json');
 const passgen = require('./passgen.json');
 
