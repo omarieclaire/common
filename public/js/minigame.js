@@ -21,22 +21,31 @@ var lineLength2 = 0;
 
 var haveIWonYet = false;
 
+var player1Sound = null;
+var player2Sound = null;
+var connectionFormingSound = null;
+
+
+function preload() {
+  player1Sound = loadSound('sounds/player1-sound.mp3');
+  player2Sound = loadSound('sounds/player2-sound.mp3');
+  connectionFormingSound = loadSound('sounds/connection-forming-sound.mp3');
+
+}
+
 function setup() {
   createCanvas(screenW, screenH);
   fill(0);
   background(200);
-  player1Sound = loadSound('/sounds/player1-sound.mp3');
-  player2Sound = loadSound('/sounds/player2-sound.mp3');
-
-
-  // <audio id="reinforcing-connection-sound" src="/sounds/creinforcing-connection-sound.mp3" preload="auto"></audio>
-  // <audio id="connection-forming-sound" src="/sounds/connection-forming-sound.mp3" preload="auto"></audio>
-  //
-  // <audio id="new-connection-sound" src="/sounds/new-connection-sound.mp3" preload="auto"></audio>
+  // player2Sound = loadSound('/sounds/player2-sound.mp3');
+  // player2Sound = loadSound('/sounds/player2-sound.mp3');
+  // connectionFormingSound = loadSound('/sounds/connection-forming-sound.mp3');
+  // newConnectionSound = loadSound('/sounds/new-connection-sound.mp3');
 
 }
 
 function draw() {
+  connectionFormingSound.play();
 
   if(haveIWonYet) {
     background(0, 255, 255);
@@ -55,14 +64,14 @@ function draw() {
   rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
 
-
-
-
-
   if (haveIWonYet == false) {
     if(leftIsTouched && rightIsTouched) {
+
       lineLength1 ++;
       lineLength2 --;
+      // setVolume(volume,[rampTime],[timeFromNow])
+      connectionFormingSound.play();
+
     } else {
       if (lineLength1 > 0 || lineLength2 < 0) {
         lineLength1--;
@@ -70,17 +79,17 @@ function draw() {
       }
     }
 
-    if (leftIsTouched) {
-      player1Sound.play();
-    } else {
-      player1Sound.stop();
-    }
-
-    if (rightIsTouched) {
-      player2Sound.play();
-    } else {
-      player2Sound.stop();
-    }
+    // if (leftIsTouched) {
+    //   player1Sound.play();
+    // } else {
+    //   player1Sound.stop();
+    // }
+    //
+    // if (rightIsTouched) {
+    //   player2Sound.play();
+    // } else {
+    //   player2Sound.stop();
+    // }
   }
 
   strokeWeight(10);
