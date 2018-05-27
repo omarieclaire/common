@@ -108,7 +108,7 @@ exports.sendWelcomeEmail =
         from: '"Common Play" <marieflanagan@gmail.com>',
         to: user.email,
         subject: "Welcome to Common!",
-        text: "Welcome to Common! Your password is: " + password;
+        text: "Welcome to Common! Your password is: " + password
       };
 
       return mailTransport.sendMail(mailOptions)
