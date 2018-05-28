@@ -36,19 +36,21 @@ var importAction = function(ui, util, scores, db) {
         playSound("reinforcing-connection-sound", 0.2);
         // begin edge animation
         var htmlEdge = document.getElementById(util.edgeIdAttr(ouredge));
-        d3.select(htmlEdge).transition().duration(1000).attr("stroke", "magenta").transition().duration(1500).attr("stroke", null);
+        d3.select(htmlEdge).transition().duration(1000).attr("stroke", "#00FF00").transition().duration(1500).attr("stroke", null);
         // d3.select(htmlEdge).transition().duration(1000).attr("stroke-dasharray", "5, 5").transition().duration(1500).attr("stroke-dasharray", null);
 
         // begin node animation
         var htmlNode = document.getElementById(util.nodeIdAttr(d));
-        d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
+        // d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
 
       }
     } else if (ourNode.score > 2) {
       //console.log(d, "Not our edge!");
+      d3.select(htmlNode).transition().duration(10).style("fill","#8FBC8F").transition().duration(1500).style("fill", d.color);
       playSound("poor-sound", 0.2);
     } else {
       //console.log(d, "Not our edge!");
+      d3.select(htmlNode).transition().duration(10).style("fill","#8FBC8F").transition().duration(1500).style("fill", d.color);
       playSound("error-sound", 0.2);
     }
 
