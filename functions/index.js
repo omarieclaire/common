@@ -136,7 +136,7 @@ exports.sendWelcomeEmail =
         html: "<!DOCTYPE html><html><body><p>Hello <strong>" + user.username + "</strong>!</p><p>Welcome to Common! Your password is: <code>" + password + '</code>. Try logging in at <a href="http://commonplay.ca/" target="_blank">https://commonplay.ca</a> and update your password!</p></body></html>'
       };
 
-      var result = new Promise((resolve, reject) => {
+      var mailgunPromise = new Promise((resolve, reject) => {
         mailgun.messages().send(mailOptions, ((error, body) => {
           if(error) {
             reject(error);
@@ -146,5 +146,10 @@ exports.sendWelcomeEmail =
         }));
       });
 
-      return result;
+      return mailgunPromise.then((resp) => {
+        return admin.database().ref('/players/' + user.username).update({
+          initialPassword: null
+        });
+      });
+
     });
