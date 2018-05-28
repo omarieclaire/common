@@ -114,7 +114,7 @@ var importScores = function(ui) {
     }
 
     //console.log("score = %o", score);
-    document.getElementById("iscore").textContent = score.toString();
+    //document.getElementById("iscore").textContent = score.toString();
 
     var networkScores = calculateNetworkScoresByNode(edges, nodes);
     //console.log("network scores = %o", networkScores);

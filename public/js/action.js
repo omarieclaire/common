@@ -31,12 +31,8 @@ var importAction = function(ui, util, scores, db) {
     if (ouredge){
       // get our node from the seenNodes object (efficient)
       var ourNode = state.seenNodes[state.selfId];
-      console.log(ourNode.score);
       if(ouredge.strength < MAX_EDGE_STRENGTH && ourNode.score > 2) {
-        ouredge.strength = ouredge.strength + CLICK_EDGE_INCREMENTER;
-        // decrement our score
-        ourNode.score = ourNode.score - CLICK_NODE_DESTROYER_POWER;
-
+        db.reinforceConnection(ourNode.id, target, CLICK_EDGE_INCREMENTER, CLICK_NODE_DESTROYER_POWER);
         playSound("reinforcing-connection-sound", 0.2);
         // begin edge animation
         var htmlEdge = document.getElementById(util.edgeIdAttr(ouredge));

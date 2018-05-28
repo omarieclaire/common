@@ -339,8 +339,8 @@ window.addEventListener("load", function() {
 
     db.listenToLog(function(logMsg) {
       ui.renderMyScore(state.selfId, state.seenNodes);
-      // this has a draw() call at the end
       scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
+      draw();
     });
 
     // zooming funtion given to d3
