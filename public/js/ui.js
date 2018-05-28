@@ -4,7 +4,7 @@ var importUi = function() {
     var myNode = seenNodes[myId];
     if(myNode) {
       var html = document.getElementById("node-score-me");
-      html.textContent = myNode.score;
+      html.textContent = myNode.score.toFixed(0);
     } else {
       console.log("can't find my id (" + myId + ") in seenNodes");
     }
