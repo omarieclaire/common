@@ -20,15 +20,16 @@ window.addEventListener("load", function() {
 
     // If the user was logged in, we set `currentUser` in local storage.
     // Note: if the user logs out, we should unset this.
-    var currentUser = {
-      username: window.localStorage.getItem("current-username"),
-      email: window.localStorage.getItem("current-email")
-    };
-
-    if(currentUser.username === null || currentUser.email === null) {
+    var currentUser;
+    if(user === null || user === undefined) {
       currentUser = {
         email: "unknown@null.void",
         username: "anonymous-" + Date.now()
+      };
+    } else {
+      currentUser = {
+        email: user.email,
+        username: user.displayName
       };
     }
 
