@@ -32,6 +32,8 @@ var haveIWonYet = false;
 //
 // }
 
+
+
 function setup() {
   createCanvas(screenW, screenH);
   fill(0);
@@ -43,10 +45,15 @@ function setup() {
 }
 
 function draw() {
-    playSound("connection-forming-sound");
+  playSound("connection-forming-sound");
+
+
+
 
   if(haveIWonYet) {
     background(255, 0, 255);
+    textAlign(CENTER);
+    text("Success!", 200, 200);
     // document.querySelector("#reinforcing-connection-sound").play()
 
     // window.location.replace('minigamewin.html');
@@ -144,8 +151,26 @@ function winState(distance) {
     return true;
     // connectionFormingSound.play();
   } else {
-    console.log("not winning yet")
+    // console.log("not winning yet")
     return false;
 
   }
 }
+
+
+
+
+
+// function keyPressed() {
+//   if (keyCode === 70 && keyCode === 74) {
+//     isTouched = true;
+//   } else if (keyCode === 70) {
+//     leftIsTouched = true;
+//     value = 0, 255, 0;
+//   } else if (keyCode === 74) {
+//     rightIsTouched = true;
+//     value = 0, 0, 255;
+//
+//   }
+//
+// }
