@@ -44,7 +44,6 @@ function setup() {
 
 function draw() {
     // document.querySelector("#reinforcing-connection-sound").play()
-    playSound("connection-forming-sound");
 
   if(haveIWonYet) {
     background(0, 255, 255);
@@ -65,6 +64,8 @@ function draw() {
 
   if (haveIWonYet == false) {
     if(leftIsTouched && rightIsTouched) {
+      playSound("connection-forming-sound");
+
       // connectionFormingSound.play();
       lineLength1 ++;
       lineLength2 --;
