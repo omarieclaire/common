@@ -2,31 +2,50 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   // log the user out when clicking on the link.
-  document.getElementById("logout").addEventListener("click", function() {
+  document.getElementById("logout-anchor").addEventListener("click", function() {
     firebase.auth().signOut().then(function() {
       document.getElementById('auth-msg').innerHTML = "";
-      window.localStorage.removeItem("current-username");
-      window.localStorage.removeItem("current-email");
       console.log("sign-out success!");
     }).catch(function(error) {
       console.log("sign-out error!");
     });
   });
 
+
   // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
   // // The Firebase SDK is initialized and available here!
   //
   firebase.auth().onAuthStateChanged(function(user) {
+    console.log("onchange", user);
+
     //grab auth element
     let auth_msg = document.getElementById("auth-msg");
     let auth_element = document.getElementById("auth-element");
     var loginDiv = document.getElementById("login");
+    var logoutDiv = document.getElementById("logout");
+
+    
     //if the user is logged in then user is not null
     if (user) {
+      document.getElementById("pass-reset").addEventListener("click", function() {
+        firebase.auth().sendPasswordResetEmail(user.email).then(function() {
+          var span = document.getElementById("reset-sent");
+          span.innerHTML = " (sent)";
+          return true;
+        }).then(function() {
+          return (new Promise(function(resolve, reject) {
+            window.setTimeout(function() {
+              document.getElementById("reset-sent").innerHTML = "";
+            }, 2000);
+          }));
+        });
+      });
+
       loginDiv.style.display = "none";
-      auth_msg.innerHTML = "Yay, you're logged in!";
+      logoutDiv.style.display = "block";
     } else {
       loginDiv.style.display = "block";
+      logoutDiv.style.display = "none";
     }
   });
   // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
@@ -35,10 +54,4 @@ document.addEventListener('DOMContentLoaded', function() {
   //
   // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-  try {
-    document.getElementById('load').innerHTML = '';
-  } catch (e) {
-    console.error(e);
-    document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-  }
 });

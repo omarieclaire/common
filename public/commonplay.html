@@ -29,7 +29,7 @@
   <div class="main-container">
     <div class="main wrapper clearfix">
 
-       <div id="chart"></div>
+      <div id="chart"></div>
 
        <div class="ui">
 
@@ -62,6 +62,18 @@
        </div>
 
         <div class="adminButtons">
+
+          <div class="login-elements">
+            <p id="auth-element"></p>
+
+            <div id="login" style="display:none;">
+              <p><a href="auth.html" id="login-anchor">login / signup</a></p>
+            </div>
+            <div id="logout" style="display:none;">
+              <p><a href="#" id="logout-anchor">logout</a> / <a id="pass-reset" href="#">pass reset</a><span id="reset-sent" style="color:red;"></span></p>
+            </div>
+          </div>
+
           <!-- My Common: <span id="iscore">0</span><br> -->
           My node score: <span id="node-score-me">0</span><br>
           <button id="toggleDebugBtn">+</button><br><br>
@@ -94,6 +106,7 @@
   <script src="js/action.js"></script>
   <script src="js/scores.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
   <script src="js/commonplay.js"></script>
 
   <audio id="reinforcing-connection-sound" src="/sounds/reinforcing-connection-sound.mp3" preload="auto"></audio>
