@@ -128,9 +128,13 @@ var importUtil = function(scores, ui) {
       // note: if a node doesn't have a network yet, we skip it.
       if(data.network) {
         if(nodesByNetwork[data.network]) {
-          nodesByNetwork[data.network].push(data);
+          nodesByNetwork[data.network].nodes.push(data);
         } else {
-          nodesByNetwork[data.network] = [data];
+          var entry = {
+            nodes: [data],
+            score: data.networkScore
+          };
+          nodesByNetwork[data.network] = entry;
         }
       }
     });

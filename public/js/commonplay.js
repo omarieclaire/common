@@ -12,7 +12,7 @@ window.addEventListener("load", function() {
     var ui = importUi();
     var scores = importScores(ui);
     var util = importUtil(scores, ui);
-    var db = importDb(util, firebase);
+    var db = importDb(util, firebase, scores);
     var action = importAction(ui, util, scores, db);
 
     // Create modals
@@ -126,9 +126,12 @@ window.addEventListener("load", function() {
     function enclosedCirclesByNetwork(nodesByNetwork) {
       var enclosedCircles = [];
       Object.keys(nodesByNetwork).forEach(function(network,index) {
-        var nodesInNetwork = nodesByNetwork[network];
+        var networkData = nodesByNetwork[network];
+        var nodesInNetwork = networkData.nodes;
+        var networkScore = networkData.score;
         var enclosedCircle = d3.packEnclose(nodesInNetwork);
         enclosedCircle.id = "enclosing-network-" + index;
+        enclosedCircle.score = networkScore;
         enclosedCircles.push(enclosedCircle);
       });
       return enclosedCircles;
@@ -139,7 +142,7 @@ window.addEventListener("load", function() {
       var annotations = enclosedCircles.map(function(circle,index) {
         return {
           id: "annotation-" + index,
-          note: {  title: "10" },
+          note: {  title: circle.score || ":(" },
           dy: -(circle.r + 20) - 3,
           dx: 0,
           x: circle.x,
@@ -212,6 +215,7 @@ window.addEventListener("load", function() {
         networkScores.forEach(function(network) {
           if(network.people.indexOf(d.id) != -1) {
             d.network = network.network;
+            d.networkScore = network.score;
           }
         })
       });
@@ -330,18 +334,10 @@ window.addEventListener("load", function() {
 
     document.getElementById("giver").addEventListener("click", function() {
       playSound("giver-sound", 0.1);
+      db.runTheGiver(GIVER_POWER);
+    });
 
-      var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
-      _.each(state.nodes, function(node) {
-        var network = networkScores.filter(function(network) {
-          return network.people.indexOf(node.id) != -1;
-        })[0]
-        if(network) {
-          node.score = node.score + GIVER_POWER * network.health;
-        } else {
-          console.log("YIKES! Could not find a network for node " + node.id);
-        }
-      });
+    db.listenToLog(function(logMsg) {
       ui.renderMyScore(state.selfId, state.seenNodes);
       draw();
     });

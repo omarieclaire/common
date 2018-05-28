@@ -1,4 +1,4 @@
-var importDb = function(util, firebase) {
+var importDb = function(util, firebase, scores) {
 
   var database = firebase.database();
 
@@ -45,6 +45,19 @@ var importDb = function(util, firebase) {
     ref.on('child_added', function (data) {
       var msg = data.val();
       readLog(state, msg);
+    });
+  }
+
+  /**
+   * Setup a listener to run anytime the log is updated.
+   *
+   * Action is a function from the log entry
+   */
+  function listenToLog(action) {
+    var ref = database.ref('/log');
+    ref.on('child_added', function(data) {
+      var msg = data.val();
+      action(msg);
     });
   }
 
@@ -137,6 +150,19 @@ var importDb = function(util, firebase) {
       } else {
         node.score -= msg.power;
       }
+    } else if(msg.type === "giver") {
+      var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
+      state.nodes.forEach(function(node) {
+        var network = networkScores.filter(function(network) {
+          return network.people.indexOf(node.id) != -1;
+        })[0]
+        if(network) {
+          node.score = node.score + msg.power * network.health;
+        } else {
+          console.log("YIKES! Could not find a network for node " + node.id);
+        }
+      });
+
     } else {
       console.log("unknown msg type %o: %o", msg.type, msg);
     }
@@ -208,7 +234,7 @@ var importDb = function(util, firebase) {
   }
 
   /**
-   * Create a new graph conneection between existing players.
+   * giveStrength to two players
    *
    * This method requires both players to already exist, and to have
    * an existing edge between them already.
@@ -239,6 +265,13 @@ var importDb = function(util, firebase) {
     });
   }
 
+  function runTheGiver(power) {
+    return sendLog({
+      type: "giver",
+      power: power
+    });
+  }
+
   return {
     initPlayers: initPlayers,
     initLog: initLog,
@@ -249,6 +282,8 @@ var importDb = function(util, firebase) {
     weakenEdge: weakenEdge,
     weakenNode: weakenNode,
     reinitialize: reinitialize,
-    createPlayer: createPlayer
+    createPlayer: createPlayer,
+    listenToLog: listenToLog,
+    runTheGiver: runTheGiver
   };
 };
