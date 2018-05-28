@@ -4,10 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // log the user out when clicking on the link.
   document.getElementById("logout-anchor").addEventListener("click", function() {
     firebase.auth().signOut().then(function() {
-      document.getElementById('auth-msg').innerHTML = "";
       console.log("sign-out success!");
+      window.location.reload();
     }).catch(function(error) {
-      console.log("sign-out error!");
+      console.log("sign-out error!", error);
+      window.location.reload();
     });
   });
 
