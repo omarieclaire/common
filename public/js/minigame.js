@@ -47,8 +47,6 @@ function draw() {
 
   if(haveIWonYet) {
     background(0, 255, 255);
-    leftEllipse(leftButtonX, leftButtonY, 50);
-    rightEllipse(rightButtonX, rightButtonY, 100);
     textSize(50);
     textAlign(CENTER);
     text("Success!", screenW/2, screenH/2 - 20);
@@ -56,16 +54,12 @@ function draw() {
     // window.location.replace('minigamewin.html');
 
    setTimeout(function() {
-   window.location.href = "minigamewin.html"; //will redirect to your blog page (an ex: blog.html)
-}, 2000); //will call the function after 2 secs.
+   window.location.href = "minigamewin.html";
+    }, 2000);
 
   } else {
     //background(200);
-    // document.querySelector("#reinforcing-connection-sound").play()
-
   }
-
-  // textAlign(CENTER);
 
   rect(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   rect(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
@@ -153,21 +147,3 @@ function winState(distance) {
 
   }
 }
-
-
-
-
-
-// function keyPressed() {
-//   if (keyCode === 70 && keyCode === 74) {
-//     isTouched = true;
-//   } else if (keyCode === 70) {
-//     leftIsTouched = true;
-//     value = 0, 255, 0;
-//   } else if (keyCode === 74) {
-//     rightIsTouched = true;
-//     value = 0, 0, 255;
-//
-//   }
-//
-// }
