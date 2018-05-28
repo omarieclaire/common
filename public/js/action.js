@@ -28,9 +28,9 @@ var importAction = function(ui, util, scores, db) {
 
     // if clicking on a edge attached to our nodes
     // decrement our score
-    if (ouredge){
+    var ourNode = state.seenNodes[state.selfId];
+    if (ouredge && ourNode) {
       // get our node from the seenNodes object (efficient)
-      var ourNode = state.seenNodes[state.selfId];
       if(ouredge.strength < MAX_EDGE_STRENGTH && ourNode.score > 2) {
         db.reinforceConnection(ourNode.id, target, CLICK_EDGE_INCREMENTER, CLICK_NODE_DESTROYER_POWER);
         playSound("reinforcing-connection-sound", 0.2);
@@ -43,15 +43,17 @@ var importAction = function(ui, util, scores, db) {
         var htmlNode = document.getElementById(util.nodeIdAttr(d));
         // d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
 
+      } else if (ourNode.score > 2) {
+        //console.log(d, "Not our edge!");
+        d3.select(htmlNode).transition().duration(10).style("fill","#8FBC8F").transition().duration(1500).style("fill", d.color);
+        playSound("poor-sound", 0.2);
+      } else {
+        //console.log(d, "Not our edge!");
+        d3.select(htmlNode).transition().duration(10).style("fill","#8FBC8F").transition().duration(1500).style("fill", d.color);
+        playSound("error-sound", 0.2);
       }
-    } else if (ourNode.score > 2) {
-      //console.log(d, "Not our edge!");
-      d3.select(htmlNode).transition().duration(10).style("fill","#8FBC8F").transition().duration(1500).style("fill", d.color);
-      playSound("poor-sound", 0.2);
     } else {
-      //console.log(d, "Not our edge!");
-      d3.select(htmlNode).transition().duration(10).style("fill","#8FBC8F").transition().duration(1500).style("fill", d.color);
-      playSound("error-sound", 0.2);
+      console.log("Could not find node or edge for state.selfId = " + state.selfId);
     }
 
     scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
