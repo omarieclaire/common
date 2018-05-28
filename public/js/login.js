@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var loginDiv = document.getElementById("login");
     var logoutDiv = document.getElementById("logout");
 
-    
     //if the user is logged in then user is not null
     if (user) {
       document.getElementById("pass-reset").addEventListener("click", function() {
