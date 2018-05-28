@@ -1,3 +1,4 @@
+
 var screenW = window.innerWidth;
 var screenH = window.innerHeight;
 var buttonWidth = 100;
@@ -5,9 +6,9 @@ var buttonWidth = 100;
 var leftButton;
 var rightButton;
 
-var leftButtonX = 50;
+var leftButtonX = 75;
 var leftButtonY = screenH/2 - buttonWidth/2;
-var rightButtonX = screenW - (buttonWidth + 50);
+var rightButtonX = screenW - (buttonWidth + 75);
 var rightButtonY = screenH/2 - buttonWidth/2;
 
 var leftIsTouched = false;
