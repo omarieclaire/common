@@ -26,19 +26,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //if the user is logged in then user is not null
     if (user) {
-      document.getElementById("pass-reset").addEventListener("click", function() {
-        firebase.auth().sendPasswordResetEmail(user.email).then(function() {
-          var span = document.getElementById("reset-sent");
-          span.innerHTML = " (sent)";
-          return true;
-        }).then(function() {
-          return (new Promise(function(resolve, reject) {
-            window.setTimeout(function() {
-              document.getElementById("reset-sent").innerHTML = "";
-            }, 2000);
-          }));
-        });
-      });
+//      document.getElementById("pass-reset").addEventListener("click", function() {
+//        firebase.auth().sendPasswordResetEmail(user.email).then(function() {
+//          var span = document.getElementById("reset-sent");
+//          span.innerHTML = " (sent)";
+//          return true;
+//        }).then(function() {
+//          return (new Promise(function(resolve, reject) {
+//            window.setTimeout(function() {
+//              document.getElementById("reset-sent").innerHTML = "";
+//            }, 2000);
+//          }));
+//        });
+//      });
 
       loginDiv.style.display = "none";
       logoutDiv.style.display = "block";
