@@ -3,16 +3,7 @@ var importAuth = function(firebase, dbModule) {
   var database = firebase.database();
 
   var signInSuccessFunction = function(authResult, redirectUrl) {
-    if(authResult.additionalUserInfo.isNewUser) {
-      var username = authResult.user.displayName;
-      var email = authResult.user.email;
-
-      console.log("A users first time?", username, email);
-      return true;
-    } else {
-      console.log("could not find username after login, this is bad.");
-      return true;
-    }
+    return true;
   };
 
   var uiConfig = {

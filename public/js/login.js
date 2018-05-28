@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // // The Firebase SDK is initialized and available here!
   //
   firebase.auth().onAuthStateChanged(function(user) {
-    console.log("onchange", user);
 
     //grab auth element
     let auth_msg = document.getElementById("auth-msg");
