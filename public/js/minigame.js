@@ -23,12 +23,12 @@ var haveIWonYet = false;
 
 // var player1Sound = null;
 // var player2Sound = null;
-// var connectionFormingSound = null;
+// var connection-forming-sound = null;
 
 // function preload() {
 //   player1Sound = loadSound('sounds/player1-sound.mp3');
 //   player2Sound = loadSound('sounds/player2-sound.mp3');
-//   connectionFormingSound = loadSound('sounds/connection-forming-sound.mp3');
+//   connectionformingsound = loadSound('sounds/connection-forming-sound.mp3');
 //
 // }
 
@@ -43,10 +43,12 @@ function setup() {
 }
 
 function draw() {
-    // document.querySelector("#reinforcing-connection-sound").play()
+    playSound("connection-forming-sound");
 
   if(haveIWonYet) {
-    background(0, 255, 255);
+    background(255, 0, 255);
+    // document.querySelector("#reinforcing-connection-sound").play()
+
     // window.location.replace('minigamewin.html');
 
    setTimeout(function() {
@@ -55,6 +57,8 @@ function draw() {
 
   } else {
     background(200);
+    // document.querySelector("#reinforcing-connection-sound").play()
+
   }
 
   // textAlign(CENTER);
@@ -64,7 +68,6 @@ function draw() {
 
   if (haveIWonYet == false) {
     if(leftIsTouched && rightIsTouched) {
-      playSound("connection-forming-sound");
 
       // connectionFormingSound.play();
       lineLength1 ++;
