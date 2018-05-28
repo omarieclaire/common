@@ -143,6 +143,20 @@ var importDb = function(util, firebase, scores) {
           edge.strength -= msg.power;
         }
       }
+    } else if (msg.type === "reinforceConnection") {
+      var eid = util.edgeId(msg.source, msg.target);
+      var edge = state.seenEdges[eid];
+      if(edge) {
+        edge.strength += msg.edgePower;
+      }
+      var node = state.seenNodes[msg.source];
+      if(node) {
+        if(node.score <= msg.nodePower) {
+          util.deleteNode(node, state);
+        } else {
+          node.score -= msg.nodePower;
+        }
+      }
     } else if (msg.type === "weakenNode") {
       var node = state.seenNodes[msg.id];
       if (node.score <= msg.power) {
@@ -265,6 +279,16 @@ var importDb = function(util, firebase, scores) {
     });
   }
 
+  function reinforceConnection(source, target, edgePower, nodePower) {
+    sendLog({
+      type: "reinforceConnection",
+      source: source,
+      target: target,
+      edgePower: edgePower,
+      nodePower: nodePower
+    });
+  }
+
   function runTheGiver(power) {
     return sendLog({
       type: "giver",
@@ -284,6 +308,7 @@ var importDb = function(util, firebase, scores) {
     reinitialize: reinitialize,
     createPlayer: createPlayer,
     listenToLog: listenToLog,
-    runTheGiver: runTheGiver
+    runTheGiver: runTheGiver,
+    reinforceConnection: reinforceConnection
   };
 };
