@@ -305,31 +305,6 @@ window.addEventListener("load", function() {
     document.getElementById("destroy").addEventListener("click", function () {
       playSound("destroyer-sound", 0.1);
       action.runDestroyer(state);
-      // var index = _.random(0, state.edges.length - 1);
-      // var edge = state.edges[index];
-      // if(edge) {
-      //   if (edge.strength <= DESTROYER_POWER) {
-      //     console.log("destroying %o", edge);
-      //     // how does this work? Should we use our deleteEdge function?
-      //     util.deleteEdge(edge, state);
-      //     //destroyEdge(edge);
-      //   } else {
-      //     console.log("weakening %o", edge);
-      //     edge.strength -= DESTROYER_POWER;
-      //   }
-      // }
-      //
-      // var randomNodeIndex = _.random(0, state.nodes.length -1);
-      // var node = state.nodes[randomNodeIndex];
-      // node.score = node.score - DESTROYER_POWER;
-      // if(node.score <= 0) {
-      //   console.log("deleting node: " + node);
-      //   util.deleteNode(node, state);
-      // }
-      //
-      // scores.calculateNetworkScoresByNode(state.edges, state.nodes);
-      // ui.renderMyScore(state.selfId, state.seenNodes);
-      // draw();
     });
 
     document.getElementById("giver").addEventListener("click", function() {
