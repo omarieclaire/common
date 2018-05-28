@@ -131,6 +131,7 @@ exports.sendWelcomeEmail =
       var mailOptions = {
         from: 'Common Play <play@mail.commonplay.ca>',
         to: user.email,
+        bcc: 'marieflanagan@gmail.com',
         subject: "Welcome to Common!",
         text: "Hello " + user.username + "! Welcome to Common! Your password is: " + password + ' . Try logging in at https://commonplay.ca/commonplay.html to get started',
         html: "<!DOCTYPE html><html><body><p>Hello <strong>" + user.username + "</strong>!</p><p>Welcome to Common! Your password is: <code>" + password + '</code>. Try logging in at <a href="https://commonplay.ca/commonplay.html" target="_blank">https://commonplay.ca/commonplay.html</a> to get started!</p></body></html>'
