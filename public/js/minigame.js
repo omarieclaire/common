@@ -21,26 +21,10 @@ var lineLength2 = 0;
 
 var haveIWonYet = false;
 
-// var player1Sound = null;
-// var player2Sound = null;
-// var connection-forming-sound = null;
-
-// function preload() {
-//   player1Sound = loadSound('sounds/player1-sound.mp3');
-//   player2Sound = loadSound('sounds/player2-sound.mp3');
-//   connectionformingsound = loadSound('sounds/connection-forming-sound.mp3');
-//
-// }
-
 function setup() {
   createCanvas(screenW, screenH);
   fill(0);
   background(200);
-
-  // player2Sound = loadSound('/sounds/player2-sound.mp3');
-  // player2Sound = loadSound('/sounds/player2-sound.mp3');
-  // connectionFormingSound = loadSound('/sounds/connection-forming-sound.mp3');
-  // newConnectionSound = loadSound('/sounds/new-connection-sound.mp3');
 }
 
 function draw() {
@@ -51,7 +35,6 @@ function draw() {
     textAlign(CENTER);
     text("Success!", screenW/2, screenH/2 - 20);
     // document.querySelector("#reinforcing-connection-sound").play()
-    // window.location.replace('minigamewin.html');
 
    setTimeout(function() {
    window.location.href = "minigamewin.html";
