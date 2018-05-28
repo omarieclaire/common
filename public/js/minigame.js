@@ -32,12 +32,11 @@ var haveIWonYet = false;
 //
 // }
 
-
-
 function setup() {
   createCanvas(screenW, screenH);
   fill(0);
   background(200);
+
   // player2Sound = loadSound('/sounds/player2-sound.mp3');
   // player2Sound = loadSound('/sounds/player2-sound.mp3');
   // connectionFormingSound = loadSound('/sounds/connection-forming-sound.mp3');
@@ -45,17 +44,15 @@ function setup() {
 }
 
 function draw() {
-  playSound("connection-forming-sound");
-
-
-
 
   if(haveIWonYet) {
-    background(255, 0, 255);
+    background(0, 255, 255);
+    leftEllipse(leftButtonX, leftButtonY, 50);
+    rightEllipse(rightButtonX, rightButtonY, 100);
+    textSize(50);
     textAlign(CENTER);
-    text("Success!", 200, 200);
+    text("Success!", screenW/2, screenH/2 - 20);
     // document.querySelector("#reinforcing-connection-sound").play()
-
     // window.location.replace('minigamewin.html');
 
    setTimeout(function() {
@@ -63,7 +60,7 @@ function draw() {
 }, 2000); //will call the function after 2 secs.
 
   } else {
-    background(200);
+    //background(200);
     // document.querySelector("#reinforcing-connection-sound").play()
 
   }
