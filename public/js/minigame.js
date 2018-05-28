@@ -21,15 +21,15 @@ var lineLength2 = 0;
 
 var haveIWonYet = false;
 
-var player1Sound = null;
-var player2Sound = null;
-var connectionFormingSound = null;
+// var player1Sound = null;
+// var player2Sound = null;
+// var connectionFormingSound = null;
 
 
 function preload() {
-  player1Sound = loadSound('sounds/player1-sound.mp3');
-  player2Sound = loadSound('sounds/player2-sound.mp3');
-  connectionFormingSound = loadSound('sounds/connection-forming-sound.mp3');
+  // player1Sound = loadSound('sounds/player1-sound.mp3');
+  // player2Sound = loadSound('sounds/player2-sound.mp3');
+  // connectionFormingSound = loadSound('sounds/connection-forming-sound.mp3');
 
 }
 
@@ -45,7 +45,8 @@ function setup() {
 }
 
 function draw() {
-  connectionFormingSound.play();
+    // document.querySelector("#reinforcing-connection-sound").play()
+    playSound("connection-forming-sound");
 
   if(haveIWonYet) {
     background(0, 255, 255);
@@ -66,11 +67,10 @@ function draw() {
 
   if (haveIWonYet == false) {
     if(leftIsTouched && rightIsTouched) {
+      // connectionFormingSound.play();
 
       lineLength1 ++;
       lineLength2 --;
-      // setVolume(volume,[rampTime],[timeFromNow])
-      connectionFormingSound.play();
 
     } else {
       if (lineLength1 > 0 || lineLength2 < 0) {
@@ -153,10 +153,38 @@ function touchMoved() {
 function winState(distance) {
   if (lineLength1 > distance && (-1)*lineLength2 > distance) {
     return true;
+    // connectionFormingSound.play();
   } else {
     console.log("not winning yet")
-
     return false;
 
   }
 }
+
+// sounds
+var gameSounds = [
+  "connection-forming-sound",
+  "destroyer-sound",
+  "error-sound",
+  "giver-sound",
+  "invitation-sound",
+  "new-connection-sound",
+  "player1-sound",
+  "player2-sound",
+  "poor-sound",
+  "reinforcing-connection-sound"
+];
+
+gameSounds.forEach(function (path) {
+  var audio = document.createElement("audio");
+  audio.id = path;
+  audio.src = "/sounds/" + path + ".mp3";
+  audio.preload = "auto";
+  body.appendChild(audio);
+});
+
+var playSound = function(id, volume) {
+  var audio = document.querySelector("#" + id);
+  audio.volume = (volume === undefined ? 1 : volume);
+  audio.play();
+};
