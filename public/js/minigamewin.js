@@ -1,5 +1,7 @@
 <!-- email username sender -->
+document.addEventListener("DOMContentLoaded", function() {
 document.getElementById("join").onclick = joinButtonClicked;
+var createUser = firebase.functions().httpsCallable("createUserAndInvite");
 
 function joinButtonClicked() {
   document.getElementById("usernameLabel").style.color = "black";
@@ -17,21 +19,28 @@ function joinButtonClicked() {
     var emailEntered = document.getElementById('email').value;
     var usernameEntered = document.getElementById('username').value;
 
-    
-  var createUser = firebase.functions().httpsCallable("createUserAndInvite");
+
   createUser({email: emailEntered, username: usernameEntered, sender: "butt"}, {}).then(function(result) {
 
     // Read result of the Cloud Function.
-    var sanitizedMessage = result.data.text;
-    document.getElementById('status').innerHTML = sanitizedMessage;
+    console.log(result.data);
+    if(result.data.success) {
+      document.getElementById('status').innerHTML = "Success";
+    } else {
+      document.getElementById('status').innerHTML = "Failed :(";
+    }
+    setTimeout(function() {
+      window.location.href = "commonplay.html"; //will redirect to your blog page (an ex: blog.html)
+    }, 1000); //will call the function after 2 secs.
+
   });
 
-  // setTimeout(function() {
-  //   window.location.href = "commonplay.html"; //will redirect to your blog page (an ex: blog.html)
-  // }, 1000); //will call the function after 2 secs.
+
 }
 
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
+
+});

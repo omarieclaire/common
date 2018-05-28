@@ -25,13 +25,12 @@ var haveIWonYet = false;
 // var player2Sound = null;
 // var connectionFormingSound = null;
 
-
-function preload() {
-  // player1Sound = loadSound('sounds/player1-sound.mp3');
-  // player2Sound = loadSound('sounds/player2-sound.mp3');
-  // connectionFormingSound = loadSound('sounds/connection-forming-sound.mp3');
-
-}
+// function preload() {
+//   player1Sound = loadSound('sounds/player1-sound.mp3');
+//   player2Sound = loadSound('sounds/player2-sound.mp3');
+//   connectionFormingSound = loadSound('sounds/connection-forming-sound.mp3');
+//
+// }
 
 function setup() {
   createCanvas(screenW, screenH);
@@ -41,7 +40,6 @@ function setup() {
   // player2Sound = loadSound('/sounds/player2-sound.mp3');
   // connectionFormingSound = loadSound('/sounds/connection-forming-sound.mp3');
   // newConnectionSound = loadSound('/sounds/new-connection-sound.mp3');
-
 }
 
 function draw() {
@@ -68,7 +66,6 @@ function draw() {
   if (haveIWonYet == false) {
     if(leftIsTouched && rightIsTouched) {
       // connectionFormingSound.play();
-
       lineLength1 ++;
       lineLength2 --;
 
@@ -78,18 +75,6 @@ function draw() {
         lineLength2++;
       }
     }
-
-    // if (leftIsTouched) {
-    //   player1Sound.play();
-    // } else {
-    //   player1Sound.stop();
-    // }
-    //
-    // if (rightIsTouched) {
-    //   player2Sound.play();
-    // } else {
-    //   player2Sound.stop();
-    // }
   }
 
   strokeWeight(10);
@@ -160,31 +145,3 @@ function winState(distance) {
 
   }
 }
-
-// sounds
-var gameSounds = [
-  "connection-forming-sound",
-  "destroyer-sound",
-  "error-sound",
-  "giver-sound",
-  "invitation-sound",
-  "new-connection-sound",
-  "player1-sound",
-  "player2-sound",
-  "poor-sound",
-  "reinforcing-connection-sound"
-];
-
-gameSounds.forEach(function (path) {
-  var audio = document.createElement("audio");
-  audio.id = path;
-  audio.src = "/sounds/" + path + ".mp3";
-  audio.preload = "auto";
-  body.appendChild(audio);
-});
-
-var playSound = function(id, volume) {
-  var audio = document.querySelector("#" + id);
-  audio.volume = (volume === undefined ? 1 : volume);
-  audio.play();
-};
