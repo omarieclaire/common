@@ -132,8 +132,8 @@ exports.sendWelcomeEmail =
         from: 'Common Play <play@mail.commonplay.ca>',
         to: user.email,
         subject: "Welcome to Common!",
-        text: "Hello " + user.username + "! Welcome to Common! Your password is: " + password + ' . Try logging in at https://commonplay.ca and update your password!',
-        html: "<!DOCTYPE html><html><body><p>Hello <strong>" + user.username + "</strong>!</p><p>Welcome to Common! Your password is: <code>" + password + '</code>. Try logging in at <a href="http://commonplay.ca/" target="_blank">https://commonplay.ca</a> and update your password!</p></body></html>'
+        text: "Hello " + user.username + "! Welcome to Common! Your password is: " + password + ' . Try logging in at https://commonplay.ca/commonplay.html to get started',
+        html: "<!DOCTYPE html><html><body><p>Hello <strong>" + user.username + "</strong>!</p><p>Welcome to Common! Your password is: <code>" + password + '</code>. Try logging in at <a href="https://commonplay.ca/commonplay.html" target="_blank">https://commonplay.ca/commonplay.html</a> to get started!</p></body></html>'
       };
 
       var mailgunPromise = new Promise((resolve, reject) => {
