@@ -13,24 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  var usernameElement = document.getElementById("username");
-
-  // store the username in local storage
-  usernameElement.addEventListener("input", function(e) {
-    var text = e.target.value;
-    window.localStorage.setItem("username", text);
-  });
-
-  // handle the click to login, but don't allow if username is empty
-  document.getElementById("login-anchor").addEventListener("click", function(e) {
-    if(usernameElement.value === "" || usernameElement === null) {
-      // do not allow click, please enter username
-      document.getElementById("username-error").style.display = "inline";
-      // return false tells the browser not to follow the redirect
-      e.preventDefault();
-    }
-  });
-
   // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
   // // The Firebase SDK is initialized and available here!
   //
@@ -60,4 +42,3 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
   }
 });
-

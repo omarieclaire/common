@@ -61,15 +61,36 @@ var importDb = function(util, firebase) {
    * populate them with 3 starting users.
    */
   function reinitialize(state) {
+    var createUser = firebase.functions().httpsCallable("createUserAndInvite");
     state.seenNodes = {}
     state.seenEdges = {}
     state.nodes = []
     state.edges = []
     database.ref('/players').set({});
     database.ref('/log').set({});
-    sendInvite(null, "omarieclaire", "marieflanagan@gmail.com");
-    sendInvite("omarieclaire", "vilevin", "vilevin@gmail.com");
-    sendInvite("vilevin", "erik", "stark.fist@gmail.com");
+    createUser({
+      email: "marieflanagan@gmail.com",
+      username: "omarieclaire",
+      sender: null
+    }).then(function(result) {
+      return createUser({
+        email: "vilevin@gmail.com",
+        username: "aaronlevin",
+        sender: "omarieclaire"
+      });
+    }).then(function(result) {
+      return createUser({
+        email: "stark.fist@gmail.com",
+        username: "erik",
+        sender: "omarieclaire"
+      });
+    }).catch(function(error) {
+      console.log("Uh oh! Encountered an error while reinitializing");
+      console.log(error);
+    });
+    //sendInvite(null, "omarieclaire", "marieflanagan@gmail.com");
+    //sendInvite("omarieclaire", "vilevin", "vilevin@gmail.com");
+    //sendInvite("vilevin", "erik", "stark.fist@gmail.com");
   }
 
   /**
