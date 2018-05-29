@@ -10,7 +10,7 @@ var importAuth = function(firebase, dbModule) {
     autoUpgradeAnonymousUsers: false,
 
     //the user has sucessfully signed in so tell them to go to index
-    signInSuccessUrl: 'commonplay.html',
+    signInSuccessUrl: '/',
     signInOptions: [
       // Leave the lines as is for the providers you want to offer your users.
       //firebase.auth.GoogleAuthProvider.PROVIDER_ID,

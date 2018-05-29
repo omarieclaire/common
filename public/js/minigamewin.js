@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         var promise = new Promise(function(resolve, reject) {
           setTimeout(function() {
-            window.location.href = "commonplay.html";
+            window.location.href = "/";
             resolve();
           }, 1000);
         });
