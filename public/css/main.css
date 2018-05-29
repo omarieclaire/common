@@ -1,3 +1,7 @@
+:root {
+        --annotation-color: #E8336D;
+    }
+
 html {
     color: #333;
     background-color: inherit;
@@ -55,7 +59,8 @@ textarea {
    ========================================================================== */
 
 body {
-    font: 12px/14px "Helvetica", "Helvetica Neue", "Arial";
+    font: 12px/14px "Lato", "Helvetica", "Helvetica Neue", "Arial";
+
     line-height: 1.6;
     /* background-image: url(/img/common-background.png); */
     background-position: 50% -50%;
@@ -187,6 +192,8 @@ nav a {
  .nodeLabelContainer {
  }
 
+
+
  .annotation path {
  }
 
@@ -294,10 +301,15 @@ nav a {
   }
 
   #add-player {
+    position: fixed;
+
+    left: 2em;
+    bottom: 2em;
     background-image: url(/img/add-player.svg);
     background-size: 95%;
     background-repeat: no-repeat;
     background-position: center;
+
   }
 
 button:hover {

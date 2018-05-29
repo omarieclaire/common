@@ -1,3 +1,5 @@
+// The things that the users do in the app. Click events should go here.
+
 var importAction = function(ui, util, scores, db) {
 
   function addEdge(from, to, state) {

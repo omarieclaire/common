@@ -2,19 +2,19 @@ const functions = require('firebase-functions');
 // Firebase Setup
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
-const gmailCredentials = require('./gmail.json');
+// const gmailCredentials = require('./gmail.json');
 const passgen = require('./passgen.json');
-const mailgunApiKey = require('./mailgun.json').apiKey;
-const mailgun = require('mailgun-js')({apiKey: mailgunApiKey, domain: "mail.commonplay.ca"});
+// const mailgunApiKey = require('./mailgun.json').apiKey;
+// const mailgun = require('mailgun-js')({apiKey: mailgunApiKey, domain: "mail.commonplay.ca"});
 
 const nodemailer = require('nodemailer');
-const mailTransport = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: gmailCredentials.email,
-    pass: gmailCredentials.password,
-  },
-});
+// const mailTransport = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: gmailCredentials.email,
+//     pass: gmailCredentials.password,
+//   },
+// });
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));

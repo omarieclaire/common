@@ -12,7 +12,6 @@
   "dependencies": {
     "firebase-admin": "~5.12.1",
     "firebase-functions": "^1.0.3",
-    "mailgun-js": "^0.18.0",
     "nodemailer": "^4.6.5"
   },
   "devDependencies": {
