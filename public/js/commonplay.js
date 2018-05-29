@@ -68,7 +68,11 @@ window.addEventListener("load", function() {
 
 		// start listening to DB updates
 		db.initPlayers(state);
-		db.initLog(state);
+		db.initLog(state, function(logMsg) {
+			ui.renderMyScore(state.selfId, state.seenNodes);
+			scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
+			draw();
+		});
 
 		// create a d3 simulation object
 		var simulation = d3.forceSimulation(state.nodes)
@@ -183,10 +187,6 @@ window.addEventListener("load", function() {
 		function edgeStrength(d) {
 			return d.strength;
 		}
-
-
-		// render the score for the first time
-		ui.renderMyScore(state.selfId, state.seenNodes);
 
 		// function to refresh d3 (for any changes to the graph)?
 		function draw() {
@@ -327,7 +327,6 @@ window.addEventListener("load", function() {
 			var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork);
 
 			doAnnotations(enclosedCircles, annotationAnchor);
-
 		}
 
 		// used to generate random nodes
@@ -358,12 +357,6 @@ window.addEventListener("load", function() {
 		document.getElementById("giver").addEventListener("click", function() {
 			playSound("giver-sound", 0.1);
 			db.runTheGiver(GIVER_POWER);
-		});
-
-		db.listenToLog(function(logMsg) {
-			ui.renderMyScore(state.selfId, state.seenNodes);
-			scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
-			draw();
 		});
 
 		// zooming funtion given to d3
@@ -409,6 +402,5 @@ window.addEventListener("load", function() {
 				zoomOut();
 			}
 		});
-		state.loaded = true;
 	});
 });

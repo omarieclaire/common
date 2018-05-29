@@ -6,7 +6,7 @@ var importUi = function() {
       var html = document.getElementById("node-score-me");
       html.textContent = myNode.score.toFixed(0);
     } else {
-      console.log("can't find my id (" + myId + ") in seenNodes");
+      //console.log("can't find my id (" + myId + ") in seenNodes");
     }
   }
 

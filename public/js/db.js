@@ -40,23 +40,11 @@ var importDb = function(util, firebase, scores) {
    * See reinitialize for more about how we handle the situation where
    * we want to delete the logs.
    */
-  function initLog(state) {
+  function initLog(state, action) {
     var ref = database.ref('/log');
     ref.on('child_added', function (data) {
       var msg = data.val();
       readLog(state, msg);
-    });
-  }
-
-  /**
-   * Setup a listener to run anytime the log is updated.
-   *
-   * Action is a function from the log entry
-   */
-  function listenToLog(action) {
-    var ref = database.ref('/log');
-    ref.on('child_added', function(data) {
-      var msg = data.val();
       action(msg);
     });
   }
@@ -180,7 +168,6 @@ var importDb = function(util, firebase, scores) {
     } else {
       console.log("unknown msg type %o: %o", msg.type, msg);
     }
-    if (state.loaded) state.draw();
   }
 
   /**
@@ -307,7 +294,6 @@ var importDb = function(util, firebase, scores) {
     weakenNode: weakenNode,
     reinitialize: reinitialize,
     createPlayer: createPlayer,
-    listenToLog: listenToLog,
     runTheGiver: runTheGiver,
     reinforceConnection: reinforceConnection
   };
