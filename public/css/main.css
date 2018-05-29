@@ -60,7 +60,7 @@ body {
     font: 12px/14px "Lato", "Helvetica", "Helvetica Neue", "Arial";
 
     line-height: 1.6;
-    /* background-image: url(/img/common-background.png); */
+    background-image: url(/img/common-background.png);
     background-position: 50% -50%;
     background-size: 30%;
     background-repeat: no-repeat;
@@ -171,6 +171,7 @@ nav a {
     right: 0px;
     top: 0px;
     bottom: 0px;
+    background-color: white;
   }
 
   /* rect {
