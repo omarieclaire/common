@@ -1,6 +1,4 @@
-:root {
-        --annotation-color: #E8336D;
-    }
+
 
 html {
     color: #333;
@@ -194,21 +192,27 @@ nav a {
 
 
 
- .annotation path {
- }
+.annotation-path {
+}
 
- .annotation-note {
- }
+.annotation-note {
+
+}
+
+
+.annotation-note-label {
+  font-weight: lighter;
+  font-size: 1.4em;
+}
 
 .annotation-note-title {
   font-weight: lighter;
-  padding-left: 10em;
-  font-size: 3em;
+  /* padding-left: 10em; */
+  font-size: 2.6em;
 }
 
 .annotationBox {
-  /* fill: black; */
-  /* padding: 2em 2em 2em 2em; */
+
 }
 
 .annotation path {
@@ -219,7 +223,7 @@ nav a {
 }
 
 .annotation-connector path {
-  stroke: black;
+  stroke: blue;
 }
 
 .ui {
