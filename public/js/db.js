@@ -40,11 +40,12 @@ var importDb = function(util, firebase, scores) {
    * See reinitialize for more about how we handle the situation where
    * we want to delete the logs.
    */
-  function initLog(state) {
+  function initLog(state, continuation) {
     var ref = database.ref('/log');
     ref.on('child_added', function (data) {
       var msg = data.val();
       readLog(state, msg);
+      continuation(state, msg);
     });
   }
 
@@ -180,7 +181,6 @@ var importDb = function(util, firebase, scores) {
     } else {
       console.log("unknown msg type %o: %o", msg.type, msg);
     }
-    if (state.loaded) state.draw();
   }
 
   /**

@@ -66,9 +66,6 @@ window.addEventListener("load", function() {
 			draw: draw
 		};
 
-		// start listening to DB updates
-		db.initPlayers(state);
-		db.initLog(state);
 
 		// create a d3 simulation object
 		var simulation = d3.forceSimulation(state.nodes)
@@ -360,11 +357,6 @@ window.addEventListener("load", function() {
 			db.runTheGiver(GIVER_POWER);
 		});
 
-		db.listenToLog(function(logMsg) {
-			ui.renderMyScore(state.selfId, state.seenNodes);
-			scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
-			draw();
-		});
 
 		// zooming funtion given to d3
 		// <svg transform="translate(10) + scale(2)">;
@@ -409,6 +401,12 @@ window.addEventListener("load", function() {
 				zoomOut();
 			}
 		});
-		state.loaded = true;
+		// start listening to DB updates
+		db.initPlayers(state);
+		db.initLog(state, function(s, msg) {
+      ui.renderMyScore(state.selfId, state.seenNodes);
+      scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
+      draw();
+    });
 	});
 });
