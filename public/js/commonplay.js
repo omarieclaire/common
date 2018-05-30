@@ -70,7 +70,7 @@ window.addEventListener("load", function() {
 		};
 
 		// We pass the initial state, and a
-		// "gameInitializer" function.
+		// "initializeGame" function.
 		db.initLog(initialState,function(state) {
 
 			// create a d3 simulation object
