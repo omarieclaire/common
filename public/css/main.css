@@ -260,6 +260,9 @@ nav a {
     text-indent: -1000em;
     background-color: transparent;
     opacity: 0.5;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
    }
 
   .zoomButtons button:hover, .modalButtons button:hover {
@@ -322,9 +325,6 @@ nav a {
 
   #reset-button {
     background-image: url(/img/reload.svg);
-    background-size: 75%;
-    background-repeat: no-repeat;
-    background-position: center;
   }
 
   #add-player {
