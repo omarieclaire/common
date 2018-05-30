@@ -39,14 +39,44 @@ var importDb = function(util, firebase, scores) {
    *
    * See reinitialize for more about how we handle the situation where
    * we want to delete the logs.
+   *
+   *
    */
-  function initLog(state, continuation) {
-    var ref = database.ref('/log');
-    ref.on('child_added', function (data) {
-      var msg = data.val();
-      readLog(state, msg);
-      continuation(state, msg);
-    });
+  function initLog(state, gameInitializer, onLogUpdate) {
+    database
+      .ref('/state')
+      .orderByKey()
+      .limitToLast(1)
+      .once('child_added', function(snapshot) {
+        var stateSnapshot = snapshot.val();
+        var key = snapshot.key;
+        stateSnapshot.nodes.forEach(function(n) {
+          util.addNode(n.id, state);
+        });
+        stateSnapshot.edges.forEach(function(e) {
+          util.addEdge(e.source.id, e.target.id, e.strength, state)
+        });
+        state.randomIndex = stateSnapshot.randomIndex;
+        state.players = stateSnapshot.players;
+        state.logEntry = key;
+        gameInitializer(state);
+        var ref = database.ref('/log').orderByKey().startAt(snapshot.key);
+        return ref.on('child_added', function(data) {
+          var msg = data.val();
+          var key = data.key;
+          readLog(state, msg, key);
+          onLogUpdate(state, msg);
+        });
+      }, function(error) {
+        console.log("ERROR fetching state, starting from scratch", error);
+        var ref = database.ref('/log');
+        return ref.on('child_added', function(data) {
+          var msg = data.val();
+          var key = data.key;
+          readLog(state, msg, key);
+          onLogUpdate(state, msg);
+        });
+      });
   }
 
   /**
@@ -82,6 +112,7 @@ var importDb = function(util, firebase, scores) {
     state.edges = []
     database.ref('/players').set({});
     database.ref('/log').set({});
+    database.ref('/state').set({});
     createUser({
       email: "marieflanagan@gmail.com",
       username: "omarieclaire",
@@ -113,7 +144,7 @@ var importDb = function(util, firebase, scores) {
    * This method handles updating our local graph based on information
    * we receive from Firebase.
    */
-  function readLog(state, msg) {
+  function readLog(state, msg, key) {
     if (msg.type === "invite") {
       if (msg.sender == null) {
         util.addNode(msg.recipient, state);
@@ -178,6 +209,8 @@ var importDb = function(util, firebase, scores) {
         }
       });
 
+      // IMPORTANT: update the state with the logEntry
+      state.logEntry = key;
     } else {
       console.log("unknown msg type %o: %o", msg.type, msg);
     }
@@ -191,6 +224,22 @@ var importDb = function(util, firebase, scores) {
    */
   function sendLog(msg) {
     return database.ref('/log').push().set(msg);
+  }
+
+  /**
+   * Snapshots the state at a given log entry
+   */
+  function snapshotState(state) {
+    console.log("snapshot key", state.logEntry);
+    console.log(state.seenNodes);
+    return database.ref('/state/' + state.logEntry).set({
+      randomIndex: state.randomIndex,
+      players: state.players,
+      //seenNodes: state.seenNodes,
+      //seenEdges: state. seenEdges,
+      nodes: state.nodes,
+      edges: state.edges
+    });
   }
 
   /**
@@ -309,6 +358,7 @@ var importDb = function(util, firebase, scores) {
     createPlayer: createPlayer,
     listenToLog: listenToLog,
     runTheGiver: runTheGiver,
-    reinforceConnection: reinforceConnection
+    reinforceConnection: reinforceConnection,
+    snapshotState: snapshotState
   };
 };
