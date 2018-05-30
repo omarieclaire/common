@@ -42,8 +42,6 @@ window.addEventListener("load", function() {
 		var initialState = {
 			// index used by random button
 			randomIndex: 1,
-			// tracks if we are done loading yet (true) or not (false)
-			loaded: false,
 			// id of the current user (same as ME)
 			selfId: currentUser.username,
 			// reference to SVG node and info
@@ -184,7 +182,6 @@ window.addEventListener("load", function() {
 			function edgeStrength(d) {
 				return d.strength;
 			}
-
 
 			// render the score for the first time
 			ui.renderMyScore(state.selfId, state.seenNodes);
