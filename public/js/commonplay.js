@@ -351,9 +351,6 @@ window.addEventListener("load", function() {
 
 			}
 
-			// used to generate random nodes
-			var index = 1;
-
 			// draw refreshes the graph?
 			draw();
 
