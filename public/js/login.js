@@ -19,9 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
   //
   firebase.auth().onAuthStateChanged(function(user) {
 
-    //grab auth element
-    let auth_msg = document.getElementById("auth-msg");
-    let auth_element = document.getElementById("auth-element");
     var loginDiv = document.getElementById("login");
     var logoutDiv = document.getElementById("logout");
 
