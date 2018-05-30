@@ -178,6 +178,13 @@ nav a {
     z-index: -1000;
   } */
 
+.myNode {
+  border: solid 5px yellow;
+  border-radius: 50%;
+  width: 5em;
+  height: 5em;
+}
+
  .nodes circle {
    width: 1.5px;
  }

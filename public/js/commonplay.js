@@ -70,7 +70,7 @@ window.addEventListener("load", function() {
     };
 
     // We pass the initial state, and a
-    // "gameInitializer" function. 
+    // "gameInitializer" function.
     db.initLog(initialState,function(state) {
 
       // create a d3 simulation object
@@ -305,6 +305,13 @@ window.addEventListener("load", function() {
           })
           .attr("fill", function(d) {
             return d.color;
+          })
+          .attr("class", function(d) {
+            if(d.id === state.selfId) {
+              return "myNode";
+            } else {
+              return null;
+            }
           });
 
         edge
