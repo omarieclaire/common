@@ -69,9 +69,7 @@ window.addEventListener("load", function() {
 			logEntry: null
 		};
 
-		// We pass the initial state, and a
-		// "initializeGame" function.
-		db.initLog(initialState,function(state) {
+		var initializeGame = function (state) {
 
 			// create a d3 simulation object
 			var simulation = d3.forceSimulation(state.nodes)
@@ -450,12 +448,18 @@ window.addEventListener("load", function() {
 			});
 			// start listening to DB updates
 			db.initPlayers(state);
+		};
 
-			// This is onLogUpdate function
-		}, function(s, msg) {
-			ui.renderMyScore(s.selfId, s.seenNodes);
-			scores.calculateCommonScore(s.edges, s.nodes, s.selfId);
-			s.draw();
-		});
+		// This is an onLogUpdate function
+		var onLogUpdate = function (state, msg) {
+			ui.renderMyScore(state.selfId, state.seenNodes);
+			scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
+			state.draw();
+		};
+
+		// We pass the initial state, and a
+		// "initializeGame" function,
+		// and onLogUpdate function.
+		db.initLog(initialState, initializeGame, onLogUpdate);
 	});
 });
