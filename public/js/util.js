@@ -141,6 +141,32 @@ var importUtil = function(scores, ui) {
     return nodesByNetwork;
   }
 
+  /**
+   * given an array of edges, reconstruct
+   * the seenEdges map (a map from edgeId to
+   * the edge)
+   */
+  function recoverSeenEdges(edges) {
+    var seenEdges = {};
+    edges.forEach(function(edge) {
+      seenEdges[edge.id] = edge;
+    });
+    return seenEdges;
+  }
+
+  /**
+   * given an array of nodes, reconstruct
+   * the seenNodes map (a mpa from node id t
+   * the node)
+   */
+  function recoverSeenNodes(nodes) {
+    var seenNodes = {};
+    nodes.forEach(function(node) {
+      seenNodes[node.id] = node;
+    });
+    return seenNodes;
+  }
+
   return {
     edgeIdAttr: edgeIdAttr,
     nodeIdAttr: nodeIdAttr,
@@ -150,6 +176,8 @@ var importUtil = function(scores, ui) {
     addEdge: addEdge,
     deleteEdge: deleteEdge,
     deleteNode: deleteNode,
-    nodesByNetwork: nodesByNetwork
+    nodesByNetwork: nodesByNetwork,
+    recoverSeenNodes: recoverSeenNodes,
+    recoverSeenEdges: recoverSeenEdges
   };
 };

@@ -63,7 +63,9 @@ window.addEventListener("load", function() {
 			nodes: [],
 			edges: [],
 			// method used to draw the graph
-			draw: draw
+			draw: draw,
+      // id of the leg entry for this version of the state.
+      logEntry: null
 		};
 
 
@@ -356,6 +358,12 @@ window.addEventListener("load", function() {
 			playSound("giver-sound", 0.1);
 			db.runTheGiver(GIVER_POWER);
 		});
+
+    document.getElementById("snapshot").addEventListener("click", function() {
+      db.snapshotState(state).then(function(result) {
+        console.log("success snapshot: ", result);
+      });
+    });
 
 
 		// zooming funtion given to d3
