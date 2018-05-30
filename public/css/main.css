@@ -271,6 +271,17 @@ nav a {
     min-height: 1.6em;
   }
 
+  .login-elements a,
+  .login-elements a:visited {
+    color: rgb(0, 0, 238);
+    text-decoration: none;
+  }
+
+  .login-elements a:hover,
+  .login-elements a:focus {
+    text-decoration: underline;
+  }
+
   #toggleDebug {
     display:none;
   }
