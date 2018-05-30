@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   // log the user out when clicking on the link.
-  document.getElementById("logout-anchor").addEventListener("click", function(e) {
+  document.getElementById("logout").addEventListener("click", function(e) {
     e.preventDefault();
     firebase.auth().signOut().then(function() {
       console.log("sign-out success!");
@@ -19,16 +19,16 @@ document.addEventListener('DOMContentLoaded', function() {
   //
   firebase.auth().onAuthStateChanged(function(user) {
 
-    var loginDiv = document.getElementById("login");
-    var logoutDiv = document.getElementById("logout");
+    var login = document.getElementById("login");
+    var logout = document.getElementById("logout");
 
     //if the user is logged in then user is not null
     if (user) {
-      loginDiv.style.display = "none";
-      logoutDiv.style.display = "block";
+      login.style.display = "none";
+      logout.style.display = "block";
     } else {
-      loginDiv.style.display = "block";
-      logoutDiv.style.display = "none";
+      login.style.display = "block";
+      logout.style.display = "none";
     }
   });
   // firebase.database().ref('/path/to/ref').on('value', snapshot => { });

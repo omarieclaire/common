@@ -267,6 +267,10 @@ nav a {
     opacity: 1;
   }
 
+  .login-elements {
+    min-height: 1.6em;
+  }
+
   #toggleDebug {
     display:none;
   }
