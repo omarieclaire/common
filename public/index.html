@@ -78,22 +78,18 @@
        </div>
 
         <div class="adminButtons">
+          <p class="login-elements">
+            <span id="loading-indicator">Loading …</span>
+            <a style="display:none;" href="auth.html" id="login">Sign in</a>
+            <a style="display:none;" href="/" id="logout">Log out</a>
+          </p>
 
-          <div class="login-elements">
-            <p id="auth-element"></p>
+          My life-force: <span id="node-score-me">–</span>
 
-            <div id="login" style="display:none;">
-              <p><a href="auth.html" id="login-anchor">login</a></p>
-            </div>
-            <div id="logout" style="display:none;">
-              <p><a href="#" id="logout-anchor">logout</a></p>
-              <!-- <p><a id="pass-reset" href="#">pass reset</a><span id="reset-sent" style="color:red;"></span></p> -->
-            </div>
-          </div>
+          <br>
+          <button id="toggleDebugBtn">+</button>
 
-          <!-- My Common: <span id="iscore">0</span><br> -->
-         My life-force: <span id="node-score-me">0</span><br>
-          <button id="toggleDebugBtn">+</button><br><br>
+          <br><br>
 
           <div id="toggleDebug">
             <button id="destroy">Destroyer</button>

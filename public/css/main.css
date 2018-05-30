@@ -264,11 +264,33 @@ nav a {
     text-indent: -1000em;
     background-color: transparent;
     opacity: 0.5;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
    }
 
   .zoomButtons button:hover, .modalButtons button:hover {
     background-color: transparent;
     opacity: 1;
+  }
+
+  .login-elements {
+    min-height: 1.6em;
+  }
+
+  .login-elements span {
+    color: #ddd;
+  }
+
+  .login-elements a,
+  .login-elements a:visited {
+    color: rgb(0, 0, 238);
+    text-decoration: none;
+  }
+
+  .login-elements a:hover,
+  .login-elements a:focus {
+    text-decoration: underline;
   }
 
   #toggleDebug {
@@ -277,8 +299,8 @@ nav a {
 
   #toggleDebugBtn {
     position: fixed;
-    left: 2em;
-    bottom: 2em;
+    left: 0;
+    bottom: 0;
     border: none;
     margin: 0.75em;
     background-color: transparent;
