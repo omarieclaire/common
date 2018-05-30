@@ -19,5 +19,8 @@ var CLICK_NODE_DESTROYER_POWER = 2;
 //the edge-strength increase-when the node is clicked
 var CLICK_EDGE_INCREMENTER = 2;
 
+// amount to remove from a player when they add a person
+var ADD_PLAYER_DECREMENT_NODE_SCORE = 1;
+
 // starting life
 var STARTING_LIFE = 30;

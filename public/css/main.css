@@ -185,6 +185,10 @@ nav a {
   height: 5em;
 }
 
+.nodeStrong {
+
+}
+
  .nodes circle {
    width: 1.5px;
  }
@@ -284,7 +288,7 @@ nav a {
   #aboutBtn {
     background-image: url(/img/about.svg);
     background-position: center;
-    background-size: 90%;
+    background-size: 125%;
     background-repeat: no-repeat;
 
   }
@@ -292,7 +296,7 @@ nav a {
   #settingsBtn {
     background-image: url(/img/settings.svg);
     background-position: center;
-    background-size: 90%;
+    background-size: 120%;
     background-repeat: no-repeat;
   }
 
@@ -307,7 +311,7 @@ nav a {
 
   #reset-button {
     background-image: url(/img/reload.svg);
-    background-size: 75%;
+    background-size: 115%;
     background-repeat: no-repeat;
     background-position: center;
   }
@@ -318,7 +322,7 @@ nav a {
     left: 2em;
     bottom: 2em;
     background-image: url(/img/add-player.svg);
-    background-size: 95%;
+    background-size: 90%;
     background-repeat: no-repeat;
     background-position: center;
     border: solid 5px yellow;
