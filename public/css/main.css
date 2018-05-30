@@ -274,6 +274,10 @@ nav a {
     min-height: 1.6em;
   }
 
+  .login-elements span {
+    color: #ddd;
+  }
+
   .login-elements a,
   .login-elements a:visited {
     color: rgb(0, 0, 238);

@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var login = document.getElementById("login");
     var logout = document.getElementById("logout");
+    var loadingIndicator = document.getElementById("loading-indicator");
+
+    loadingIndicator.style.display = "none";
 
     //if the user is logged in then user is not null
     if (user) {
