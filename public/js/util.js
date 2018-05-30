@@ -98,6 +98,16 @@ var importUtil = function(scores, ui) {
     state.edges.splice(index,1);
   }
 
+  function deactivateNode(node, state) {
+    node.score = 0;
+    // TODO: change the styling for this node
+  }
+
+  function currentTimeMillis() {
+    var d = new Date();
+    return d.valueOf();
+  }
+
   // Deletes nodes
   function deleteNode(node, state) {
     // first, clone the array (this fixed a bug where looping
@@ -167,6 +177,16 @@ var importUtil = function(scores, ui) {
     return seenNodes;
   }
 
+  function setHealth(node, amount) {
+    if (amount > 100) {
+      node.score = 100;
+    } else if (amount < 0) {
+      node.score = 0;
+    } else {
+      node.score = amount;
+    }
+  }
+
   return {
     edgeIdAttr: edgeIdAttr,
     nodeIdAttr: nodeIdAttr,
@@ -178,6 +198,8 @@ var importUtil = function(scores, ui) {
     deleteNode: deleteNode,
     nodesByNetwork: nodesByNetwork,
     recoverSeenNodes: recoverSeenNodes,
-    recoverSeenEdges: recoverSeenEdges
+    recoverSeenEdges: recoverSeenEdges,
+    currentTimeMillis: currentTimeMillis,
+    setHealth: setHealth
   };
 };

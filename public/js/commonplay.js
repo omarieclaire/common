@@ -62,12 +62,20 @@ window.addEventListener("load", function() {
 			// list of node/edge data used by the force-directed graph
 			nodes: [],
 			edges: [],
+		  lastClickTime: util.currentTimeMillis(),
+		  playerClicks: 0, // this is a count 0-6
+		  lastClickGainedAt: 0, // these are milliseconds
 			// method used to draw the graph. For initialization reasons
 			// we start with a fake draw and mutate it below.
 			draw: function() { console.log("fake draw"); },
 			// id of the leg entry for this version of the state.
 			logEntry: null
 		};
+
+	  // once a minute, try to gain a click
+	  window.setInterval(function () {
+		action.tryToGainClicks(initialState);
+	  }, 1000 * 60);
 
 		// We pass the initial state, and a
 		// "gameInitializer" function.
@@ -385,11 +393,6 @@ window.addEventListener("load", function() {
 				action.runDestroyer(state);
 			});
 
-			document.getElementById("giver").addEventListener("click", function() {
-				playSound("giver-sound", 0.1);
-				db.runTheGiver(GIVER_POWER);
-			});
-
 			document.getElementById("snapshot").addEventListener("click", function() {
 				db.snapshotState(state).then(function(result) {
 					console.log("success snapshot: ", result);
@@ -457,5 +460,6 @@ window.addEventListener("load", function() {
 			scores.calculateCommonScore(s.edges, s.nodes, s.selfId);
 			s.draw();
 		});
+
 	});
 });

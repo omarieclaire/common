@@ -151,66 +151,41 @@ var importDb = function(util, firebase, scores) {
       } else {
         util.addEdge(msg.sender, msg.recipient, 3, state);
       }
+      state.lastClickTime = util.currentTimeMillis();
     } else if (msg.type === "newConnection") {
       util.addEdge(msg.sender, msg.recipient, 3, state);
+      state.lastClickTime = util.currentTimeMillis();
     } else if (msg.type === "giveStrength") {
-      var eid = util.edgeId(msg.source, msg.target);
+      var eid = util.edgeId(msg.sender, msg.recipient);
       var edge = state.seenEdges[eid];
-      var node = state.seenNodes[msg.id];
+      var sender = state.seenNodes[msg.sender];
+      var recipient = state.seenNodes[msg.sender];
       if (!edge) {
-        console.log("%o gave strength to missing edge: %o", msg.id, msg);
-      } else if (node.score <= msg.amount) {
-        console.log("%o (%o) was too weak to give strength: %o", msg.id, node, msg);
+        console.log("%o is not connected to %o", sender, recipient);
       } else {
-        node.score -= msg.amount;
-        edge.strength += msg.amount;
+        sender.score = util.health(sender.score + 10);
+        recipient.score = util.health(recipient.score + 25);
+        state.lastClickTime = util.currentTimeMillis();
       }
-    } else if (msg.type === "weakenEdge") {
+    } else if (msg.type === "destroyEdge") {
       var eid = util.edgeId(msg.source, msg.target);
       var edge = state.seenEdges[eid];
       if (edge) {
-        if (edge.strength <= msg.power) {
-          util.deleteEdge(edge, state);
-        } else {
-          edge.strength -= msg.power;
-        }
+        util.deleteEdge(edge, state);
       }
-    } else if (msg.type === "reinforceConnection") {
-      var eid = util.edgeId(msg.source, msg.target);
-      var edge = state.seenEdges[eid];
-      if(edge) {
-        edge.strength += msg.edgePower;
-      }
-      var node = state.seenNodes[msg.source];
-      if(node) {
-        if(node.score <= msg.nodePower) {
-          util.deleteNode(node, state);
-        } else {
-          node.score -= msg.nodePower;
-        }
-      }
-    } else if (msg.type === "weakenNode") {
-      var node = state.seenNodes[msg.id];
-      if (node.score <= msg.power) {
-        util.deleteNode(node, state);
-      } else {
-        node.score -= msg.power;
-      }
-    } else if(msg.type === "giver") {
-      var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
-      state.nodes.forEach(function(node) {
-        var network = networkScores.filter(function(network) {
-          return network.people.indexOf(node.id) != -1;
-        })[0]
-        if(network) {
-          node.score = node.score + msg.power * network.health;
-        } else {
-          console.log("YIKES! Could not find a network for node " + node.id);
-        }
+    } else if (msg.type === "weakenCommon") {
+      _.each(state.nodes, function (node) {
+        var p = node.score;
+        node.score = util.health(node.score - msg.power);
       });
-
-      // IMPORTANT: update the state with the logEntry
-      state.logEntry = key;
+    } else if (msg.type === "gainClicks") {
+      if (msg.id === state.selfId) {
+        // the logged-in player will gain clicks
+        state.playerClicks = Math.min(6, state.playerClicks + msg.numClicks);
+        state.lastClickGainedAt = msg.lastClickGainedAt;
+      } else {
+        // do nothing, it's a different player
+      }
     } else {
       console.log("unknown msg type %o: %o", msg.type, msg);
     }
@@ -235,8 +210,6 @@ var importDb = function(util, firebase, scores) {
     return database.ref('/state/' + state.logEntry).set({
       randomIndex: state.randomIndex,
       players: state.players,
-      //seenNodes: state.seenNodes,
-      //seenEdges: state. seenEdges,
       nodes: state.nodes,
       edges: state.edges
     });
@@ -311,37 +284,27 @@ var importDb = function(util, firebase, scores) {
     });
   }
 
-  function weakenEdge(source, target, power) {
+  function destroyEdge(source, target) {
     sendLog({
-      type: "weakenEdge",
+      type: "destroyEdge",
       source: source,
-      target: target,
+      target: target
+    });
+  }
+
+  function weakenCommon(power) {
+    sendLog({
+      type: "weakenCommon",
       power: power
     });
   }
 
-  function weakenNode(id, power) {
+  function gainClicks(id, numClicks, lastClickGainedAt) {
     sendLog({
-      type: "weakenNode",
+      type: "gainClicks",
       id: id,
-      power: power
-    });
-  }
-
-  function reinforceConnection(source, target, edgePower, nodePower) {
-    sendLog({
-      type: "reinforceConnection",
-      source: source,
-      target: target,
-      edgePower: edgePower,
-      nodePower: nodePower
-    });
-  }
-
-  function runTheGiver(power) {
-    return sendLog({
-      type: "giver",
-      power: power
+      numClicks: numClicks,
+      lastClickGainedAt: lastClickGainedAt
     });
   }
 
@@ -352,13 +315,12 @@ var importDb = function(util, firebase, scores) {
     sendInvite: sendInvite,
     newConnection: newConnection,
     giveStrength: giveStrength,
-    weakenEdge: weakenEdge,
-    weakenNode: weakenNode,
+    destroyEdge: destroyEdge,
+    weakenCommon: weakenCommon,
     reinitialize: reinitialize,
     createPlayer: createPlayer,
     listenToLog: listenToLog,
-    runTheGiver: runTheGiver,
-    reinforceConnection: reinforceConnection,
-    snapshotState: snapshotState
+    snapshotState: snapshotState,
+    gainClicks: gainClicks
   };
 };

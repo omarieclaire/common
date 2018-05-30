@@ -86,13 +86,17 @@ var importAction = function(ui, util, scores, db) {
 		addEdge(from, to, state);
 	}
 
-	function runDestroyer(state) {
-		var i = _.random(0, state.edges.length - 1);
-		var edge = state.edges[i];
-		if (edge) {
-			db.weakenEdge(edge.source, edge.target, DESTROYER_POWER);
+  function runDestroyer(state) {
+		if (_.random(1, 10) == 10) {
+		  // 10% chance of destroying a connection
+		  var i = _.random(0, state.edges.length - 1);
+		  var edge = state.edges[i];
+		  if (edge) {
+			db.destroyEdge(edge.source, edge.target);
+		  }
 		}
 
+	    db.weakenCommon(DESTROYER_POWER);
 		var j = _.random(0, state.nodes.length -1);
 		var node = state.nodes[j];
 		if (node) {
@@ -103,6 +107,20 @@ var importAction = function(ui, util, scores, db) {
 	function reinitializeClicked(state) {
 		db.reinitialize(state);
 	}
+
+  function tryToGainClicks(state) {
+	var eightHoursInMillis = 8 * 60 * 60 * 1000;
+	var now = util.currentTimeMillis();
+	var delta = now - state.lastClickGainedAt;
+	var numClicks = Math.floor(delta / eightHoursInMillis);
+	var remainder = delta % eightHoursInMillis;
+	if (state.playerClicks < 6 && numClicks > 0) {
+	  // player gains some clicks
+	  db.gainClicks(state.selfId, numClicks, now - remainder);
+	} else {
+	  // nothing happens
+	}
+  }
 
 	return {
 		addEdge: addEdge,
