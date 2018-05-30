@@ -39,7 +39,7 @@ window.addEventListener("load", function() {
 		console.log(currentUser.username);
 		console.log(currentUser.email);
 
-		var state = {
+		var initialState = {
 			// index used by random button
 			randomIndex: 1,
 			// tracks if we are done loading yet (true) or not (false)
@@ -62,12 +62,16 @@ window.addEventListener("load", function() {
 			// list of node/edge data used by the force-directed graph
 			nodes: [],
 			edges: [],
-			// method used to draw the graph
-			draw: draw,
+			// method used to draw the graph. For initialization reasons
+      // we start with a fake draw and mutate it below.
+			draw: function() { console.log('fake draw'); },
       // id of the leg entry for this version of the state.
       logEntry: null
 		};
 
+    // We pass the initial state, and a
+    // "gameInitializer" function. 
+		db.initLog(initialState,function(state) {
 
 		// create a d3 simulation object
 		var simulation = d3.forceSimulation(state.nodes)
@@ -281,6 +285,10 @@ window.addEventListener("load", function() {
 			ec.textContent = Object.keys(state.seenEdges).length;
 		}
 
+      // Update the draw on state once we've defined it
+      // (doing this for initialization reasons)
+      state.draw = draw;
+
 		// function called on every "tick" of d3 like a clock or gameloop
 		function ticked(e) {
 			node
@@ -411,10 +419,12 @@ window.addEventListener("load", function() {
 		});
 		// start listening to DB updates
 		db.initPlayers(state);
-		db.initLog(state, function(s, msg) {
-      ui.renderMyScore(state.selfId, state.seenNodes);
-      scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
-      draw();
+
+      // This is onLogUpdate function
+    }, function(s, msg) {
+      ui.renderMyScore(s.selfId, s.seenNodes);
+      scores.calculateCommonScore(s.edges, s.nodes, s.selfId);
+      s.draw();
     });
 	});
 });

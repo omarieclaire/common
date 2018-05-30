@@ -42,28 +42,30 @@ var importDb = function(util, firebase, scores) {
    *
    *
    */
-  function initLog(state, continuation, startKey) {
+  function initLog(state, gameInitializer, onLogUpdate) {
     database
       .ref('/state')
       .orderByKey()
       .limitToLast(1)
       .once('child_added', function(snapshot) {
-        console.log("SUCCESS");
         var stateSnapshot = snapshot.val();
         var key = snapshot.key;
+        stateSnapshot.nodes.forEach(function(n) {
+          util.addNode(n.id, state);
+        });
+        stateSnapshot.edges.forEach(function(e) {
+          util.addEdge(e.source.id, e.target.id, e.strength, state)
+        });
         state.randomIndex = stateSnapshot.randomIndex;
         state.players = stateSnapshot.players;
-        state.nodes = stateSnapshot.nodes;
-        state.edges = stateSnapshot.edges;
         state.logEntry = key;
-        state.seenEdges = util.recoverSeenEdges(state.edges);
-        state.seenNodes = util.recoverSeenNodes(state.nodes);
+        gameInitializer(state);
         var ref = database.ref('/log').orderByKey().startAt(snapshot.key);
         return ref.on('child_added', function(data) {
           var msg = data.val();
           var key = data.key;
           readLog(state, msg, key);
-          continuation(state, msg);
+          onLogUpdate(state, msg);
         });
       }, function(error) {
         console.log("ERROR fetching state, starting from scratch", error);
@@ -72,7 +74,7 @@ var importDb = function(util, firebase, scores) {
           var msg = data.val();
           var key = data.key;
           readLog(state, msg, key);
-          continuation(state, msg);
+          onLogUpdate(state, msg);
         });
       });
   }
