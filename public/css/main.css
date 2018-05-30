@@ -273,8 +273,8 @@ nav a {
 
   #toggleDebugBtn {
     position: fixed;
-    left: 2em;
-    bottom: 2em;
+    left: 0;
+    bottom: 0;
     border: none;
     margin: 0.75em;
     background-color: transparent;
