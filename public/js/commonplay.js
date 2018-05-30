@@ -216,6 +216,30 @@ window.addEventListener("load", function() {
           .attr("stroke", "pink")
         // add an id attribute to each node, so we can access/select it later
           .attr("id", util.nodeIdAttr)
+          .attr("class", function(d) {
+
+            var classString = "";
+            if(d.score > 4) {
+              classString += "nodeStrong ";
+            }
+            if(d.score > 3) {
+              classString += "nodeMedium ";
+            }
+            if(d.score > 2) {
+              classString += "nodeSmall ";
+            }
+            if(d.score > 1) {
+              classString += "nodeTiny ";
+            }
+
+            if(d.id === state.selfId) {
+              classString += "myNode nodeClass";
+              return classString;
+            } else {
+              classString += "nodeClass";
+              return classString;
+            }
+          })
         //we added the onclick to the circle, but maybe we should have added it to the node
         //.on("click", nodeClick)
           .on("click", function(d) {
@@ -305,13 +329,6 @@ window.addEventListener("load", function() {
           })
           .attr("fill", function(d) {
             return d.color;
-          })
-          .attr("class", function(d) {
-            if(d.id === state.selfId) {
-              return "myNode";
-            } else {
-              return null;
-            }
           });
 
         edge
@@ -410,6 +427,14 @@ window.addEventListener("load", function() {
       document.getElementById("zoom-in").addEventListener("click", zoomIn);
       document.getElementById("reset-button").addEventListener("click", resetZoom);
       document.getElementById("zoom-out").addEventListener("click", zoomOut);
+
+      document.getElementById("add-player").addEventListener("click", function() {
+        // in case the user is anonymous
+        if(state.selfId) {
+          //db.weakenNode(state.selfId, ADD_PLAYER_DECREMENT_NODE_SCORE);
+          return true;
+        }
+      })
 
       document.body.addEventListener("keydown", function(e) {
         // console.log(e);

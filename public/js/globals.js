@@ -9,7 +9,7 @@ var DEFAULT_STRENGTH = 0.2;
 //capping the strength of each edge
 var MAX_EDGE_STRENGTH = 10;
 //default starting strength for each node
-var INITIAL_NODE_SCORE = 5;
+var INITIAL_NODE_SCORE = 3;
 //the default amount of "life-force" a network receives
 var GIVER_POWER = 0.4;
 //the default amount of "life force" decayed by entropy/destroyer
