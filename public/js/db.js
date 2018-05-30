@@ -80,19 +80,6 @@ var importDb = function(util, firebase, scores) {
   }
 
   /**
-   * Setup a listener to run anytime the log is updated.
-   *
-   * Action is a function from the log entry
-   */
-  function listenToLog(action) {
-    var ref = database.ref('/log');
-    ref.on('child_added', function(data) {
-      var msg = data.val();
-      action(msg);
-    });
-  }
-
-  /**
    * Return the database to an initial state, removing all other data.
    *
    * This method is intended to be used to restore the DB to a
@@ -356,7 +343,6 @@ var importDb = function(util, firebase, scores) {
     weakenNode: weakenNode,
     reinitialize: reinitialize,
     createPlayer: createPlayer,
-    listenToLog: listenToLog,
     runTheGiver: runTheGiver,
     reinforceConnection: reinforceConnection,
     snapshotState: snapshotState
