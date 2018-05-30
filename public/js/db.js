@@ -110,6 +110,7 @@ var importDb = function(util, firebase, scores) {
     state.edges = []
     database.ref('/players').set({});
     database.ref('/log').set({});
+    database.ref('/state').set({});
     createUser({
       email: "marieflanagan@gmail.com",
       username: "omarieclaire",
