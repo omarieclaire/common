@@ -7,7 +7,7 @@ var MY_FIXED_Y = 0;
 //default starting strength for each edge
 var DEFAULT_STRENGTH = 0.2;
 //capping the strength of each edge
-var MAX_EDGE_STRENGTH = 10;
+var MAX_EDGE_STRENGTH = 20;
 //default starting strength for each node
 var INITIAL_NODE_SCORE = 3;
 //the default amount of "life-force" a network receives

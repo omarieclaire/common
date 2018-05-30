@@ -1,55 +1,48 @@
-
-
 html {
-    color: #333;
-    background-color: inherit;
-    font-size: 1em;
-    line-height: 1.7;
+  color: #333;
+  background-color: inherit;
+  font-size: 1em;
+  line-height: 1.7;
 }
 
 ::-moz-selection {
-    background: #b3d4fc;
-    text-shadow: none;
+  background: #b3d4fc;
+  text-shadow: none;
 }
 
 ::selection {
-    background: #b3d4fc;
-    text-shadow: none;
+  background: #b3d4fc;
+  text-shadow: none;
 }
 
 hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 1em 0;
-    padding: 0;
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
 }
 
-audio,
-canvas,
-iframe,
-img,
-svg,
-video {
-    vertical-align: middle;
+audio, canvas, iframe, img, svg, video {
+  vertical-align: middle;
 }
 
 fieldset {
-    border: 0;
-    margin: 0;
-    padding: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
 }
 
 textarea {
-    resize: vertical;
+  resize: vertical;
 }
 
 .browserupgrade {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
 }
 
 /* ===== Initializr Styles ==================================================
@@ -57,18 +50,17 @@ textarea {
    ========================================================================== */
 
 body {
-    font: 12px/14px "Lato", "Helvetica", "Helvetica Neue", "Arial";
-
-    line-height: 1.6;
-    background-image: url(/img/common-background.png);
-    background-position: 50% -50%;
-    background-size: 30%;
-    background-repeat: no-repeat;
+  font: 12px/14px "Lato", "Helvetica", "Helvetica Neue", "Arial";
+  line-height: 1.6;
+  background-image: url(/img/common-background.png);
+  background-position: 50% -50%;
+  background-size: 30%;
+  background-repeat: no-repeat;
 }
 
 .wrapper {
-    width: 90%;
-    margin: 0 5%;
+  width: 90%;
+  margin: 0 5%;
 }
 
 .title {
@@ -83,134 +75,163 @@ body {
    ============== */
 
 nav ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 nav a {
-    display: block;
-    margin-bottom: 10px;
-    padding: 15px 0;
-
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
-
-    color: white;
-    background: #e1e1e1;
+  display: block;
+  margin-bottom: 10px;
+  padding: 15px 0;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+  background: #e1e1e1;
 }
-
 
 /* ==============
     MOBILE: Main
    ============== */
 
 .main {
-    padding: 10px 0;
+  padding: 10px 0;
 }
 
 /* The Modal (background) */
+
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
+
 .modal-content {
-    background-color: #fefefe;
-    margin: 10% auto; /* 15% from the top and centered */
-    padding: 15px;
-    border: 1px solid #888;
-    width: 40%; /* Could be more or less, depending on screen size */
+  background-color: #fefefe;
+  margin: 10% auto;
+  /* 15% from the top and centered */
+  padding: 15px;
+  border: 1px solid #888;
+  width: 40%;
+  /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
+
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    line-height: 0.5;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 0.5;
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.close:hover, .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 /*fix teh modal?*/
+
 .clickable {
-    cursor: pointer;
+  cursor: pointer;
 }
-
-
 
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-   /* ==========================================================================
+
+/* ==========================================================================
       d3 styles
       ========================================================================== */
 
+/* Make the chart container - SVG - fill the page using CSS. */
 
-  /* Make the chart container - SVG - fill the page using CSS. */
-  #chart {
-    position: fixed;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
-    background-color: white;
-  }
+#chart {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  background-color: white;
+}
 
-  /* rect {
+/* rect {
     z-index: -1000;
   } */
 
+.nodeClass {
+  opacity: 0.5;
+  width: 20em;
+  height: 20em;
+}
+
 .myNode {
-  border: solid 5px yellow;
+  opacity: 0.9;
+  /* stroke: red; */
+  outline: 4px solid red;
+  stroke-offset: 15px;
+
+  /* border: solid 5px yellow;
   border-radius: 50%;
   width: 5em;
-  height: 5em;
+  height: 5em; */
 }
 
 .nodeStrong {
+  opacity: 0.5;
 
 }
 
- .nodes circle {
-   width: 1.5px;
- }
-
- .nodeLabel {
-   font-family: Helvetica;
-   font-size: 12px;
-   letter-spacing: 0.02em;
- }
-
- .nodeLabelContainer {
- }
-
-
-
-.annotation-path {
-}
-
-.annotation-note {
+.nodeMedium {
+  opacity: 0.1;
 
 }
 
+.nodeSmall {
+  opacity: 0.1;
+
+}
+
+.nodeTiny {
+  opacity: 0.1;
+
+}
+
+.nodes circle {
+  width: 100px;
+}
+
+.nodeLabel {
+  font-family: Helvetica;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.nodeLabelContainer {}
+
+.annotation-path {}
+
+.annotation-note {}
 
 .annotation-note-label {
   font-weight: lighter;
@@ -223,9 +244,7 @@ nav a {
   font-size: 2.6em;
 }
 
-.annotationBox {
-
-}
+.annotationBox {}
 
 .annotation path {
   /* stroke: blue; */
@@ -242,117 +261,111 @@ nav a {
   position: absolute;
 }
 
-  .modalButtons {
-    position: fixed;
-    right: 2em;
-    top: 2em;
-  }
+.modalButtons {
+  position: fixed;
+  right: 2em;
+  top: 2em;
+}
 
-  .zoomButtons {
-    position: fixed;
-    right: 2em;
-    bottom: 2em;
-  }
+.zoomButtons {
+  position: fixed;
+  right: 2em;
+  bottom: 2em;
+}
 
-  .zoomButtons button, .modalButtons button {
-    border: none;
-    overflow: hidden;
-    width: 3em;
-    height: 3em;
-    margin: 0.75em;
-    display: block;
-    text-indent: -1000em;
-    background-color: transparent;
-    opacity: 0.5;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-   }
+.zoomButtons button, .modalButtons button {
+  border: none;
+  overflow: hidden;
+  width: 3em;
+  height: 3em;
+  margin: 0.75em;
+  display: block;
+  text-indent: -1000em;
+  background-color: transparent;
+  opacity: 0.5;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
-  .zoomButtons button:hover, .modalButtons button:hover {
-    background-color: transparent;
-    opacity: 1;
-  }
+.zoomButtons button:hover, .modalButtons button:hover {
+  background-color: transparent;
+  opacity: 1;
+}
 
-  .login-elements {
-    min-height: 1.6em;
-  }
+.login-elements {
+  min-height: 1.6em;
+}
 
-  .login-elements span {
-    color: #ddd;
-  }
+.login-elements span {
+  color: #ddd;
+}
 
-  .login-elements a,
-  .login-elements a:visited {
-    color: rgb(0, 0, 238);
-    text-decoration: none;
-  }
+.login-elements a, .login-elements a:visited {
+  color: rgb(0, 0, 238);
+  text-decoration: none;
+}
 
-  .login-elements a:hover,
-  .login-elements a:focus {
-    text-decoration: underline;
-  }
+.login-elements a:hover, .login-elements a:focus {
+  text-decoration: underline;
+}
 
-  #toggleDebug {
-    display:none;
-  }
+#toggleDebug {
+  display: none;
+}
 
-  #toggleDebugBtn {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    border: none;
-    margin: 0.75em;
-    background-color: transparent;
-    opacity: 0;
-  }
+#toggleDebugBtn {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  border: none;
+  margin: 0.75em;
+  background-color: transparent;
+  opacity: 0;
+}
 
-  #aboutBtn {
-    background-image: url(/img/about.svg);
-    background-position: center;
-    background-size: 125%;
-    background-repeat: no-repeat;
+#aboutBtn {
+  background-image: url(/img/about.svg);
+  background-position: center;
+  background-size: 125%;
+  background-repeat: no-repeat;
+}
 
-  }
+#settingsBtn {
+  background-image: url(/img/settings.svg);
+  background-position: center;
+  background-size: 120%;
+  background-repeat: no-repeat;
+}
 
-  #settingsBtn {
-    background-image: url(/img/settings.svg);
-    background-position: center;
-    background-size: 120%;
-    background-repeat: no-repeat;
-  }
+#zoom-in {
+  background-image: url(/img/zoom-in.svg);
+}
 
-  #zoom-in {
-    background-image: url(/img/zoom-in.svg);
+#zoom-out {
+  background-image: url(/img/zoom-out.svg);
+}
 
-  }
+#reset-button {
+  background-image: url(/img/reload.svg);
+  background-size: 115%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
-  #zoom-out {
-    background-image: url(/img/zoom-out.svg);
-  }
-
-  #reset-button {
-    background-image: url(/img/reload.svg);
-    background-size: 115%;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-  #add-player {
-    position: fixed;
-
-    left: 2em;
-    bottom: 2em;
-    background-image: url(/img/add-player.svg);
-    background-size: 90%;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: solid 5px yellow;
-    border-radius: 50%;
-    width: 5em;
-    height: 5em;
-
-  }
+#add-player {
+  position: fixed;
+  left: 2em;
+  bottom: 2em;
+  background-image: url(/img/add-player.svg);
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: solid 5px yellow;
+  border-radius: 50%;
+  width: 5em;
+  height: 5em;
+}
 
 button:hover {
   background-color: grey;
@@ -363,45 +376,43 @@ button:hover {
    ========================================================================== */
 
 .hidden {
-    /* display: none !important; */
-    visibility: hidden;
+  /* display: none !important; */
+  visibility: hidden;
 }
 
 .visuallyhidden {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
-    clip: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    position: static;
-    width: auto;
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
 }
 
 .invisible {
-    visibility: hidden;
+  visibility: hidden;
 }
 
-.clearfix:before,
-.clearfix:after {
-    content: " ";
-    display: table;
+.clearfix:before, .clearfix:after {
+  content: " ";
+  display: table;
 }
 
 .clearfix:after {
-    clear: both;
+  clear: both;
 }
 
 .clearfix {
-    *zoom: 1;
+  *zoom: 1;
 }
