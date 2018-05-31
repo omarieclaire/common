@@ -187,8 +187,8 @@ nav a {
 
 .myNode {
   opacity: 0.9;
-  /* stroke: red; */
-  outline: 4px solid red;
+  stroke: yellow;
+  /* outline: 4px solid red; */
   stroke-offset: 15px;
 
   /* border: solid 5px yellow;
@@ -199,7 +199,6 @@ nav a {
 
 .nodeStrong {
   opacity: 0.5;
-
 }
 
 .nodeMedium {
@@ -218,11 +217,12 @@ nav a {
 }
 
 .nodes circle {
-  width: 100px;
+  /* width: 100px; */
 }
 
 .nodeLabel {
   font-family: Helvetica;
+  /* background-color: rgb(201, 76, 76); */
   font-size: 12px;
   letter-spacing: 0.02em;
 }
