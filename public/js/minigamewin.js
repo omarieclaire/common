@@ -6,54 +6,122 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   var createUser = firebase.functions().httpsCallable("createUserAndInvite");
+  var emailExistsFunc = firebase.functions().httpsCallable("emailExists");
+  var usernameInput = document.getElementById("username");
   var usernameLabel = document.getElementById("usernameLabel");
+  var usernameErrorMsg = document.getElementById("username-error-msg");
+  var emailInput = document.getElementById("email");
   var emailLabel = document.getElementById("emailLabel");
+  var emailErrorMsg = document.getElementById("email-error-msg");
+  var statusElement = document.getElementById("status");
+  var submitButton = document.getElementById("join");
+  // import database, but we can only access a few methods
+  // since we're passing null util and null scores.
+  var database = importDb(null, firebase, null);
+
+
 
   firebase.auth().onAuthStateChanged(function(user) {
+    if(user) {
 
-    document.getElementById("join").addEventListener("click", function(ev) {
-      var failure = false;
-      usernameLabel.style.color = "black";
-      emailLabel.style.color = "black";
+      usernameInput.addEventListener("focus", function(ev) {
+        usernameErrorMsg.innerHTML = "";
+        statusElement.innerHTML = "";
+        usernameLabel.style.color = "black";
+      });
 
-      var emailEntered = document.getElementById('email').value;
-      var usernameEntered = document.getElementById('username').value;
+      emailInput.addEventListener("focus", function(ev) {
+        emailErrorMsg.innerHTML = "";
+        statusElement.innerHTML = "";
+        emailLabel.style.color = "black";
+      });
 
-      if (usernameEntered.length == 0) {
-        usernameLabel.style.color = "red";
-        failure = true;
-      }
-      if (validateEmail(emailEntered) == false) {
-        emailLabel.style.color = "red";
-        failure = true;
-      }
+      document.getElementById("join").addEventListener("click", function(ev) {
+        var failure = false;
+        usernameLabel.style.color = "black";
+        emailLabel.style.color = "black";
 
-      if(failure) {
-        ev.preventDefault();
-        return false;
-      }
+        var emailEntered = emailInput.value;
+        var usernameEntered = usernameInput.value;
 
-      var sender = user.displayName || 'UNKNOWN';
+        if (usernameEntered.length == 0) {
+          usernameLabel.style.color = "red";
+          usernameErrorMsg.innerHTML = "username cannot be empty like the void that is our universe";
+          failure = true;
+        }
+        if (validateEmail(emailEntered) == false) {
+          emailLabel.style.color = "red";
+          if(emailEntered.length === 0) {
+            emailErrorMsg.innerHTML = "email cannot be empty like an inbox that's never opened";
+          } else {
+            emailErrorMsg.innerHTML = "email must be a valid email and must not be a tautology";
+          }
 
-      createUser({email: emailEntered, username: usernameEntered, sender: sender}, {}).then(function(result) {
-
-        // Read result of the Cloud Function.
-        console.log(result.data);
-        if(result.data.success) {
-          document.getElementById('status').innerHTML = "Success";
-        } else {
-          document.getElementById('status').innerHTML = "Failed :(";
+          failure = true;
         }
 
-        var promise = new Promise(function(resolve, reject) {
-          setTimeout(function() {
-            window.location.href = "/";
-            resolve();
-          }, 1000);
-        });
+        if(failure) {
+          ev.preventDefault();
+          return false;
+        }
 
-        return promise;
+        database.userExists(usernameEntered).then(function(exists) {
+          console.log(exists);
+          if(exists) {
+            usernameLabel.style.color = "red";
+            usernameErrorMsg.innerHTML = "username already exists :(";
+            //ev.preventDefault();
+            return Promise.reject(new Error("username-exists"));
+          } else {
+            return Promise.resolve(true);
+          }
+        }).then(function(result) {
+          // check if email exists
+          return emailExistsFunc(emailEntered).then(function(emailExists) {
+            if(emailExists.data) {
+              emailLabel.style.color = "red";
+              emailErrorMsg.innerHTML = "email already exists :(";
+              //ev.preventDefault();
+              return Promise.reject(new Error("email-exists"));
+            } else {
+              return Promise.resolve(true);
+            }
+          }).then(function(result) {
+
+            var sender = user.displayName || 'UNKNOWN';
+
+            console.log("about to create user. sender:", sender);
+            createUser({email: emailEntered, username: usernameEntered, sender: sender}, {}).then(function(result) {
+
+              // Read result of the Cloud Function.
+              console.log("RESULT OF CLOUD FUNCTION", result.data);
+              if(result.data.success) {
+                document.getElementById('status').innerHTML = "Success";
+              } else {
+                document.getElementById('status').innerHTML = "Failed :(";
+              }
+
+              var promise = new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                  window.location.href = "/";
+                  resolve();
+                }, 1000);
+              });
+
+              return promise;
+            });
+          }).catch(function(error) {
+            ev.preventDefault();
+            if(error.message !== "email-exists" && error.message !== "username-exists") {
+              document.getElementById('status').innerHTML = "Failed and we don't know why :(";
+            }
+            return false;
+          });
+        });
       });
-    });
+    } else {
+      submitButton.disabled = true;
+      statusElement.innerHTML = "you must be logged in to invite someone :(";
+    }
   });
 });
