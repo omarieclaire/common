@@ -34,7 +34,7 @@ function draw() {
     background(0, 255, 255);
     textSize(50);
     textAlign(CENTER);
-    text("Success!", screenW/2, screenH/2 - 20);
+    text("connected!", screenW/2, screenH/2 - 30);
     // document.querySelector("#reinforcing-connection-sound").play()
 
    setTimeout(function() {
