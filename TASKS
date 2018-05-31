@@ -1,0 +1,39 @@
+
+players have:
+ - "clicks" which are actions they can take
+   + start with 6 clicks
+   + clicks regenrate at a rate of 1-per-8 hours
+   + clicks can:
+     * invite a new player
+     * build a connection with an existing player
+     * strengthen a connected node (by how much?)
+ - life force
+   + goes from 0 (dead) to 100 (totally healthy)
+   + can't below 0 or above 100
+   + strengthening a connected node gives it 25 health (and 10 for you)
+   + at 0 life force a player is dead (and doesn't get clicks)
+   + dead players can be revived if another player strengthens them
+ - connections
+   + are created by clicks
+   + may be randomly destroyed
+   + do not have health or energy
+   + are needed to be able to use clicks to strenghten players
+
+destroyer:
+ - randomly chooses edges to delete
+ - also weakens all nodes based on the "rate of decay"
+ - rate of decay is % of life force to be lost when the destroy runs
+ - e.g. 1% decay means every time it runs, players lose 1 life.
+        5% decay means every time it runs, players lose 5 life.
+ - destroy runs about once-per-hour of browser time (i.e. per player)
+
+ - possible decay formula:
+        t = minutes since last action
+        f(t) = round(log(t + 1)), as a percentage
+
+ - i.e. f(1 minute) = 1%
+        f(30 minutes) = 3%
+        f(24 hours) = 7%
+        f(1 week) = 9%
+        f(1 year) = 13%
+ - when destroyer runs, 20% chance of destroying a random connection
