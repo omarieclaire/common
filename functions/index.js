@@ -29,7 +29,7 @@ function generatePassphrase() {
   var verb = passgen.verbs[randomVerb];
   var noun = passgen.nouns[randomNoun];
 
-  return adj + "-" + verb + "-" + noun;
+  return adj + verb + noun;
 }
 
 try {
@@ -169,3 +169,19 @@ exports.sendWelcomeEmail =
       });
 
     });
+
+exports.emailExists = functions.https.onCall((email) => {
+
+  var promise = admin.auth().getUserByEmail(email).then((user) => {
+    return Promise.resolve(true);
+  }, (error) => {
+    if(error.code === "auth/user-not-found") {
+      return Promise.resolve(false);
+    } else {
+      return Promise.reject(new Error("error fetching email"));
+    }
+  });
+
+  return promise;
+
+});
