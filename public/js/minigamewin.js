@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function() {
   var emailErrorMsg = document.getElementById("email-error-msg");
   var statusElement = document.getElementById("status");
   var submitButton = document.getElementById("join");
+  var youAreConnectingElement = document.getElementById("common-you-are-connecting");
+
   // import database, but we can only access a few methods
   // since we're passing null util and null scores.
   var database = importDb(null, firebase, null);
@@ -35,6 +37,8 @@ document.addEventListener("DOMContentLoaded", function() {
         statusElement.innerHTML = "";
         emailLabel.style.color = "black";
       });
+
+      youAreConnectingElement.innerHTML = "you are connecting with 👯 " + user.displayName + " 👯";
 
       document.getElementById("join").addEventListener("click", function(ev) {
         var failure = false;
