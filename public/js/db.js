@@ -160,6 +160,7 @@ var importDb = function(util, firebase, scores) {
         sender.score = util.health(sender.score + 10);
         recipient.score = util.health(recipient.score + 25);
         trackClick(state, msg);
+        scores.calculateCommonScore(state);
       }
     } else if (msg.type === "destroyEdge") {
       var eid = util.edgeId(msg.source, msg.target);
@@ -172,6 +173,7 @@ var importDb = function(util, firebase, scores) {
         var p = node.score;
         node.score = util.health(node.score - msg.power);
       });
+      scores.calculateCommonScore(state);
     } else if (msg.type === "gainClicks") {
       if (msg.id === state.selfId) {
         // the logged-in player will gain clicks

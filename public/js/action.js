@@ -55,7 +55,7 @@ var importAction = function(ui, util, scores, db) {
 			// d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
 		}
 
-		scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
+		scores.calculateCommonScore(state);
 		state.draw();
 	}
 
@@ -87,21 +87,30 @@ var importAction = function(ui, util, scores, db) {
 		addEdge(from, to, state);
 	}
 
-  function runDestroyer(state) {
-		if (_.random(1, 10) == 10) {
-		  // 10% chance of destroying a connection
-		  var i = _.random(0, state.edges.length - 1);
-		  var edge = state.edges[i];
-		  if (edge) {
-			db.destroyEdge(edge.source, edge.target);
-		  }
+	function tryDestroyer(state) {
+		// destroyer has a 1-in-60 chance of running every minute.
+		// this means for each player, we expect the destroyer to run
+		// about once for every hour they play.
+		if (_.random(1, 60) == 1) {
+			runDestroyer(state);
 		}
+	}
 
-	    db.weakenCommon(DESTROYER_POWER);
-		var j = _.random(0, state.nodes.length -1);
-		var node = state.nodes[j];
-		if (node) {
-			db.weakenNode(node.id, DESTROYER_POWER);
+	function runDestroyer(state) {
+		var rate = ui.getDecayRate(state);
+		console.log("running the destroyer (decay rate: %o)", rate);
+		if (rate > 0) {
+			// if rate is 0, the common doesn't get weaker
+			db.weakenCommon(rate);
+		}
+		if (_.random(1, 10) == 10) {
+			// 10% chance of destroying a random connection
+			var i = _.random(0, state.edges.length - 1);
+			var edge = state.edges[i];
+			if (edge) {
+				console.log("destroying a random edge: %o", edge);
+				db.destroyEdge(edge.source, edge.target);
+			}
 		}
 	}
 
@@ -133,6 +142,7 @@ var importAction = function(ui, util, scores, db) {
 		reinitializeClicked: reinitializeClicked,
 		nodeClicked: nodeClicked,
 		runDestroyer: runDestroyer,
-      tryToGainClicks: tryToGainClicks
+		tryDestroyer: tryDestroyer,
+		tryToGainClicks: tryToGainClicks
 	};
 };

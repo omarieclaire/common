@@ -69,7 +69,14 @@ window.addEventListener("load", function() {
 		// once a minute, try to gain a click
 		window.setInterval(function () {
 			action.tryToGainClicks(initialState);
-		}, 30 * 1000);
+		}, 60 * 1000);
+		action.tryToGainClicks(initialState);
+
+		// once a minute, have a 1/60 chance of running the destroyer
+		window.setInterval(function () {
+			action.tryDestroyer(initialState);
+		}, 60 * 1000);
+		action.tryDestroyer(initialState);
 
 		var initializeGame = function (state) {
 
@@ -259,7 +266,7 @@ window.addEventListener("load", function() {
 				// Then we use that group and d3.packEnclose to encircle the networks.
 				// TODO it would be good to find a better place to calculate this stuff
 				// rather than in draw
-				var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
+				var networkScores = scores.calculateNetworkScoresByNode(state);
 				// add a radius to the data
 				node.data().forEach(function(d) {
 					// This is slow; TODO we should improve this.
@@ -451,7 +458,7 @@ window.addEventListener("load", function() {
 		// This is an onLogUpdate function
 		var onLogUpdate = function (state, msg) {
 			ui.renderMyScore(state);
-			scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
+			scores.calculateCommonScore(state);
 			state.draw();
 		};
 

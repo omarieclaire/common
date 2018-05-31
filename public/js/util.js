@@ -85,7 +85,7 @@ var importUtil = function(scores, ui) {
       state.edges.push(o);
       // add the edge id to the seenEdges object
       state.seenEdges[id] = o;
-      scores.calculateCommonScore(state.edges, state.selfId, ui.renderNetworkScores);
+      scores.calculateCommonScore(state);
     }
   }
 
@@ -161,18 +161,6 @@ var importUtil = function(scores, ui) {
   function health(n) {
     // ensure the result is between 0 and 100
     return Math.min(100, Math.max(0, n));
-  }
-
-  // genDecayRate(0 minutes) = 0 energy
-  // getDecayRate(1 minute) = 1 energy
-  // getDecayRate(30 minutes) = 3 energy
-  // getDecayRate(24 hours) = 7 energy
-  // getDecayRate(1 week) = 9 energy
-  // getDecayRate(1 year) = 13 energy
-  function getDecayRate(state) {
-    var millis = currentTimeMillis() - state.lastClickTime;
-    var minutes = millis / (60 * 1000);
-    return Math.round(Math.log1p(minutes));
   }
 
   return {
