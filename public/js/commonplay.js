@@ -1,6 +1,8 @@
 /* global d3:false :false */
 /* global firebase:false :false */
 
+var xyz = 1;
+
 // when the window is ready, call the function below
 window.addEventListener("load", function() {
 
@@ -62,9 +64,9 @@ window.addEventListener("load", function() {
 			// list of node/edge data used by the force-directed graph
 			nodes: [],
 			edges: [],
-		  lastClickTime: util.currentTimeMillis(),
-		  playerClicks: 0, // this is a count 0-6
-		  lastClickGainedAt: 0, // these are milliseconds
+			lastClickTime: COMMON_EPOCH, // by default, ~may30
+			playerClicks: 0, // this is a count 0-6
+			lastClickGainedAt: 0, // these are milliseconds
 			// method used to draw the graph. For initialization reasons
 			// we start with a fake draw and mutate it below.
 			draw: function() { console.log("fake draw"); },
@@ -72,10 +74,10 @@ window.addEventListener("load", function() {
 			logEntry: null
 		};
 
-	  // once a minute, try to gain a click
-	  window.setInterval(function () {
-		action.tryToGainClicks(initialState);
-	  }, 1000 * 60);
+		// once a minute, try to gain a click
+		window.setInterval(function () {
+			action.tryToGainClicks(initialState);
+		}, 30 * 1000);
 
 		// We pass the initial state, and a
 		// "gameInitializer" function.
@@ -197,7 +199,7 @@ window.addEventListener("load", function() {
 
 
 			// render the score for the first time
-			ui.renderMyScore(state.selfId, state.seenNodes);
+			ui.renderMyScore(state);
 
 			// function to refresh d3 (for any changes to the graph)?
 			function draw() {
@@ -456,7 +458,7 @@ window.addEventListener("load", function() {
 
 			// This is onLogUpdate function
 		}, function(s, msg) {
-			ui.renderMyScore(s.selfId, s.seenNodes);
+			ui.renderMyScore(s);
 			scores.calculateCommonScore(s.edges, s.nodes, s.selfId);
 			s.draw();
 		});

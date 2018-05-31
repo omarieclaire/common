@@ -29,7 +29,6 @@ var importUtil = function(scores, ui) {
 
   // given a node id, add a node
   // this function returns the node
-  //function addNode(id, myId, nodes, seenNodes, colorPicker) {
   function addNode(id, state) {
     // check if the id was already added
     if (state.seenNodes[id]) {
@@ -40,7 +39,7 @@ var importUtil = function(scores, ui) {
       var o = {
         "id": id,
         color: state.colorPicker(id),
-        score: INITIAL_NODE_SCORE,
+        score: 100,//INITIAL_NODE_SCORE,
         x: 0,
         y:0,
         get r() {
@@ -63,7 +62,7 @@ var importUtil = function(scores, ui) {
 
   // Given a 'from' id and a 'to' id, add an edge
   // this function returns nothing
-  function addEdge(from, to, strength, state) {
+  function addEdge(from, to, state) {
     // calculate the edge id
     var id = edgeId(from, to);
     if (from === to) {
@@ -81,7 +80,7 @@ var importUtil = function(scores, ui) {
       // add a node for 'to' in case it doesn't exist
       var y = addNode(to, state);
       // create a new edge
-      var o = {id: id, source: x, target: y, strength: strength};
+      var o = {id: id, source: x, target: y};
       // add the edges to the array of edges
       state.edges.push(o);
       // add the edge id to the seenEdges object
@@ -108,43 +107,20 @@ var importUtil = function(scores, ui) {
     return d.valueOf();
   }
 
-  // Deletes nodes
-  function deleteNode(node, state) {
-    // first, clone the array (this fixed a bug where looping
-    // and slicing over the array caused an issue)
-    // This is potentially expensive if we have a lot of edges.
-    var clonedEdges = state.edges.slice(0);
-
-    // first delete all the edges that refer to this node
-    _.each(clonedEdges, function(edge) {
-      if(edge) {
-        if(edge.source.id == node.id || edge.target.id == node.id) {
-          deleteEdge(edge, state);
-        }
-      }
-    });
-
-    // now delete the node
-    delete state.seenNodes[node.id];
-    var index = state.nodes.indexOf(node);
-    console.log("DELETE NODE: " + node + " at index " + index);
-    state.nodes.splice(index,1);
-  }
-
   // Small helper function to calculate nodes by network
   function nodesByNetwork(nodes) {
     var nodesByNetwork = {};
-    nodes.forEach(function(data) {
+    nodes.forEach(function(node) {
       // note: if a node doesn't have a network yet, we skip it.
-      if(data.network) {
-        if(nodesByNetwork[data.network]) {
-          nodesByNetwork[data.network].nodes.push(data);
+      if(node.network) {
+        if(nodesByNetwork[node.network]) {
+          nodesByNetwork[node.network].nodes.push(node);
         } else {
           var entry = {
-            nodes: [data],
-            score: data.networkScore
+            nodes: [node],
+            score: node.networkScore
           };
-          nodesByNetwork[data.network] = entry;
+          nodesByNetwork[node.network] = entry;
         }
       }
     });
@@ -177,14 +153,26 @@ var importUtil = function(scores, ui) {
     return seenNodes;
   }
 
-  function setHealth(node, amount) {
-    if (amount > 100) {
-      node.score = 100;
-    } else if (amount < 0) {
-      node.score = 0;
-    } else {
-      node.score = amount;
-    }
+  function clicks(n) {
+    // ensure the result is between 0 and 100
+    return Math.min(6, Math.max(0, n));
+  }
+
+  function health(n) {
+    // ensure the result is between 0 and 100
+    return Math.min(100, Math.max(0, n));
+  }
+
+  // genDecayRate(0 minutes) = 0 energy
+  // getDecayRate(1 minute) = 1 energy
+  // getDecayRate(30 minutes) = 3 energy
+  // getDecayRate(24 hours) = 7 energy
+  // getDecayRate(1 week) = 9 energy
+  // getDecayRate(1 year) = 13 energy
+  function getDecayRate(state) {
+    var millis = currentTimeMillis() - state.lastClickTime;
+    var minutes = millis / (60 * 1000);
+    return Math.round(Math.log1p(minutes));
   }
 
   return {
@@ -195,11 +183,11 @@ var importUtil = function(scores, ui) {
     addNode: addNode,
     addEdge: addEdge,
     deleteEdge: deleteEdge,
-    deleteNode: deleteNode,
     nodesByNetwork: nodesByNetwork,
     recoverSeenNodes: recoverSeenNodes,
     recoverSeenEdges: recoverSeenEdges,
     currentTimeMillis: currentTimeMillis,
-    setHealth: setHealth
+    clicks: clicks,
+    health: health
   };
 };

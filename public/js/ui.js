@@ -1,12 +1,12 @@
 var importUi = function() {
 
-  function renderMyScore(myId, seenNodes) {
-    var myNode = seenNodes[myId];
-    if(myNode) {
-      var html = document.getElementById("node-score-me");
-      html.textContent = myNode.score.toFixed(0);
+  function renderMyScore(state) {
+    var myNode = state.seenNodes[state.selfId];
+    if (myNode && myNode.score) {
+      document.getElementById("node-score-me").textContent = myNode.score.toFixed(0);
+      document.getElementById("player-clicks").textContent = state.playerClicks.toFixed(0);
     } else {
-      console.log("can't find my id (" + myId + ") in seenNodes");
+      console.log("can't find my id (" + state.selfId + ") in seenNodes");
     }
   }
 

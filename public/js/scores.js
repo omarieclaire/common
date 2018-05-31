@@ -3,6 +3,7 @@ var importScores = function(ui) {
   //calculate the health of the network (factors: number of edges,
   // strength of edges, and number of people)
   function calculateNetworkHealth(numEdges, sumEdgesStrength, numPeople) {
+      return 999;
     var averageEdgePerPerson = sumEdgesStrength / numPeople;
     return averageEdgePerPerson;
   };
@@ -63,9 +64,9 @@ var importScores = function(ui) {
         networks.push({
           network: currentNetworkId,
           people: currentPeople,
-          score: currentScore,
+          score: 999, //currentScore,
           numEdges: currentNumEdges,
-          health: health
+          health: 999, //health
         });
         currentNetworkId += 1;
       }
@@ -119,7 +120,8 @@ var importScores = function(ui) {
     var networkScores = calculateNetworkScoresByNode(edges, nodes);
     //console.log("network scores = %o", networkScores);
 
-    return score;
+    //return score;
+    return 999;
   };
 
 

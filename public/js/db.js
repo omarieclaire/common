@@ -54,7 +54,7 @@ var importDb = function(util, firebase, scores) {
           util.addNode(n.id, state);
         });
         stateSnapshot.edges.forEach(function(e) {
-          util.addEdge(e.source.id, e.target.id, e.strength, state)
+          util.addEdge(e.source.id, e.target.id, state)
         });
         state.randomIndex = stateSnapshot.randomIndex;
         state.players = stateSnapshot.players;
@@ -133,9 +133,13 @@ var importDb = function(util, firebase, scores) {
       console.log("Uh oh! Encountered an error while reinitializing");
       console.log(error);
     });
-    //sendInvite(null, "omarieclaire", "marieflanagan@gmail.com");
-    //sendInvite("omarieclaire", "vilevin", "vilevin@gmail.com");
-    //sendInvite("vilevin", "erik", "stark.fist@gmail.com");
+  }
+
+  function trackClick(state, msg) {
+    if (msg.sender === state.selfId) {
+      state.playerClicks = util.clicks(state.playerClicks - 1);
+    }
+    state.lastClickTime = msg.timestamp;
   }
 
   /**
@@ -145,16 +149,19 @@ var importDb = function(util, firebase, scores) {
    * we receive from Firebase.
    */
   function readLog(state, msg, key) {
+    if (!msg.timestamp) {
+      msg.timestamp = COMMON_EPOCH;
+    }
     if (msg.type === "invite") {
       if (msg.sender == null) {
         util.addNode(msg.recipient, state);
       } else {
-        util.addEdge(msg.sender, msg.recipient, 3, state);
+        util.addEdge(msg.sender, msg.recipient, state);
       }
-      state.lastClickTime = util.currentTimeMillis();
+      trackClick(state, msg);
     } else if (msg.type === "newConnection") {
-      util.addEdge(msg.sender, msg.recipient, 3, state);
-      state.lastClickTime = util.currentTimeMillis();
+      util.addEdge(msg.sender, msg.recipient, state);
+      trackClick(state, msg);
     } else if (msg.type === "giveStrength") {
       var eid = util.edgeId(msg.sender, msg.recipient);
       var edge = state.seenEdges[eid];
@@ -165,7 +172,7 @@ var importDb = function(util, firebase, scores) {
       } else {
         sender.score = util.health(sender.score + 10);
         recipient.score = util.health(recipient.score + 25);
-        state.lastClickTime = util.currentTimeMillis();
+        trackClick(state, msg);
       }
     } else if (msg.type === "destroyEdge") {
       var eid = util.edgeId(msg.source, msg.target);
@@ -186,6 +193,14 @@ var importDb = function(util, firebase, scores) {
       } else {
         // do nothing, it's a different player
       }
+    } else if (msg.type === "giver") {
+      // deprecated
+    } else if (msg.type === "reinforceConnection") {
+      // deprecated
+    } else if (msg.type === "weakenNode") {
+      // deprecated
+    } else if (msg.type === "weakenEdge") {
+      // deprecated
     } else {
       console.log("unknown msg type %o: %o", msg.type, msg);
     }
@@ -198,6 +213,7 @@ var importDb = function(util, firebase, scores) {
    * "send" methods.
    */
   function sendLog(msg) {
+    msg.timestamp = util.currentTimeMillis();
     return database.ref('/log').push().set(msg);
   }
 
@@ -251,7 +267,6 @@ var importDb = function(util, firebase, scores) {
       email: email,
       sender: sender,
       recipient: recipient,
-      startingLife: STARTING_LIFE
     });
   }
 
@@ -260,12 +275,11 @@ var importDb = function(util, firebase, scores) {
    *
    * This method requires both players to already exist.
    */
-  function newConnection(sender, recipient, amount) {
+  function newConnection(sender, recipient) {
     sendLog({
       type: "newConnection",
       sender: sender,
-      recipient: recipient,
-      amount: amount
+      recipient: recipient
     });
   }
 
@@ -275,12 +289,11 @@ var importDb = function(util, firebase, scores) {
    * This method requires both players to already exist, and to have
    * an existing edge between them already.
    */
-  function giveStrength(sender, recipient, amount) {
+  function giveStrength(sender, recipient) {
     sendLog({
       type: "giveStrength",
       sender: sender,
-      recipient: recipient,
-      amount: amount
+      recipient: recipient
     });
   }
 
