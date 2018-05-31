@@ -180,18 +180,16 @@ nav a {
   } */
 
 .nodeClass {
-  /* opacity: 0.3; */
-  width: 5em;
-  height: 5em;
-  /* stroke: blue; */
-
+  opacity: 0.3;
+  width: 10em;
+  height: 10em;
 }
 
 .myNode {
-  /* opacity: 0.3; */
-  width: 5em;
-  height: 5em;
-  stroke: "pink";
+  opacity: 0.3;
+  width: 10em;
+  height: 10em;
+  stroke: yellow;
   /* outline: 4px solid red; */
   /* stroke-offset: 15px; */
 
@@ -201,43 +199,22 @@ nav a {
   height: 5em; */
 }
 
-.nodeFull {
-  stroke: "blue";
-  /* opacity: 0.5; */
-}
-
-.nodeHigh {
-  stroke: green;
-
-  /* opacity: 0.5; */
-
+.nodeStrong {
+  opacity: 0.5;
 }
 
 .nodeMedium {
-  stroke: yellow;
-
-  /* opacity: 0.5; */
+  opacity: 0.1;
 
 }
 
-.nodeLow {
-  stroke: orange;
-
-  /* opacity: 0.5; */
+.nodeSmall {
+  opacity: 0.1;
 
 }
 
-.nodeDanger {
-  stroke: red;
-
-  /* opacity: 0.5; */
-
-}
-
-.nodeDead {
-  stroke: black;
-
-  /* opacity: 0.5; */
+.nodeTiny {
+  opacity: 0.1;
 
 }
 
@@ -376,7 +353,7 @@ nav a {
 
 #reset-button {
   background-image: url(/img/reload.svg);
-  /* background-size: 115%; */
+  background-size: 115%;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -397,6 +374,54 @@ nav a {
 
 button:hover {
   background-color: grey;
+}
+
+/* on/off switch  */
+
+.onoffswitch {
+    position: relative; width: 88px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #999999; border-radius: 10px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 25px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 10px;
+    background-color: #999999; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 10px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 12px; margin: 6.5px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 59px;
+    border: 2px solid #999999; border-radius: 10px;
+    transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px;
 }
 
 /* ==========================================================================
