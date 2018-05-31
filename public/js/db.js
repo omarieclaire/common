@@ -332,6 +332,18 @@ var importDb = function(util, firebase, scores) {
     });
   }
 
+  // check if player at username exists
+  function userExists(username) {
+    var promise =
+      database
+        .ref('/players/' + username)
+        .once('value').then(function(snapshot) {
+          return snapshot.exists();
+        });
+
+    return promise;
+  }
+
   return {
     initPlayers: initPlayers,
     initLog: initLog,
@@ -345,6 +357,7 @@ var importDb = function(util, firebase, scores) {
     createPlayer: createPlayer,
     runTheGiver: runTheGiver,
     reinforceConnection: reinforceConnection,
-    snapshotState: snapshotState
+    snapshotState: snapshotState,
+    userExists: userExists
   };
 };
