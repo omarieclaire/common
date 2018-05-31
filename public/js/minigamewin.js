@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
   var emailLabel = document.getElementById("emailLabel");
   var emailErrorMsg = document.getElementById("email-error-msg");
   var statusElement = document.getElementById("status");
+  var submitButton = document.getElementById("join");
   // import database, but we can only access a few methods
   // since we're passing null util and null scores.
   var database = importDb(null, firebase, null);
@@ -119,6 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
       });
     } else {
+      submitButton.disabled = true;
       statusElement.innerHTML = "you must be logged in to invite someone :(";
     }
   });
