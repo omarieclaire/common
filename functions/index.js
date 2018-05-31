@@ -29,7 +29,7 @@ function generatePassphrase() {
   var verb = passgen.verbs[randomVerb];
   var noun = passgen.nouns[randomNoun];
 
-  return adj + "-" + verb + "-" + noun;
+  return adj + verb + noun;
 }
 
 try {
