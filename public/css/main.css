@@ -305,8 +305,13 @@ nav a {
   min-height: 1.6em;
 }
 
-.login-elements span {
+#loading-indicator {
   color: #ddd;
+}
+
+#logout {
+  margin-left: 0.5em;
+  font-size: smaller;
 }
 
 .login-elements a, .login-elements a:visited {

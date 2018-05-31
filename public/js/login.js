@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
   //
   firebase.auth().onAuthStateChanged(function(user) {
 
+    var username = document.getElementById("username");
     var login = document.getElementById("login");
     var logout = document.getElementById("logout");
     var loadingIndicator = document.getElementById("loading-indicator");
@@ -27,12 +28,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //if the user is logged in then user is not null
     if (user) {
-      logout.innerText = user.displayName + " (Log out)";
+      username.innerText = user.displayName;
       login.style.display = "none";
-      logout.style.display = "block";
+      logout.style.display = "inline";
     } else {
-      logout.innerText = "Log out";
-      login.style.display = "block";
+      username.innerText = "";
+      login.style.display = "inline";
       logout.style.display = "none";
     }
   });
