@@ -10,9 +10,7 @@ var importScores = function(ui) {
   //find the network score of a given node
   // also pass in a render function that will
   // accept a networks as an argument.
-  function calculateNetworkScoresByNode(state) {
-    var edges = state.edges;
-    var nodes = state.nodes;
+  function calculateNetworkScoresByNode(edges, nodes) {
 
     // first, build a dictionary which associates each node ID with the
     // IDs it is directly connected to. sometimes this would be called
@@ -21,11 +19,11 @@ var importScores = function(ui) {
     _.each(edges, function (edge) {
 
       const targets = dict[edge.source.id] || [];
-      targets.push({dest: edge.target.id, strength: 1});
+      targets.push({dest: edge.target.id, strength: edge.strength});
       dict[edge.source.id] = targets;
 
       const sources = dict[edge.target.id] || [];
-      sources.push({dest: edge.source.id, strength: 1});
+      sources.push({dest: edge.source.id, strength: edge.strength});
       dict[edge.target.id] = sources;
     });
 
@@ -60,9 +58,6 @@ var importScores = function(ui) {
           }
         }
 
-        currentScore = 0;
-        _.each(currentPeople, function (id) { currentScore += (state.seenNodes[id].score || 0) });
-
         var health = calculateNetworkHealth(currentNumEdges, currentScore, currentPeople.length);
 
         networks.push({
@@ -85,10 +80,7 @@ var importScores = function(ui) {
 
   // each edge has:
   // - {source: nodeId, target: nodeId, strength: number}
-  function calculateCommonScore(state) {
-    var edges = state.edges;
-    var nodes = state.nodes;
-    var id = state.selfId;
+  function calculateCommonScore(edges, nodes, id) {
 
     // first, build a dictionary which associates each node ID with the
     // IDs it is directly connected to. sometimes this would be called
@@ -97,11 +89,11 @@ var importScores = function(ui) {
     _.each(edges, function (edge) {
 
       const targets = dict[edge.source.id] || [];
-      targets.push({dest: edge.target.id, strength: 1});
+      targets.push({dest: edge.target.id, strength: edge.strength});
       dict[edge.source.id] = targets;
 
       const sources = dict[edge.target.id] || [];
-      sources.push({dest: edge.source.id, strength: 1});
+      sources.push({dest: edge.source.id, strength: edge.strength});
       dict[edge.target.id] = sources;
     });
 
@@ -124,7 +116,7 @@ var importScores = function(ui) {
     //console.log("score = %o", score);
     //document.getElementById("iscore").textContent = score.toString();
 
-    var networkScores = calculateNetworkScoresByNode(state);
+    var networkScores = calculateNetworkScoresByNode(edges, nodes);
     //console.log("network scores = %o", networkScores);
 
     return score;

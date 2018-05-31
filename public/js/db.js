@@ -54,7 +54,7 @@ var importDb = function(util, firebase, scores) {
           util.addNode(n.id, state, n.score);
         });
         stateSnapshot.edges.forEach(function(e) {
-          util.addEdge(e.source.id, e.target.id, state)
+          util.addEdge(e.source.id, e.target.id, e.strength, state)
         });
         state.randomIndex = stateSnapshot.randomIndex;
         state.players = stateSnapshot.players;
@@ -120,13 +120,9 @@ var importDb = function(util, firebase, scores) {
       console.log("Uh oh! Encountered an error while reinitializing");
       console.log(error);
     });
-  }
-
-  function trackClick(state, msg) {
-    if (msg.sender === state.selfId) {
-      state.playerClicks = util.clicks(state.playerClicks - 1);
-    }
-    state.lastClickTime = msg.timestamp;
+    //sendInvite(null, "omarieclaire", "marieflanagan@gmail.com");
+    //sendInvite("omarieclaire", "vilevin", "vilevin@gmail.com");
+    //sendInvite("vilevin", "erik", "stark.fist@gmail.com");
   }
 
   /**
@@ -136,60 +132,72 @@ var importDb = function(util, firebase, scores) {
    * we receive from Firebase.
    */
   function readLog(state, msg, key) {
-    if (!msg.timestamp) {
-      msg.timestamp = COMMON_EPOCH;
-    }
     if (msg.type === "invite") {
       if (msg.sender == null) {
         util.addNode(msg.recipient, state);
       } else {
-        util.addEdge(msg.sender, msg.recipient, state);
+        util.addEdge(msg.sender, msg.recipient, 3, state);
       }
-      trackClick(state, msg);
     } else if (msg.type === "newConnection") {
-      util.addEdge(msg.sender, msg.recipient, state);
-      trackClick(state, msg);
+      util.addEdge(msg.sender, msg.recipient, 3, state);
     } else if (msg.type === "giveStrength") {
-      var eid = util.edgeId(msg.sender, msg.recipient);
+      var eid = util.edgeId(msg.source, msg.target);
       var edge = state.seenEdges[eid];
-      var sender = state.seenNodes[msg.sender];
-      var recipient = state.seenNodes[msg.sender];
+      var node = state.seenNodes[msg.id];
       if (!edge) {
-        console.log("%o is not connected to %o", sender, recipient);
+        console.log("%o gave strength to missing edge: %o", msg.id, msg);
+      } else if (node.score <= msg.amount) {
+        console.log("%o (%o) was too weak to give strength: %o", msg.id, node, msg);
       } else {
-        sender.score = util.health(sender.score + 10);
-        recipient.score = util.health(recipient.score + 25);
-        trackClick(state, msg);
-        scores.calculateCommonScore(state);
+        node.score -= msg.amount;
+        edge.strength += msg.amount;
       }
-    } else if (msg.type === "destroyEdge") {
+    } else if (msg.type === "weakenEdge") {
       var eid = util.edgeId(msg.source, msg.target);
       var edge = state.seenEdges[eid];
       if (edge) {
-        util.deleteEdge(edge, state);
+        if (edge.strength <= msg.power) {
+          util.deleteEdge(edge, state);
+        } else {
+          edge.strength -= msg.power;
+        }
       }
-    } else if (msg.type === "weakenCommon") {
-      _.each(state.nodes, function (node) {
-        var p = node.score;
-        node.score = util.health(node.score - msg.power);
-      });
-      scores.calculateCommonScore(state);
-    } else if (msg.type === "gainClicks") {
-      if (msg.id === state.selfId) {
-        // the logged-in player will gain clicks
-        state.playerClicks = Math.min(6, state.playerClicks + msg.numClicks);
-        state.lastClickGainedAt = msg.lastClickGainedAt;
-      } else {
-        // do nothing, it's a different player
-      }
-    } else if (msg.type === "giver") {
-      // deprecated
     } else if (msg.type === "reinforceConnection") {
-      // deprecated
+      var eid = util.edgeId(msg.source, msg.target);
+      var edge = state.seenEdges[eid];
+      if(edge) {
+        edge.strength += msg.edgePower;
+      }
+      var node = state.seenNodes[msg.source];
+      if(node) {
+        if(node.score <= msg.nodePower) {
+          util.deleteNode(node, state);
+        } else {
+          node.score -= msg.nodePower;
+        }
+      }
     } else if (msg.type === "weakenNode") {
-      // deprecated
-    } else if (msg.type === "weakenEdge") {
-      // deprecated
+      var node = state.seenNodes[msg.id];
+      if (node.score <= msg.power) {
+        util.deleteNode(node, state);
+      } else {
+        node.score -= msg.power;
+      }
+    } else if(msg.type === "giver") {
+      var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
+      state.nodes.forEach(function(node) {
+        var network = networkScores.filter(function(network) {
+          return network.people.indexOf(node.id) != -1;
+        })[0]
+        if(network) {
+          node.score = node.score + msg.power * network.health;
+        } else {
+          console.log("YIKES! Could not find a network for node " + node.id);
+        }
+      });
+
+      // IMPORTANT: update the state with the logEntry
+      state.logEntry = key;
     } else {
       console.log("unknown msg type %o: %o", msg.type, msg);
     }
@@ -202,7 +210,6 @@ var importDb = function(util, firebase, scores) {
    * "send" methods.
    */
   function sendLog(msg) {
-    msg.timestamp = util.currentTimeMillis();
     return database.ref('/log').push().set(msg);
   }
 
@@ -215,6 +222,8 @@ var importDb = function(util, firebase, scores) {
     return database.ref('/state/' + state.logEntry).set({
       randomIndex: state.randomIndex,
       players: state.players,
+      //seenNodes: state.seenNodes,
+      //seenEdges: state. seenEdges,
       nodes: state.nodes,
       edges: state.edges
     });
@@ -256,6 +265,7 @@ var importDb = function(util, firebase, scores) {
       email: email,
       sender: sender,
       recipient: recipient,
+      startingLife: STARTING_LIFE
     });
   }
 
@@ -264,11 +274,12 @@ var importDb = function(util, firebase, scores) {
    *
    * This method requires both players to already exist.
    */
-  function newConnection(sender, recipient) {
+  function newConnection(sender, recipient, amount) {
     sendLog({
       type: "newConnection",
       sender: sender,
-      recipient: recipient
+      recipient: recipient,
+      amount: amount
     });
   }
 
@@ -278,35 +289,46 @@ var importDb = function(util, firebase, scores) {
    * This method requires both players to already exist, and to have
    * an existing edge between them already.
    */
-  function giveStrength(sender, recipient) {
+  function giveStrength(sender, recipient, amount) {
     sendLog({
       type: "giveStrength",
       sender: sender,
-      recipient: recipient
+      recipient: recipient,
+      amount: amount
     });
   }
 
-  function destroyEdge(source, target) {
+  function weakenEdge(source, target, power) {
     sendLog({
-      type: "destroyEdge",
+      type: "weakenEdge",
       source: source,
-      target: target
-    });
-  }
-
-  function weakenCommon(power) {
-    sendLog({
-      type: "weakenCommon",
+      target: target,
       power: power
     });
   }
 
-  function gainClicks(id, numClicks, lastClickGainedAt) {
+  function weakenNode(id, power) {
     sendLog({
-      type: "gainClicks",
+      type: "weakenNode",
       id: id,
-      numClicks: numClicks,
-      lastClickGainedAt: lastClickGainedAt
+      power: power
+    });
+  }
+
+  function reinforceConnection(source, target, edgePower, nodePower) {
+    sendLog({
+      type: "reinforceConnection",
+      source: source,
+      target: target,
+      edgePower: edgePower,
+      nodePower: nodePower
+    });
+  }
+
+  function runTheGiver(power) {
+    return sendLog({
+      type: "giver",
+      power: power
     });
   }
 
@@ -329,12 +351,13 @@ var importDb = function(util, firebase, scores) {
     sendInvite: sendInvite,
     newConnection: newConnection,
     giveStrength: giveStrength,
-    destroyEdge: destroyEdge,
-    weakenCommon: weakenCommon,
+    weakenEdge: weakenEdge,
+    weakenNode: weakenNode,
     reinitialize: reinitialize,
     createPlayer: createPlayer,
+    runTheGiver: runTheGiver,
+    reinforceConnection: reinforceConnection,
     snapshotState: snapshotState,
-    gainClicks: gainClicks,
     userExists: userExists
   };
 };

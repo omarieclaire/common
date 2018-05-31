@@ -29,7 +29,8 @@ var importUtil = function(scores, ui) {
 
   // given a node id, add a node
   // this function returns the node
-  function addNode(id, state) {
+  //function addNode(id, myId, nodes, seenNodes, colorPicker) {
+  function addNode(id, state, score) {
     // check if the id was already added
     if (state.seenNodes[id]) {
       // the id was added, so return the node
@@ -39,7 +40,7 @@ var importUtil = function(scores, ui) {
       var o = {
         "id": id,
         color: state.colorPicker(id),
-        score: INITIAL_NODE_SCORE,
+        score: score ? score : INITIAL_NODE_SCORE,
         x: 0,
         y:0,
         get r() {
@@ -62,7 +63,7 @@ var importUtil = function(scores, ui) {
 
   // Given a 'from' id and a 'to' id, add an edge
   // this function returns nothing
-  function addEdge(from, to, state) {
+  function addEdge(from, to, strength, state) {
     // calculate the edge id
     var id = edgeId(from, to);
     if (from === to) {
@@ -80,12 +81,12 @@ var importUtil = function(scores, ui) {
       // add a node for 'to' in case it doesn't exist
       var y = addNode(to, state);
       // create a new edge
-      var o = {id: id, source: x, target: y};
+      var o = {id: id, source: x, target: y, strength: strength};
       // add the edges to the array of edges
       state.edges.push(o);
       // add the edge id to the seenEdges object
       state.seenEdges[id] = o;
-      scores.calculateCommonScore(state);
+      scores.calculateCommonScore(state.edges, state.selfId, ui.renderNetworkScores);
     }
   }
 
@@ -97,30 +98,43 @@ var importUtil = function(scores, ui) {
     state.edges.splice(index,1);
   }
 
-  function deactivateNode(node, state) {
-    node.score = 0;
-    // TODO: change the styling for this node
-  }
+  // Deletes nodes
+  function deleteNode(node, state) {
+    // first, clone the array (this fixed a bug where looping
+    // and slicing over the array caused an issue)
+    // This is potentially expensive if we have a lot of edges.
+    var clonedEdges = state.edges.slice(0);
 
-  function currentTimeMillis() {
-    var d = new Date();
-    return d.valueOf();
+    // first delete all the edges that refer to this node
+    _.each(clonedEdges, function(edge) {
+      if(edge) {
+        if(edge.source.id == node.id || edge.target.id == node.id) {
+          deleteEdge(edge, state);
+        }
+      }
+    });
+
+    // now delete the node
+    delete state.seenNodes[node.id];
+    var index = state.nodes.indexOf(node);
+    console.log("DELETE NODE: " + node + " at index " + index);
+    state.nodes.splice(index,1);
   }
 
   // Small helper function to calculate nodes by network
   function nodesByNetwork(nodes) {
     var nodesByNetwork = {};
-    nodes.forEach(function(node) {
+    nodes.forEach(function(data) {
       // note: if a node doesn't have a network yet, we skip it.
-      if(node.network) {
-        if(nodesByNetwork[node.network]) {
-          nodesByNetwork[node.network].nodes.push(node);
+      if(data.network) {
+        if(nodesByNetwork[data.network]) {
+          nodesByNetwork[data.network].nodes.push(data);
         } else {
           var entry = {
-            nodes: [node],
-            score: node.networkScore
+            nodes: [data],
+            score: data.networkScore
           };
-          nodesByNetwork[node.network] = entry;
+          nodesByNetwork[data.network] = entry;
         }
       }
     });
@@ -153,16 +167,6 @@ var importUtil = function(scores, ui) {
     return seenNodes;
   }
 
-  function clicks(n) {
-    // ensure the result is between 0 and 100
-    return Math.min(6, Math.max(0, n));
-  }
-
-  function health(n) {
-    // ensure the result is between 0 and 100
-    return Math.min(100, Math.max(0, n));
-  }
-
   return {
     edgeIdAttr: edgeIdAttr,
     nodeIdAttr: nodeIdAttr,
@@ -171,11 +175,9 @@ var importUtil = function(scores, ui) {
     addNode: addNode,
     addEdge: addEdge,
     deleteEdge: deleteEdge,
+    deleteNode: deleteNode,
     nodesByNetwork: nodesByNetwork,
     recoverSeenNodes: recoverSeenNodes,
-    recoverSeenEdges: recoverSeenEdges,
-    currentTimeMillis: currentTimeMillis,
-    clicks: clicks,
-    health: health
+    recoverSeenEdges: recoverSeenEdges
   };
 };

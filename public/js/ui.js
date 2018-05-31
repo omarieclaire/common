@@ -1,26 +1,12 @@
 var importUi = function() {
 
-  // genDecayRate(0 minutes) = 0 energy
-  // getDecayRate(1 minute) = 1 energy
-  // getDecayRate(30 minutes) = 3 energy
-  // getDecayRate(24 hours) = 7 energy
-  // getDecayRate(1 week) = 9 energy
-  // getDecayRate(1 year) = 13 energy
-  function getDecayRate(state) {
-    var d = new Date();
-    var millis = d.valueOf() - state.lastClickTime;
-    var minutes = millis / (60 * 1000);
-    return Math.round(Math.log1p(minutes));
-  }
-
-  function renderMyScore(state) {
-    var myNode = state.seenNodes[state.selfId];
-    if (myNode && myNode.score) {
-      document.getElementById("node-score-me").textContent = myNode.score.toFixed(0);
-      document.getElementById("player-clicks").textContent = state.playerClicks.toFixed(0);
-      document.getElementById("decay-rate").textContent = getDecayRate(state).toFixed(0);
+  function renderMyScore(myId, seenNodes) {
+    var myNode = seenNodes[myId];
+    if(myNode) {
+      var html = document.getElementById("node-score-me");
+      html.textContent = myNode.score.toFixed(0);
     } else {
-      console.log("can't find my id (" + state.selfId + ") in seenNodes");
+      console.log("can't find my id (" + myId + ") in seenNodes");
     }
   }
 
@@ -93,7 +79,6 @@ var importUi = function() {
   return {
     renderMyScore: renderMyScore,
     renderNetworkScores: renderNetworkScores,
-    createModals: createModals,
-    getDecayRate: getDecayRate
+    createModals: createModals
   };
 };

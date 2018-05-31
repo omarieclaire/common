@@ -3,12 +3,6 @@
 var importAction = function(ui, util, scores, db) {
 
 	function addEdge(from, to, state) {
-
-		if (state.playerClicks <= 0) {
-			console.log("action.addEdge: no clicks available!");
-			return;
-		}
-
 		if (state.players[from] == null) {
 			db.sendInvite("omarieclaire", from, from+"@fake.com");
 		}
@@ -20,50 +14,55 @@ var importAction = function(ui, util, scores, db) {
 
 		var eid = util.edgeId(from, to);
 		if (!state.seenEdges[eid]) {
-			db.newConnection(from, to);
+			db.newConnection(from, to, DEFAULT_STRENGTH);
 		} else {
-			db.giveStrength(from, to);
+			db.giveStrength(from, to, DEFAULT_STRENGTH);
 		}
 	}
 
 	function nodeClicked(state, d) {
-
-		if (state.playerClicks <= 0) {
-			console.log("action.nodeClicked: no clicks available!");
-			return;
-		}
-
 		var target = d.id;
 		//reference to the edge between me and the target
 		var ouredge = state.edges.filter(function (edge) {
 			return edge.source.id == state.selfId && edge.target.id == target ||
-				edge.target.id == state.selfId && edge.source.id == target;
+        edge.target.id == state.selfId && edge.source.id == target;
 		})[0];
 
 		// if clicking on a edge attached to our nodes
 		// decrement our score
 		var ourNode = state.seenNodes[state.selfId];
 		if (ouredge && ourNode) {
-			db.giveStrength(ourNode.id, target);
-			playSound("reinforcing-connection-sound", 0.2);
-			// begin edge animation
-			var htmlEdge = document.getElementById(util.edgeIdAttr(ouredge));
-			d3.select(htmlEdge).transition().duration(1000).attr("stroke", "#00FF00").transition().duration(1500).attr("stroke", null);
+			// get our node from the seenNodes object (efficient)
+			if(ouredge.strength < MAX_EDGE_STRENGTH && ourNode.score > 2) {
+				db.reinforceConnection(ourNode.id, target, CLICK_EDGE_INCREMENTER, CLICK_NODE_DESTROYER_POWER);
+				playSound("reinforcing-connection-sound", 0.2);
+				// begin edge animation
+				var htmlEdge = document.getElementById(util.edgeIdAttr(ouredge));
+				d3.select(htmlEdge).transition().duration(1000).attr("stroke", "#00FF00").transition().duration(1500).attr("stroke", null);
+				// d3.select(htmlEdge).transition().duration(1000).attr("stroke-dasharray", "5, 5").transition().duration(1500).attr("stroke-dasharray", null);
 
-			// begin node animation
-			var htmlNode = document.getElementById(util.nodeIdAttr(d));
-			// d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
+				// begin node animation
+				var htmlNode = document.getElementById(util.nodeIdAttr(d));
+				// d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
+
+			} else if (ourNode.score > 2) {
+				//console.log(d, "Not our edge!");
+				d3.select(htmlNode).transition().duration(10).style("fill","#8FBC8F").transition().duration(1500).style("fill", d.color);
+				playSound("poor-sound", 0.2);
+			} else {
+				//console.log(d, "Not our edge!");
+				d3.select(htmlNode).transition().duration(10).style("fill","#8FBC8F").transition().duration(1500).style("fill", d.color);
+				playSound("error-sound", 0.2);
+			}
+		} else {
+			console.log("Could not find node or edge for state.selfId = " + state.selfId);
 		}
 
-		scores.calculateCommonScore(state);
+		scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
 		state.draw();
 	}
 
 	function addClicked(state) {
-		if (state.playerClicks <= 0) {
-			console.log("action.addClicked: no clicks available!");
-			return;
-		}
 		// get the text from the 'from' form
 		var from = document.getElementById("from").value;
 		// get the text from the to' form
@@ -87,30 +86,17 @@ var importAction = function(ui, util, scores, db) {
 		addEdge(from, to, state);
 	}
 
-	function tryDestroyer(state) {
-		// destroyer has a 1-in-60 chance of running every minute.
-		// this means for each player, we expect the destroyer to run
-		// about once for every hour they play.
-		if (_.random(1, 60) == 1) {
-			runDestroyer(state);
-		}
-	}
-
 	function runDestroyer(state) {
-		var rate = ui.getDecayRate(state);
-		console.log("running the destroyer (decay rate: %o)", rate);
-		if (rate > 0) {
-			// if rate is 0, the common doesn't get weaker
-			db.weakenCommon(rate);
+		var i = _.random(0, state.edges.length - 1);
+		var edge = state.edges[i];
+		if (edge) {
+			db.weakenEdge(edge.source, edge.target, DESTROYER_POWER);
 		}
-		if (_.random(1, 10) == 10) {
-			// 10% chance of destroying a random connection
-			var i = _.random(0, state.edges.length - 1);
-			var edge = state.edges[i];
-			if (edge) {
-				console.log("destroying a random edge: %o", edge);
-				db.destroyEdge(edge.source, edge.target);
-			}
+
+		var j = _.random(0, state.nodes.length -1);
+		var node = state.nodes[j];
+		if (node) {
+			db.weakenNode(node.id, DESTROYER_POWER);
 		}
 	}
 
@@ -118,31 +104,12 @@ var importAction = function(ui, util, scores, db) {
 		db.reinitialize(state);
 	}
 
-  function tryToGainClicks(state) {
-	var eightHoursInMillis = 8 * 60 * 60 * 1000;
-	var now = util.currentTimeMillis();
-	var delta = now - state.lastClickGainedAt;
-	var numClicks = Math.floor(delta / eightHoursInMillis);
-	var remainder = delta % eightHoursInMillis;
-	if (state.playerClicks < 6 && numClicks > 0) {
-	  // player gains some clicks
-      console.log("gaining clicks %o", numClicks);
-	  db.gainClicks(state.selfId, numClicks, now - remainder);
-	} else {
-		console.log(util.nodesByNetwork(state.nodes));
-      console.log("no clicks to gain %o", delta);
-	  // nothing happens
-	}
-  }
-
 	return {
 		addEdge: addEdge,
 		addClicked: addClicked,
 		randomClicked: randomClicked,
 		reinitializeClicked: reinitializeClicked,
 		nodeClicked: nodeClicked,
-		runDestroyer: runDestroyer,
-		tryDestroyer: tryDestroyer,
-		tryToGainClicks: tryToGainClicks
+		runDestroyer: runDestroyer
 	};
 };
