@@ -39,7 +39,7 @@ var importUtil = function(scores, ui) {
       var o = {
         "id": id,
         color: state.colorPicker(id),
-        score: 100,//INITIAL_NODE_SCORE,
+        score: INITIAL_NODE_SCORE,
         x: 0,
         y:0,
         get r() {

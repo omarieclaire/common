@@ -1,8 +1,6 @@
 /* global d3:false :false */
 /* global firebase:false :false */
 
-var xyz = 1;
-
 // when the window is ready, call the function below
 window.addEventListener("load", function() {
 
@@ -44,14 +42,8 @@ window.addEventListener("load", function() {
 		var initialState = {
 			// index used by random button
 			randomIndex: 1,
-			// tracks if we are done loading yet (true) or not (false)
-			loaded: false,
 			// id of the current user (same as ME)
 			selfId: currentUser.username,
-			// reference to SVG node and info
-			svg: svg,
-			svgWidth: svgWidth,
-			svgHeight: svgHeight,
 			// color picker
 			colorPicker: d3.scaleOrdinal(["#47ade0", "#be73e6", "#86e570", "#e466be", "#62b134", "#738ae8", "#db8f2e", "#4be0d9", "#ee5679", "#6de8a6",
 				"#ea6941", "#54b385", "#e07aa0", "#5dad5c", "#c792d6", "#90a44a", "#dc8869", "#cfe48c", "#caa74e"
@@ -79,9 +71,7 @@ window.addEventListener("load", function() {
 			action.tryToGainClicks(initialState);
 		}, 30 * 1000);
 
-		// We pass the initial state, and a
-		// "gameInitializer" function.
-		db.initLog(initialState,function(state) {
+		var initializeGame = function (state) {
 
 			// create a d3 simulation object
 			var simulation = d3.forceSimulation(state.nodes)
@@ -197,7 +187,6 @@ window.addEventListener("load", function() {
 				return d.strength;
 			}
 
-
 			// render the score for the first time
 			ui.renderMyScore(state);
 
@@ -228,18 +217,24 @@ window.addEventListener("load", function() {
 					.attr("id", util.nodeIdAttr)
 					.attr("class", function(d) {
 						var classString = "";
-						if(d.score > 50) {
-							classString += "nodeStrong ";
-						}
-						if(d.score > 30) {
-							classString += "nodeMedium ";
-						}
-						if(d.score > 10) {
-							classString += "nodeSmall ";
-						}
-						if(d.score > 3) {
-							classString += "nodeTiny ";
-						}
+						// if(d.score < NODE_HEALTH_FULL) {
+						// 	classString += "nodeFull ";
+						// }
+						// if(d.score < NODE_HEALTH_HIGH) {
+						// 	classString += "nodeHigh ";
+						// }
+						// if(d.score < NODE_HEALTH_MEDIUM) {
+						// 	classString += "nodeMedium ";
+						// }
+						// if(d.score < NODE_HEALTH_LOW) {
+						// 	classString += "nodeLow ";
+						// }
+						// if(d.score < NODE_HEALTH_DANGER) {
+						// 	classString += "nodeDanger ";
+						// }
+						// if(d.score < NODE_HEALTH_DEAD) {
+						// 	classString += "nodeDead ";
+						// }
 
 						if(d.id === state.selfId) {
 							classString += "myNode nodeClass";
@@ -333,8 +328,7 @@ window.addEventListener("load", function() {
 						return d.y;
 					})
 					.attr("r", function(d) {
-						return 10;
-						// return d.score;
+						return d.score/10;
 					})
 					.attr("fill", function(d) {
 						return d.color;
@@ -369,9 +363,6 @@ window.addEventListener("load", function() {
 				doAnnotations(enclosedCircles, annotationAnchor);
 
 			}
-
-			// used to generate random nodes
-			var index = 1;
 
 			// draw refreshes the graph?
 			draw();
@@ -455,13 +446,18 @@ window.addEventListener("load", function() {
 			});
 			// start listening to DB updates
 			db.initPlayers(state);
+		};
 
-			// This is onLogUpdate function
-		}, function(s, msg) {
-			ui.renderMyScore(s);
-			scores.calculateCommonScore(s.edges, s.nodes, s.selfId);
-			s.draw();
-		});
+		// This is an onLogUpdate function
+		var onLogUpdate = function (state, msg) {
+			ui.renderMyScore(state);
+			scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
+			state.draw();
+		};
 
+		// We pass the initial state, and a
+		// "initializeGame" function,
+		// and onLogUpdate function.
+		db.initLog(initialState, initializeGame, onLogUpdate);
 	});
 });

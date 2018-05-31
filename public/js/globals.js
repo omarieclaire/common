@@ -12,3 +12,13 @@ var INITIAL_NODE_SCORE = 100;
 
 // use as an "earliest timestamp" -- late on may 30th, 2018
 var COMMON_EPOCH = 1527733382598;
+
+// starting life
+var STARTING_LIFE = 30;
+
+var NODE_HEALTH_FULL = 99;
+var NODE_HEALTH_HIGH = 80;
+var NODE_HEALTH_MEDIUM = 60;
+var NODE_HEALTH_LOW = 40;
+var NODE_HEALTH_DANGER = 20;
+var NODE_HEALTH_DEAD = 0;
