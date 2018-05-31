@@ -320,7 +320,7 @@ window.addEventListener("load", function() {
 						return d.y;
 					})
 					.attr("r", function(d) {
-						return d.score;
+						return d.score/10;
 					})
 					.attr("fill", function(d) {
 						return d.color;
