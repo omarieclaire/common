@@ -180,13 +180,15 @@ nav a {
   } */
 
 .nodeClass {
-  opacity: 0.5;
+  opacity: 0.3;
   width: 20em;
   height: 20em;
 }
 
 .myNode {
-  opacity: 0.9;
+  opacity: 0.3;
+  width: 20em;
+  height: 20em;
   stroke: yellow;
   /* outline: 4px solid red; */
   stroke-offset: 15px;
@@ -312,6 +314,9 @@ nav a {
 
 #toggleDebug {
   display: none;
+}
+
+#toggleDebugAdmin {
 }
 
 #toggleDebugBtn {

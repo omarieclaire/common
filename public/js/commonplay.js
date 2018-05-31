@@ -314,8 +314,7 @@ window.addEventListener("load", function() {
 						return d.y;
 					})
 					.attr("r", function(d) {
-						return 10;
-						// return d.score;
+						return d.score;
 					})
 					.attr("fill", function(d) {
 						return d.color;
