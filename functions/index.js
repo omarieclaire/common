@@ -104,11 +104,13 @@ function createFirebaseUser(email, username, sender) {
     console.log("Error fetching user");
     console.log(error);
     return Promise.reject(error);
-  }).then((previous) => {
+  }).then((user) => {
     // we've created a user in the auth table, and if that user
     // was new we created an entry in the /player database. Now
-    // it's time to create an 'invite' action in the /log database
-    return authenticatedUserHandler(email, sender, username);
+    // it's time to create an 'invite' action in the /log database.
+    // Recall that the displayName on the user's object in the Authentication
+    // database is the same as the 'username'
+    return authenticatedUserHandler(email, sender, user.displayName);
   }).then((result) => {
     console.log("SUCCESS");
     return {success: true};
