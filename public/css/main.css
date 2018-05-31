@@ -180,18 +180,20 @@ nav a {
   } */
 
 .nodeClass {
-  opacity: 0.3;
-  width: 20em;
-  height: 20em;
+  /* opacity: 0.3; */
+  width: 5em;
+  height: 5em;
+  /* stroke: blue; */
+
 }
 
 .myNode {
-  opacity: 0.3;
-  width: 20em;
-  height: 20em;
-  stroke: yellow;
+  /* opacity: 0.3; */
+  width: 5em;
+  height: 5em;
+  stroke: "pink";
   /* outline: 4px solid red; */
-  stroke-offset: 15px;
+  /* stroke-offset: 15px; */
 
   /* border: solid 5px yellow;
   border-radius: 50%;
@@ -199,22 +201,43 @@ nav a {
   height: 5em; */
 }
 
-.nodeStrong {
-  opacity: 0.5;
+.nodeFull {
+  stroke: "blue";
+  /* opacity: 0.5; */
+}
+
+.nodeHigh {
+  stroke: green;
+
+  /* opacity: 0.5; */
+
 }
 
 .nodeMedium {
-  opacity: 0.1;
+  stroke: yellow;
+
+  /* opacity: 0.5; */
 
 }
 
-.nodeSmall {
-  opacity: 0.1;
+.nodeLow {
+  stroke: orange;
+
+  /* opacity: 0.5; */
 
 }
 
-.nodeTiny {
-  opacity: 0.1;
+.nodeDanger {
+  stroke: red;
+
+  /* opacity: 0.5; */
+
+}
+
+.nodeDead {
+  stroke: black;
+
+  /* opacity: 0.5; */
 
 }
 
@@ -353,7 +376,7 @@ nav a {
 
 #reset-button {
   background-image: url(/img/reload.svg);
-  background-size: 115%;
+  /* background-size: 115%; */
   background-repeat: no-repeat;
   background-position: center;
 }

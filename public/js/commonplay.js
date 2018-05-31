@@ -209,18 +209,24 @@ window.addEventListener("load", function() {
 					.attr("id", util.nodeIdAttr)
 					.attr("class", function(d) {
 						var classString = "";
-						if(d.score > 50) {
-							classString += "nodeStrong ";
-						}
-						if(d.score > 30) {
-							classString += "nodeMedium ";
-						}
-						if(d.score > 10) {
-							classString += "nodeSmall ";
-						}
-						if(d.score > 3) {
-							classString += "nodeTiny ";
-						}
+						// if(d.score < NODE_HEALTH_FULL) {
+						// 	classString += "nodeFull ";
+						// }
+						// if(d.score < NODE_HEALTH_HIGH) {
+						// 	classString += "nodeHigh ";
+						// }
+						// if(d.score < NODE_HEALTH_MEDIUM) {
+						// 	classString += "nodeMedium ";
+						// }
+						// if(d.score < NODE_HEALTH_LOW) {
+						// 	classString += "nodeLow ";
+						// }
+						// if(d.score < NODE_HEALTH_DANGER) {
+						// 	classString += "nodeDanger ";
+						// }
+						// if(d.score < NODE_HEALTH_DEAD) {
+						// 	classString += "nodeDead ";
+						// }
 
 						if(d.id === state.selfId) {
 							classString += "myNode nodeClass";
