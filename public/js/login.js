@@ -27,9 +27,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //if the user is logged in then user is not null
     if (user) {
+      logout.innerText = user.displayName + " (Log out)";
       login.style.display = "none";
       logout.style.display = "block";
     } else {
+      logout.innerText = "Log out";
       login.style.display = "block";
       logout.style.display = "none";
     }

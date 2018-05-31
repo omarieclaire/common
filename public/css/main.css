@@ -50,12 +50,18 @@ textarea {
    ========================================================================== */
 
 body {
-  font: 12px/14px "Lato", "Helvetica", "Helvetica Neue", "Arial";
+  font: 18px "Lato", "Helvetica", "Helvetica Neue", "Arial";
   line-height: 1.6;
   background-image: url(/img/common-background.png);
   background-position: 50% -50%;
   background-size: 30%;
   background-repeat: no-repeat;
+}
+
+@media (max-width: 900px) {
+  body {
+    font-size: 12px;
+  }
 }
 
 .wrapper {
@@ -368,8 +374,8 @@ nav a {
   background-position: center;
   border: solid 5px yellow;
   border-radius: 50%;
-  width: 5em;
-  height: 5em;
+  width: 4em;
+  height: 4em;
 }
 
 button:hover {
