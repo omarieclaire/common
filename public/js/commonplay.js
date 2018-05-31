@@ -42,14 +42,8 @@ window.addEventListener("load", function() {
 		var initialState = {
 			// index used by random button
 			randomIndex: 1,
-			// tracks if we are done loading yet (true) or not (false)
-			loaded: false,
 			// id of the current user (same as ME)
 			selfId: currentUser.username,
-			// reference to SVG node and info
-			svg: svg,
-			svgWidth: svgWidth,
-			svgHeight: svgHeight,
 			// color picker
 			colorPicker: d3.scaleOrdinal(["#47ade0", "#be73e6", "#86e570", "#e466be", "#62b134", "#738ae8", "#db8f2e", "#4be0d9", "#ee5679", "#6de8a6",
 				"#ea6941", "#54b385", "#e07aa0", "#5dad5c", "#c792d6", "#90a44a", "#dc8869", "#cfe48c", "#caa74e"
@@ -69,9 +63,7 @@ window.addEventListener("load", function() {
 			logEntry: null
 		};
 
-		// We pass the initial state, and a
-		// "gameInitializer" function.
-		db.initLog(initialState,function(state) {
+		var initializeGame = function (state) {
 
 			// create a d3 simulation object
 			var simulation = d3.forceSimulation(state.nodes)
@@ -186,7 +178,6 @@ window.addEventListener("load", function() {
 			function edgeStrength(d) {
 				return d.strength;
 			}
-
 
 			// render the score for the first time
 			ui.renderMyScore(state.selfId, state.seenNodes);
@@ -323,8 +314,7 @@ window.addEventListener("load", function() {
 						return d.y;
 					})
 					.attr("r", function(d) {
-						return 10;
-						// return d.score;
+						return d.score;
 					})
 					.attr("fill", function(d) {
 						return d.color;
@@ -359,9 +349,6 @@ window.addEventListener("load", function() {
 				doAnnotations(enclosedCircles, annotationAnchor);
 
 			}
-
-			// used to generate random nodes
-			var index = 1;
 
 			// draw refreshes the graph?
 			draw();
@@ -450,12 +437,18 @@ window.addEventListener("load", function() {
 			});
 			// start listening to DB updates
 			db.initPlayers(state);
+		};
 
-			// This is onLogUpdate function
-		}, function(s, msg) {
-			ui.renderMyScore(s.selfId, s.seenNodes);
-			scores.calculateCommonScore(s.edges, s.nodes, s.selfId);
-			s.draw();
-		});
+		// This is an onLogUpdate function
+		var onLogUpdate = function (state, msg) {
+			ui.renderMyScore(state.selfId, state.seenNodes);
+			scores.calculateCommonScore(state.edges, state.nodes, state.selfId);
+			state.draw();
+		};
+
+		// We pass the initial state, and a
+		// "initializeGame" function,
+		// and onLogUpdate function.
+		db.initLog(initialState, initializeGame, onLogUpdate);
 	});
 });

@@ -42,7 +42,7 @@ var importDb = function(util, firebase, scores) {
    *
    *
    */
-  function initLog(state, gameInitializer, onLogUpdate) {
+  function initLog(state, initializeGame, onLogUpdate) {
     database
       .ref('/state')
       .orderByKey()
@@ -59,7 +59,7 @@ var importDb = function(util, firebase, scores) {
         state.randomIndex = stateSnapshot.randomIndex;
         state.players = stateSnapshot.players;
         state.logEntry = key;
-        gameInitializer(state);
+        initializeGame(state);
         var ref = database.ref('/log').orderByKey().startAt(snapshot.key);
         return ref.on('child_added', function(data) {
           var msg = data.val();
@@ -77,19 +77,6 @@ var importDb = function(util, firebase, scores) {
           onLogUpdate(state, msg);
         });
       });
-  }
-
-  /**
-   * Setup a listener to run anytime the log is updated.
-   *
-   * Action is a function from the log entry
-   */
-  function listenToLog(action) {
-    var ref = database.ref('/log');
-    ref.on('child_added', function(data) {
-      var msg = data.val();
-      action(msg);
-    });
   }
 
   /**
@@ -356,7 +343,6 @@ var importDb = function(util, firebase, scores) {
     weakenNode: weakenNode,
     reinitialize: reinitialize,
     createPlayer: createPlayer,
-    listenToLog: listenToLog,
     runTheGiver: runTheGiver,
     reinforceConnection: reinforceConnection,
     snapshotState: snapshotState
