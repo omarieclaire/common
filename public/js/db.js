@@ -51,7 +51,7 @@ var importDb = function(util, firebase, scores) {
         var stateSnapshot = snapshot.val();
         var key = snapshot.key;
         stateSnapshot.nodes.forEach(function(n) {
-          util.addNode(n.id, state);
+          util.addNode(n.id, state, n.score);
         });
         stateSnapshot.edges.forEach(function(e) {
           util.addEdge(e.source.id, e.target.id, e.strength, state)

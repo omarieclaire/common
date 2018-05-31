@@ -30,7 +30,7 @@ var importUtil = function(scores, ui) {
   // given a node id, add a node
   // this function returns the node
   //function addNode(id, myId, nodes, seenNodes, colorPicker) {
-  function addNode(id, state) {
+  function addNode(id, state, score) {
     // check if the id was already added
     if (state.seenNodes[id]) {
       // the id was added, so return the node
@@ -40,7 +40,7 @@ var importUtil = function(scores, ui) {
       var o = {
         "id": id,
         color: state.colorPicker(id),
-        score: INITIAL_NODE_SCORE,
+        score: score ? score : INITIAL_NODE_SCORE,
         x: 0,
         y:0,
         get r() {
