@@ -361,7 +361,7 @@ window.addEventListener("load", function() {
 						return d.y;
 					})
 					.attr("r", function(d) {
-						return d.score/10;
+						return Math.max(d.score/10, 1);
 					})
 					.attr("fill", function(d) {
 						return d.color;
