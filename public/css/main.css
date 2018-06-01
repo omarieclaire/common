@@ -276,8 +276,8 @@ nav a {
 }
 
 .ui {
-  position: absolute;
-  opacity: 0.7;
+  position: fixed;
+  opacity: 0.8;
 }
 
 .modalButtons {
@@ -314,6 +314,12 @@ nav a {
 
 .login-elements {
   min-height: 1.6em;
+}
+
+#game-status {
+  min-height: 1.6em;
+  color: green;
+  font-family: monospace;
 }
 
 #loading-indicator {

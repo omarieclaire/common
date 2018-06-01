@@ -20,6 +20,7 @@ var importDb = function(util, firebase, scores) {
     var update = function (data) {
       var username = data.key;
       state.players[username] = data.val();
+      reportGameStatus(username + " JOINED");
     };
     ref.on('child_added', update);
     ref.on('child_changed', update);
@@ -195,6 +196,22 @@ var importDb = function(util, firebase, scores) {
       // deprecated
     } else {
       console.log("unknown msg type %o: %o", msg.type, msg);
+    }
+
+    if (msg.type === "invite") {
+      reportGameStatus((msg.sender || "UNKNOWN") + " INVITED " + msg.recipient);
+    } else if (msg.type === "newConnection") {
+      reportGameStatus("CONNECTED: " + msg.sender + " + " + msg.recipient);
+    } else if (msg.type === "giveStrength") {
+      reportGameStatus(msg.sender + " gave strength to " + msg.recipient);
+    } else if (msg.type === "destroyEdge") {
+      reportGameStatus("EDGE DESTROYED");
+    } else if (msg.type === "weakenCommon") {
+      reportGameStatus("COMMON WEAKED w POWER " + msg.power);
+    } else if (msg.type === "gainClicks") {
+      if (msg.id === state.selfId && state.seenNodes[state.selfId].score > 0) {
+        reportGameStatus("YOU GAINED CLICKS");
+      }
     }
   }
 

@@ -95,6 +95,34 @@ var importUi = function() {
     });
   };
 
+  // This function is now a global
+  // Use it like this:
+  // reportGameStatus("Some message here")
+
+  window.reportGameStatus = (function () {
+    var statusLog = [];
+    var statusElem = document.getElementById("game-status");
+    var timeoutId;
+    var msBetweenQueuedMsgs = 50;
+    var msAfterLastQueuedMsg = 3000;
+
+    setInterval(function () {
+      if (!statusElem) { return; }
+      if (statusLog.length) {
+        clearTimeout(timeoutId);
+        statusElem.textContent = statusLog.shift(0);
+        timeoutId = setTimeout(function () {
+          statusElem.textContent = "";
+        }, msAfterLastQueuedMsg);
+      }
+    }, msBetweenQueuedMsgs);
+
+    return function (message) {
+      console.log("Game status update:", message);
+      statusLog.push(message);
+    }
+  }());
+
   return {
     renderMyScore: renderMyScore,
     renderNetworkScores: renderNetworkScores,
