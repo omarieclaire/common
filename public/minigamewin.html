@@ -1,0 +1,61 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <title>common minigame win</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+      <link rel="stylesheet" href="css/minigamewin.css">
+      <script defer src="/__/firebase/5.0.1/firebase-app.js"></script>
+      <!-- include only the Firebase features as you need -->
+      <script defer src="/__/firebase/5.0.1/firebase-auth.js"></script>
+      <script defer src="/__/firebase/5.0.1/firebase-functions.js"></script>
+      <script defer src="/__/firebase/5.0.1/firebase-database.js"></script>
+      <script defer src="/__/firebase/init.js"></script>
+    </head>
+    <body>
+
+        <div class="container" id="newPlayerSignup">
+          <h2>Welcome to Common</h2>
+          <h3 id="common-you-are-connecting"></h3>
+
+          <!-- On submit, send the form-data to X (to process the input): -->
+          <div>
+
+            <div class="row">
+              <div class="col-25">
+                <label id="usernameLabel" for="username">username</label>
+              </div>
+
+              <div class="col-75">
+                <input type="text" id="username" name="username" placeholder="new player username here">
+                <p id="username-error-msg" style="color: red;"></p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-25">
+                <label id="emailLabel" for="email">email</label>
+              </div>
+
+              <div class="col-75">
+                <input type="email" id="email" name="email" placeholder="new player email here">
+                <p id="email-error-msg" style="color: red;"></p>
+              </div>
+            </div>
+
+            <br>
+            <div class="row">
+              <input id="join" type="button" value="submit">
+            </div>
+            <div class="row">
+              <p id="status"></p>
+            </div>
+          </div>
+        </div>
+     <script src="js/db.js" type="text/javascript"></script>
+     <script src="js/minigamewin.js" type="text/javascript"></script>
+
+  </body>
+
+
+    </html>

@@ -2,3 +2,8 @@ node_modules/*
 .DS_Store
 .eslintrc.js
 firebase-debug.log
+serviceAccountKey.json
+functions/node_modules/*
+functions/gmail.json
+functions/serviceAccountKey.json
+functions/mailgun.json

@@ -1,482 +1,601 @@
-/* global d3:false _:false */
-document.addEventListener('DOMContentLoaded', function() {
-
-  // IMPORT
-  // Note: firebase is in scope from /__/firebase/init.js
-  var ui = importUi();
-  var scores = importScores(ui);
-  var util = importUtil(scores, ui);
-  var db = importDb(scores, ui, util, firebase);
-  var action = importAction(ui, util, scores, db);
-
-  svg.append("rect")
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .attr("fill", "#F8F8F8");
-
-  var state = {
-    // index used by random button
-    randomIndex: 1,
-    // tracks if we are done loading yet (true) or not (false)
-    loaded: false,
-    // id of the current user (same as ME)
-    selfId: "omarieclaire",
-    // reference to SVG node and info
-    svg: svg,
-    svgWidth: svgWidth,
-    svgHeight: svgHeight,
-    // color picker
-    colorPicker: d3.scaleOrdinal(["#A07A19", "#AC30C0", "#EB9A72", "#BA86F5", "#EA22A8"]),
-    // directory of known players
-    players: {},
-    // set of nodes/edges we have already seen (objects)
-    seenNodes: {},
-    seenEdges: {},
-    // list of node/edge data used by the force-directed graph
-    nodes: [],
-    edges: [],
-    // method used to draw the graph
-    draw: draw
-  };
-
-  // start listening to DB updates
-  db.initPlayers(state);
-  db.initLog(state);
-
-  // create a d3 simulation object
-  var simulation = d3.forceSimulation(state.nodes)
-  //for making elements attract or repel one another
-    .force("charge", d3.forceManyBody().strength(-500))
-  //for creating a fixed distance between connected elements
-    .force("link", d3.forceLink(state.edges).distance(1))
-  //for setting the center of gravity of the system
-    .force("center", d3.forceCenter())
-  //for preventing elements overlapping
-    .force("collide", d3.forceCollide(40))
-  //for attracting elements to a given point
-    .force("x", d3.forceX())
-  //for attracting elements to a given point
-    .force("y", d3.forceY())
-    .alphaTarget(0.0)
-    .on("tick", ticked);
-
-  // create a <g> element and append it into <svg>
-  //create the graph itself
-  var g = svg
-    .append("g");
-
-  // create a <g> element for edges, append it to the previous g
-  var edge1 = g
-    .append("g")
-    .attr("stroke", "#000")
-    .attr("stroke-width", 1.5)
-    .selectAll(".edge1");
-
-  var edge2 = g
-    .append("g")
-    .attr("stroke", "#000")
-    .attr("stroke-width", 1.5)
-    .selectAll(".edge2");
-
-  var edge3 = g
-    .append("g")
-    .attr("stroke", "#000")
-    .attr("stroke-width", 1.5)
-    .selectAll(".edge3");
-
-  // create a <g> element for labels, append it to the first g
-  var label = g
-    .append("g")
-    .attr("class", "nodeLabelContainer")
-    .selectAll(".label");
-
-  // create a <g> element for annotations, append it to the first g
-  var annotationAnchor = g.append("g").attr("class", "annotationBox").selectAll(".anchor");
-
-  // create a <g> element for nodes, append it to the first g
-  var node = g
-    .append("g")
-    .attr("id", "g-node")
-    .selectAll(".node");
-
-
-  // get the nodecount HTML node
-  var nc = document.getElementById("nodecount");
-  // get the edgecount HTML node
-  var ec = document.getElementById("edgecount");
-
-  // small helper function to claculate all enclosed circles
-  // assumes nodesByNetwork is map (key-value pairs) of
-  // key=netowrk-id
-  // value=nodes in network-id
-  function enclosedCirclesByNetwork(nodesByNetwork) {
-    var enclosedCircles = [];
-    Object.keys(nodesByNetwork).forEach(function(network,index) {
-      var nodesInNetwork = nodesByNetwork[network];
-      var enclosedCircle = d3.packEnclose(nodesInNetwork);
-      enclosedCircle.id = "enclosing-network-" + index;
-      enclosedCircles.push(enclosedCircle);
-    });
-    return enclosedCircles;
-  }
-
-  // extremely side-effecty function
-  function doAnnotations(enclosedCircles, annotationAnchor) {
-    var annotations = enclosedCircles.map(function(circle,index) {
-      return {
-        id: "annotation-" + index,
-        note: {  title: "10" },
-        dy: -(circle.r + 20) - 3,
-        dx: 0,
-        x: circle.x,
-        y: circle.y,
-        type: d3.annotationCalloutCircle,
-        subject: {
-          radius: circle.r + 20,
-          radiusPadding: 20
-        }
-      };
-    });
-
-    annotationAnchor = annotationAnchor.data(annotations, function(d) { return d.id;});
-    annotationAnchor.exit().remove();
-
-    var makeAnnotations = d3.annotation().annotations(annotations).accessors({ x: function x(d) {
-      return d.x;
-    }, y: function y(d) {
-      return d.y;
-    } });
-
-    annotationAnchor.enter().call(makeAnnotations);
-  }
-
-  //getting the strength of an edge by its id
-  function edgeStrength(d) {
-    return d.strength;
-  }
-
-  // draw refreshes the graph?
-  draw();
-
-  // render the score for the first time
-  ui.renderMyScore(state.selfId, state.seenNodes);
-
-    function lerp (value1, value2, amount) {
-	amount = amount < 0 ? 0 : amount;
-	amount = amount > 1 ? 1 : amount;
-	return value1 + (value2 - value1) * amount;
-}
-
-function wave(phase,x1,y1,x2,y2) {
-  var xStart = x1;
-  var yStart = y1;
-
-  var xEnd = x2;
-  var yEnd = y2;
-
-  var numSamples = 50;
-
-  var data = [];
-  var amplitude = 3.0;
-  var frequency = 3.0;
-
-  for (var i = 0; i < numSamples; i++)
-  {
-    var progress = (i.toFixed(10) / numSamples);
-
-    var xpos = lerp(xStart, xEnd, progress);// progress * width;
-    var ypos = lerp(yStart, yEnd, progress);// height/2.0 + Math.sin(progress * Math.PI * 2.0 * frequency ) * amplitude;
-
-    var xDelta = xEnd - xStart;
-    var yDelta = yStart - yEnd;
-
-    var vecLength = Math.sqrt(xDelta*xDelta + yDelta*yDelta);
-    // Avoid divide by zero
-    vecLength = Math.max(vecLength, 0.0001);
-
-    var amp = amplitude * (Math.cos(progress * Math.PI * 2. + 3.14)*0.5+0.5);
-    // normalize it
-    xDelta = xDelta / vecLength;
-    yDelta = yDelta / vecLength;
-
-    var angle = Math.atan2(yDelta, xDelta);
-    var wave = Math.sin(phase+d3.now()*0.01 + progress * Math.PI * 2.0 * frequency ) * amp;
-
-    xpos += Math.sin(angle) * wave * 0.5;
-    ypos += Math.cos(angle) * wave * 0.5;
-
-    var entry = { xVal:xpos, yVal:ypos };
-
-    data.push(entry);
-  }
-  return data;
-}
-    
-  // function to refresh d3 (for any changes to the graph)?
-  function draw() {
-    // Apply the update to the nodes.
-    // get nodes array, extract ids, and draw them
-    node = node.data(state.nodes, function(d) { return d.id;});
-    // exit and remove before redrawing?
-    node.exit().remove();
-    // redraw the nodes
-    //enter is a d3 method being called on node
-    //whatever this process returns: append is called on it
-    node = node.enter()
-      .append("circle")
-    //fill takes a color but instead of giving a color I give it
-    // an anon function that returns a color
-      .attr("fill", function(d) { return d.color; })
-      .attr("r", function(d) { return d.score; })
-      .attr("stroke", "pink")
-    // add an id attribute to each node, so we can access/select it later
-      .attr("id", util.nodeIdAttr)
-    //we added the onclick to the circle, but maybe we should have added it to the node
-    //.on("click", nodeClick)
-      .on("click", function (d) { action.nodeClicked(state, d) })
-    //what does this mean?
-      .merge(node);
-
-    // In order to draw circles around each network, we calculate
-    // the network scores. Then we mutate each node by adding
-    // the network it belongs to.
-    // Then we group each node by the network it belngs to
-    // Then we use that group and d3.packEnclose to encircle the networks.
-    // TODO it would be good to find a better place to calculate this stuff
-    // rather than in draw
-    var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
-    // add a radius to the data
-    node.data().forEach(function(d) {
-      // This is slow; TODO we should improve this.
-      networkScores.forEach(function(network) {
-        if(network.people.indexOf(d.id) != -1) {
-          d.network = network.network;
-        }
-      })
-    });
-
-    var nodesByNetwork = util.nodesByNetwork(node.data());
-    var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork)
-
-    doAnnotations(enclosedCircles, annotationAnchor);
-
-    // do the same thing for the labels
-    label = label.data(state.nodes, function(d) { return d.id;});
-
-    //I removed line below because it didn't do anything?
-    label.exit().remove();
-    label = label.enter()
-      .append("text")
-      .attr("class", "nodeLabel")
-      .text(function(d) {return d.id;})
-      .merge(label);
-
-    // do the same thing for the edges
-    edge1 = edge1.data(state.edges, function(d) {	return d.source.id + "-" + d.target.id;	});
-    edge1.exit().remove();
-    //before .merge is where I can add the viz representation of the stroke/edge
-    edge1 = edge1.enter()
-    .append("path")
-    .attr("stroke-width", edgeStrength)
-    .style("mix-blend-mode", "darken")
-    .attr("fill", "none")
-    .merge(edge1);
-
-    edge2 = edge2.data(state.edges, function(d) {	return d.source.id + "-" + d.target.id;	});
-    edge2.exit().remove();
-    edge2 = edge2.enter()
-    .append("path")
-    .attr("stroke-width", edgeStrength)
-    .style("mix-blend-mode", "darken")
-    .attr("fill", "none")
-    .merge(edge2);
-      
-    edge3 = edge3.data(state.edges, function(d) {	return d.source.id + "-" + d.target.id;	});
-    edge3.exit().remove();
-    edge3 = edge3.enter()
-    .append("path")
-    .attr("stroke-width", edgeStrength)
-    .style("mix-blend-mode", "darken")
-    .attr("fill", "none")
-    .merge(edge3);
-    
-    // Update and restart the simulation.
-    simulation.nodes(state.nodes);
-    simulation.force("link").links(state.edges);
-    simulation.alpha(1).restart();
-
-    // update the node and edge counts
-    // can we instead call nodes.length and edges.length?
-    nc.textContent = Object.keys(state.seenNodes).length;
-    ec.textContent = Object.keys(state.seenEdges).length;
-  }
-
-  // function called on every "tick" of d3 like a clock or gameloop
-  function ticked(e) {
-    node
-    //cx is the relative position of the node
-      .attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; })
-      .attr("r", function(d) { return d.score; })
-      .attr("fill", function(d) { return d.color;});
-
-
-    var valueline = d3.line()
-        .x(function (d) {
-            return d.xVal;
-        })
-        .y(function (d) {
-            return d.yVal;
-        });
-
-  edge1
-  .attr("d", function(d) {
-    var waveData = wave(1.5,d.source.x, d.source.y, d.target.x, d.target.y);
-    return valueline(waveData);
-   } )
-   .style("mix-blend-mode", "darken")
-   .attr("stroke", "cyan")
-  .attr("stroke-width", edgeStrength);
-
-  edge2
-  .attr("d", function(d) {
-    var waveData = wave(3.8,d.source.x, d.source.y, d.target.x, d.target.y);
-    return valueline(waveData);
-   } )
-   .style("mix-blend-mode", "darken")
-   .attr("stroke", "magenta")
-   .attr("stroke-width", edgeStrength);
-
-  edge3
-  .attr("d", function(d) {
-    var waveData = wave(5.5,d.source.x, d.source.y, d.target.x, d.target.y);
-    return valueline(waveData);
-   } )
-   .attr("stroke", "yellow")
-   .attr("stroke-width", edgeStrength);
-
-
-    label
-      .attr("x", function(d) { return d.x + 9; })
-      .attr("y", function(d) { return d.y - 4; });
-
-    var nodesByNetwork = util.nodesByNetwork(node.data());
-    var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork)
-
-    doAnnotations(enclosedCircles, annotationAnchor);
-  }
-
-
-  // used to generate random nodes
-  var index = 1;
-
-  // when the window is ready, call the function below
-  window.onload = function() {
-
-    // add a function when "add" button is clicked
-    document.getElementById("add").addEventListener("click", function() {
-      action.addClicked(state);
-    });
-
-    // add a function when the `random` button is clicked
-    document.getElementById("random").addEventListener("click", function() {
-      action.randomClicked(state);
-    });
-
-    document.getElementById("reinitialize").addEventListener("click", function () {
-      action.reinitializeClicked(state);
-    });
-
-    document.getElementById("destroy").addEventListener("click", function () {
-      action.runDestroyer(state);
-      // var index = _.random(0, state.edges.length - 1);
-      // var edge = state.edges[index];
-      // if(edge) {
-      //   if (edge.strength <= DESTROYER_POWER) {
-      //     console.log("destroying %o", edge);
-      //     // how does this work? Should we use our deleteEdge function?
-      //     util.deleteEdge(edge, state);
-      //     //destroyEdge(edge);
-      //   } else {
-      //     console.log("weakening %o", edge);
-      //     edge.strength -= DESTROYER_POWER;
-      //   }
-      // }
-      //
-      // var randomNodeIndex = _.random(0, state.nodes.length -1);
-      // var node = state.nodes[randomNodeIndex];
-      // node.score = node.score - DESTROYER_POWER;
-      // if(node.score <= 0) {
-      //   console.log("deleting node: " + node);
-      //   util.deleteNode(node, state);
-      // }
-      //
-      // scores.calculateNetworkScoresByNode(state.edges, state.nodes);
-      // ui.renderMyScore(state.selfId, state.seenNodes);
-      // draw();
-    });
-
-    document.getElementById("giver").addEventListener("click", function() {
-      var networkScores = scores.calculateNetworkScoresByNode(state.edges, state.nodes);
-      _.each(state.nodes, function(node) {
-        var network = networkScores.filter(function(network) {
-          return network.people.indexOf(node.id) != -1;
-        })[0]
-        if(network) {
-          node.score = node.score + GIVER_POWER * network.health;
-        } else {
-          console.log("YIKES! Could not find a network for node " + node.id);
-        }
-      });
-      ui.renderMyScore(state.selfId, state.seenNodes);
-      draw();
-    });
-
-    // zooming funtion given to d3
-    // <svg transform="translate(10) + scale(2)">;
-    var zoomFunction = function() {
-      g.attr("transform", d3.event.transform);
-    };
-
-    // call zooming function when d3 detects a zoom
-    var zoomCall = d3.zoom().scaleExtent([1 / 4, 4]).on("zoom", zoomFunction);
-    svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight / 2) );
-    svg.call(zoomCall);
-    svg.on("dblclick.zoom", null);
-
-    var zoomIn = function() {
-      var currentScale = d3.zoomTransform(svg.node()).k;
-      svg.transition().duration(500).call(zoomCall.scaleTo, currentScale + ZOOM_AMOUNT).transition();
-    };
-
-    var resetZoom = function () {
-      svg.transition().duration(500).call(zoomCall.translateTo,MY_FIXED_X,MY_FIXED_Y).transition().duration(500).call(zoomCall.scaleTo, 1).transition();
-    };
-
-    var zoomOut = function() {
-      var currentScale = d3.zoomTransform(svg.node()).k;
-      svg.transition().duration(500).call(zoomCall.scaleTo, currentScale - ZOOM_AMOUNT).transition();
-    };
-
-    document.getElementById("zoom-in").addEventListener("click", zoomIn);
-    document.getElementById("reset-button").addEventListener("click", resetZoom);
-    document.getElementById("zoom-out").addEventListener("click", zoomOut);
-
-
-    document.body.addEventListener("keydown", function(e) {
-      // console.log(e);
-      //prevents accidental zooming
-      if (e.target !== document.body){
-        return;
-      } else if (e.key === "8") {
-        zoomIn();
-      } else if (e.key === "9") {
-        resetZoom();
-      } else if (e.key === "0") {
-        zoomOut();
-      }
-    });
-
-    state.loaded = true;
-  };
+/* global d3:false :false */
+/* global firebase:false :false */
+
+// when the window is ready, call the function below
+window.addEventListener("load", function() {
+
+	// Don't start the app until we have the user object.
+	// If we need to optimize start time, moving this
+	// around might help.
+	firebase.auth().onAuthStateChanged(function(user) {
+
+		// IMPORT
+		// Note: firebase is in scope from /__/firebase/init.js
+		var ui = importUi();
+		var scores = importScores(ui);
+		var util = importUtil(scores, ui);
+		var db = importDb(util, firebase, scores);
+		var action = importAction(ui, util, scores, db);
+
+		// Create modals
+		ui.createModals();
+
+		// If the user was logged in, we set `currentUser` in local storage.
+		// Note: if the user logs out, we should unset this.
+		var currentUser;
+		if (user === null || user === undefined) {
+			currentUser = {
+				email: "unknown@null.void",
+				username: "anonymous-" + Date.now()
+			};
+		} else {
+			currentUser = {
+				email: user.email,
+				username: user.displayName
+			};
+		}
+
+		console.log("current user is: ");
+		console.log(currentUser.username);
+		console.log(currentUser.email);
+
+		var initialState = {
+			// index used by random button
+			randomIndex: 1,
+			// id of the current user (same as ME)
+			selfId: currentUser.username,
+			// color picker
+			colorPicker: d3.scaleOrdinal(["#47ade0", "#be73e6", "#86e570", "#e466be", "#62b134", "#738ae8", "#db8f2e", "#4be0d9", "#ee5679", "#6de8a6",
+				"#ea6941", "#54b385", "#e07aa0", "#5dad5c", "#c792d6", "#90a44a", "#dc8869", "#cfe48c", "#caa74e"
+			]),
+			// directory of known players
+			players: {},
+			// set of nodes/edges we have already seen (objects)
+			seenNodes: {},
+			seenEdges: {},
+			// list of node/edge data used by the force-directed graph
+			nodes: [],
+			edges: [],
+			lastClickTime: COMMON_EPOCH, // by default, ~may30
+			playerClicks: 0, // this is a count 0-6
+			lastClickGainedAt: 0, // these are milliseconds
+			// method used to draw the graph. For initialization reasons
+			// we start with a fake draw and mutate it below.
+			draw: function() { console.log("fake draw"); },
+			// id of the leg entry for this version of the state.
+			logEntry: null
+		};
+
+		// once a minute, try to gain a click
+		window.setInterval(function () {
+			action.tryToGainClicks(initialState);
+		}, 60 * 1000);
+		action.tryToGainClicks(initialState);
+
+		// once a minute, have a 1/60 chance of running the destroyer
+		window.setInterval(function () {
+			action.tryDestroyer(initialState);
+		}, 60 * 1000);
+		action.tryDestroyer(initialState);
+
+		var initializeGame = function (state) {
+
+			// create a d3 simulation object
+			var simulation = d3.forceSimulation(state.nodes)
+			//for making elements attract or repel one another
+				.force("charge", d3.forceManyBody().strength(-500))
+			//for creating a fixed distance between connected elements
+				.force("link", d3.forceLink(state.edges).distance(1))
+			//for setting the center of gravity of the system
+				.force("center", d3.forceCenter())
+			//for preventing elements overlapping
+				.force("collide", d3.forceCollide(40))
+			//for attracting elements to a given point
+				.force("x", d3.forceX())
+			//for attracting elements to a given point
+				.force("y", d3.forceY())
+				.alphaTarget(0.0)
+				.on("tick", ticked);
+
+			// create a <g> element and append it into <svg>
+			//create the graph itself
+			var g = svg
+				.append("g");
+
+			// create a <g> element for annotations, append it to the first g
+			var annotationAnchor = g
+				.append("g")
+				.attr("class", "annotationBox")
+				.selectAll(".anchor");
+
+			// create a <g> element for edges, append it to the previous g
+			var edge = g
+				.append("g")
+				.attr("stroke", "#000")
+				.attr("stroke-width", 0.5)
+				.selectAll(".edge");
+
+            var playerEdge1 = g
+                .append("g")
+                .attr("stroke", "#000")
+                .attr("stroke-width", 1.5)
+                .attr("id", "other-edges")
+                .selectAll(".edge1");
+
+            var playerEdge2 = g
+                .append("g")
+                .attr("stroke", "#000")
+                .attr("stroke-width", 1.5)
+                .attr("id", "other-edges")
+                .selectAll(".edge2");
+
+            var playerEdge3 = g
+                .append("g")
+                .attr("stroke", "#000")
+                .attr("stroke-width", 1.5)
+                .attr("id", "other-edges")
+                .selectAll(".edge3");
+
+			// create a <g> element for labels, append it to the first g
+			var label = g
+				.append("g")
+				.attr("class", "nodeLabelContainer")
+				.selectAll(".label");
+
+			// create a <g> element for nodes, append it to the first g
+			var node = g
+				.append("g")
+				.attr("id", "g-node")
+				.selectAll(".node");
+
+			// get the nodecount HTML node
+			var nc = document.getElementById("nodecount");
+			// get the edgecount HTML node
+			var ec = document.getElementById("edgecount");
+
+			// small helper function to claculate all enclosed circles
+			// assumes nodesByNetwork is map (key-value pairs) of
+			// key=netowrk-id
+			// value=nodes in network-id
+			function enclosedCirclesByNetwork(nodesByNetwork) {
+				var enclosedCircles = [];
+				Object.keys(nodesByNetwork).forEach(function(network, index) {
+					var networkData = nodesByNetwork[network];
+					var nodesInNetwork = networkData.nodes;
+					var networkScore = networkData.score;
+					var enclosedCircle = d3.packEnclose(nodesInNetwork);
+					enclosedCircle.id = "enclosing-network-" + index;
+					enclosedCircle.score = networkScore;
+					enclosedCircles.push(enclosedCircle);
+				});
+				return enclosedCircles;
+			}
+
+			// extremely side-effecty function
+			function doAnnotations(enclosedCircles, annotationAnchor) {
+				var annotations = enclosedCircles.map(function(circle, index) {
+					return {
+						id: "annotation-" + index,
+						note: {
+							label: "Common Life Force",
+							title: circle.score || ":(",
+							wrap: 400
+						},
+						dy: -(circle.r + 30) - 10,
+						dx: 0,
+						x: circle.x,
+						y: circle.y,
+						type: d3.annotationCalloutCircle,
+						subject: {
+							radius: circle.r + 20,
+							radiusPadding: 20
+						}
+					};
+				});
+
+				annotationAnchor = annotationAnchor.data(annotations, function(d) {
+					return d.id;
+				});
+				annotationAnchor.exit().remove();
+
+				var makeAnnotations = d3.annotation().annotations(annotations).accessors({
+					x: function x(d) {
+						return d.x;
+					},
+					y: function y(d) {
+						return d.y;
+					}
+				});
+
+				annotationAnchor.enter().call(makeAnnotations);
+			}
+
+			//getting the strength of an edge by its id
+			function edgeStrength(d) {
+				return d.strength;
+			}
+
+			// render the score for the first time
+			ui.renderMyScore(state);
+            
+            function lerp (value1, value2, amount) {
+                amount = amount < 0 ? 0 : amount;
+                amount = amount > 1 ? 1 : amount;
+                return value1 + (value2 - value1) * amount;
+            }
+
+            function wave(phase,x1,y1,x2,y2) {
+              var xStart = x1;
+              var yStart = y1;
+
+              var xEnd = x2;
+              var yEnd = y2;
+
+              var numSamples = 50;
+
+              var data = [];
+              var amplitude = 3.0;
+              var frequency = 3.0;
+
+              for (var i = 0; i < numSamples; i++)
+              {
+                var progress = (i.toFixed(10) / numSamples);
+
+                var xpos = lerp(xStart, xEnd, progress);// progress * width;
+                var ypos = lerp(yStart, yEnd, progress);// height/2.0 + Math.sin(progress * Math.PI * 2.0 * frequency ) * amplitude;
+
+                var xDelta = xEnd - xStart;
+                var yDelta = yStart - yEnd;
+
+                var vecLength = Math.sqrt(xDelta*xDelta + yDelta*yDelta);
+                // Avoid divide by zero
+                vecLength = Math.max(vecLength, 0.0001);
+
+                var amp = amplitude * (Math.cos(progress * Math.PI * 2. + 3.14)*0.5+0.5);
+                // normalize it
+                xDelta = xDelta / vecLength;
+                yDelta = yDelta / vecLength;
+
+                var angle = Math.atan2(yDelta, xDelta);
+                var wave = Math.sin(phase+d3.now()*0.01 + progress * Math.PI * 2.0 * frequency ) * amp;
+
+                xpos += Math.sin(angle) * wave * 0.5;
+                ypos += Math.cos(angle) * wave * 0.5;
+
+                var entry = { xVal:xpos, yVal:ypos };
+
+                data.push(entry);
+              }
+              return data;
+            }
+			// function to refresh d3 (for any changes to the graph)?
+			function draw() {
+				// Apply the update to the nodes.
+				// get nodes array, extract ids, and draw them
+				node = node.data(state.nodes, function(d) {
+					return d.id;
+				});
+				// exit and remove before redrawing?
+				node.exit().remove();
+				// redraw the nodes
+				//enter is a d3 method being called on node
+				//whatever this process returns: append is called on it
+				node = node.enter()
+					.append("circle")
+				//fill takes a color but instead of giving a color I give it
+				// an anon function that returns a color
+					.attr("fill", function(d) {
+						return d.color;
+					})
+					.attr("r", function(d) {
+						return d.score;
+					})
+				// .attr("stroke", "pink")
+				// add an id attribute to each node, so we can access/select it later
+					.attr("id", util.nodeIdAttr)
+					.attr("class", function(d) {
+						var classString = "";
+						if(d.score === NODE_HEALTH_FULL) {
+							classString += "nodeFull ";
+						} else if(d.score > NODE_HEALTH_HIGH) {
+							classString += "nodeHigh ";
+						} else if(d.score > NODE_HEALTH_MEDIUM) {
+							classString += "nodeMedium ";
+						} else if(d.score > NODE_HEALTH_LOW) {
+							classString += "nodeLow ";
+						} else if(d.score === NODE_HEALTH_DEAD) {
+							classString += "nodeDead ";
+						}
+
+						if(d.id === state.selfId) {
+							classString += "myNode nodeClass";
+							return classString;
+						} else {
+							classString += "nodeClass";
+							return classString;
+						}
+					})
+				//we added the onclick to the circle, but maybe we should have added it to the node
+				//.on("click", nodeClick)
+					.on("click", function(d) {
+						action.nodeClicked(state, d);
+					})
+				//what does this mean?
+					.merge(node);
+
+				// In order to draw circles around each network, we calculate
+				// the network scores. Then we mutate each node by adding
+				// the network it belongs to.
+				// Then we group each node by the network it belngs to
+				// Then we use that group and d3.packEnclose to encircle the networks.
+				// TODO it would be good to find a better place to calculate this stuff
+				// rather than in draw
+				var networkScores = scores.calculateNetworkScoresByNode(state);
+				// add a radius to the data
+				node.data().forEach(function(d) {
+					// This is slow; TODO we should improve this.
+					networkScores.forEach(function(network) {
+						if (network.people.indexOf(d.id) != -1) {
+							d.network = network.network;
+							d.networkScore = network.score;
+						}
+					});
+				});
+
+				var nodesByNetwork = util.nodesByNetwork(node.data());
+				var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork);
+
+				//add Common encirling
+				doAnnotations(enclosedCircles, annotationAnchor);
+
+				// do the same thing for the labels
+				label = label.data(state.nodes, function(d) {
+					return d.id;
+				});
+				label.exit().remove();
+				label = label.enter()
+					.append("text")
+					.attr("class", "nodeLabel")
+					.attr("fill", "white")
+					.attr("opacity", "0.5")
+					.text(function(d) {
+						return d.id;
+					})
+					.merge(label);
+
+				// do the same thing for the edges
+				edge = edge.data(state.edges, function(d) {
+					return d.source.id + "-" + d.target.id;
+				});
+				edge.exit().remove();
+				//before .merge is where I can add the viz representation of the stroke/edge
+				edge = edge.enter()
+					.append("line")
+					.attr("stroke-width", edgeStrength)
+					.attr("id", util.edgeIdAttr)
+					.attr("stroke", "gray")
+					.merge(edge);
+
+					// create a duplicate list of edges connected to the player.
+					// getEdgesForNode(state.seenNodes[state.selfId], state.eedges).copy
+					// (should make a copy - not sure how to copy stuff in javascript)
+					// draw these edges ?
+				var playersEdges = util.getEdgesForNode(state.seenNodes[state.selfId], state.edges).slice();
+				playerEdge1 = playerEdge1.data(playersEdges, function(d) {
+					return d.source.id + "-" + d.target.id;
+				});
+
+				playerEdge1.exit().remove();
+				playerEdge1 = playerEdge1.enter()
+                    .attr("stroke-width", edgeStrength)
+                    .style("mix-blend-mode", "darken")
+                    .attr("fill", "none")
+					.merge(playerEdge1);
+
+                playerEdge2 = playerEdge2.data(playersEdges, function(d) {
+					return d.source.id + "-" + d.target.id;
+				});
+
+				playerEdge2.exit().remove();
+				playerEdge2 = playerEdge2.enter()
+                    .attr("stroke-width", edgeStrength)
+                    .style("mix-blend-mode", "darken")
+                    .attr("fill", "none")
+					.merge(playerEdge2);
+
+				playerEdge3 = playerEdge1.data(playersEdges, function(d) {
+					return d.source.id + "-" + d.target.id;
+				});
+
+				playerEdge3.exit().remove();
+				playerEdge3 = playerEdge3.enter()
+                    .attr("stroke-width", edgeStrength)
+                    .style("mix-blend-mode", "darken")
+                    .attr("fill", "none")
+					.merge(playerEdge3);
+
+				// Update and restart the simulation.
+				simulation.nodes(state.nodes);
+				simulation.force("link").links(state.edges);
+				simulation.alpha(1).restart();
+
+				// update the node and edge counts
+				// can we instead call nodes.length and edges.length?
+				nc.textContent = Object.keys(state.seenNodes).length;
+				ec.textContent = Object.keys(state.seenEdges).length;
+			}
+
+			// Update the draw on state once we've defined it
+			// (doing this for initialization reasons)
+			state.draw = draw;
+
+            var valueline = d3.line()
+            .x(function (d) {
+                return d.xVal;
+            })
+            .y(function (d) {
+                return d.yVal;
+            });
+
+			// function called on every "tick" of d3 like a clock or gameloop
+			function ticked(e) {
+				node
+				//cx is the relative position of the node
+					.attr("cx", function(d) {
+						return d.x;
+					})
+					.attr("cy", function(d) {
+						return d.y;
+					})
+					.attr("r", function(d) {
+						return d.score/10;
+					})
+					.attr("fill", function(d) {
+						return d.color;
+					});
+
+				edge
+					.attr("x1", function(d) {
+						return d.source.x;
+					})
+					.attr("y1", function(d) {
+						return d.source.y;
+					})
+					.attr("x2", function(d) {
+						return d.target.x;
+					})
+					.attr("y2", function(d) {
+						return d.target.y;
+					});
+					// .attr("stroke-width", edgeStrength);
+
+				playerEdge1.attr("d", function(d) {
+                    var waveData = wave(1.5,d.source.x, d.source.y, d.target.x, d.target.y);
+                    return valueline(waveData);
+                }).style("mix-blend-mode", "darken")
+                  .attr("stroke", "cyan");
+
+                playerEdge2.attr("d", function(d) {
+                    var waveData = wave(3.8,d.source.x, d.source.y, d.target.x, d.target.y);
+                    return valueline(waveData);
+                }).style("mix-blend-mode", "darken")
+                  .attr("stroke", "cyan");
+
+                playerEdge3.attr("d", function(d) {
+                    var waveData = wave(5.5,d.source.x, d.source.y, d.target.x, d.target.y);
+                    return valueline(waveData);
+                }).style("mix-blend-mode", "darken")
+                  .attr("stroke", "cyan");
+                
+				label
+					.attr("x", function(d) {
+						return d.x + 9;
+					})
+					.attr("y", function(d) {
+						return d.y - 4;
+					});
+
+				var nodesByNetwork = util.nodesByNetwork(node.data());
+				var enclosedCircles = enclosedCirclesByNetwork(nodesByNetwork);
+
+				doAnnotations(enclosedCircles, annotationAnchor);
+
+			}
+
+			// draw refreshes the graph?
+			draw();
+
+			// add a function when "add" button is clicked
+			document.getElementById("add").addEventListener("click", function() {
+				action.addClicked(state);
+			});
+
+			// add a function when the `random` button is clicked
+			document.getElementById("random").addEventListener("click", function() {
+				action.randomClicked(state);
+			});
+
+			document.getElementById("reinitialize").addEventListener("click", function() {
+				action.reinitializeClicked(state);
+			});
+
+			document.getElementById("destroy").addEventListener("click", function() {
+				playSound("destroyer-sound", 0.1);
+				action.runDestroyer(state);
+			});
+
+			document.getElementById("snapshot").addEventListener("click", function() {
+				db.snapshotState(state).then(function(result) {
+					console.log("success snapshot: ", result);
+				});
+			});
+
+
+			// zooming funtion given to d3
+			// <svg transform="translate(10) + scale(2)">;
+			var zoomFunction = function() {
+				g.attr("transform", d3.event.transform);
+			};
+
+			// call zooming function when d3 detects a zoom
+			var zoomCall = d3.zoom().scaleExtent([1 / 4, 4]).on("zoom", zoomFunction);
+			svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight / 2));
+			svg.call(zoomCall);
+			svg.on("dblclick.zoom", null);
+
+			var zoomIn = function() {
+				var currentScale = d3.zoomTransform(svg.node()).k;
+				svg.transition().duration(500).call(zoomCall.scaleTo, currentScale + ZOOM_AMOUNT).transition();
+			};
+
+			var resetZoom = function() {
+				svg.transition().duration(500).call(zoomCall.translateTo, MY_FIXED_X, MY_FIXED_Y).transition().duration(500).call(zoomCall.scaleTo, 1).transition();
+			};
+
+			var zoomOut = function() {
+				var currentScale = d3.zoomTransform(svg.node()).k;
+				svg.transition().duration(500).call(zoomCall.scaleTo, currentScale - ZOOM_AMOUNT).transition();
+			};
+
+			document.getElementById("zoom-in").addEventListener("click", zoomIn);
+			document.getElementById("reset-button").addEventListener("click", resetZoom);
+			document.getElementById("zoom-out").addEventListener("click", zoomOut);
+
+			document.getElementById("add-player").addEventListener("click", function() {
+				// in case the user is anonymous
+				if(state.selfId) {
+					//db.weakenNode(state.selfId, ADD_PLAYER_DECREMENT_NODE_SCORE);
+					return true;
+				}
+			});
+
+			document.body.addEventListener("keydown", function(e) {
+				// console.log(e);
+				//prevents accidental zooming
+				if (e.target !== document.body) {
+					return;
+				} else if (e.key === "8") {
+					zoomIn();
+				} else if (e.key === "9") {
+					resetZoom();
+				} else if (e.key === "0") {
+					zoomOut();
+				}
+			});
+			// start listening to DB updates
+			db.initPlayers(state);
+		};
+
+		// This is an onLogUpdate function
+		var onLogUpdate = function (state, msg) {
+			ui.renderMyScore(state);
+			scores.calculateCommonScore(state);
+			state.draw();
+		};
+
+		// We pass the initial state, and a
+		// "initializeGame" function,
+		// and onLogUpdate function.
+		db.initLog(initialState, initializeGame, onLogUpdate);
+	});
 });

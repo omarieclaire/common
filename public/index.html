@@ -1,98 +1,164 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Common</title>
-    <link rel="stylesheet" href="css/main.css">
+<!doctype html>
+<html class="no-js" lang="">
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/4.12.1/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/4.12.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.12.1/firebase-database.js"></script>
-    <script defer src="/__/firebase/4.12.1/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/4.12.1/firebase-storage.js"></script>
-    <!-- initialize the SDK after all desired features are loaded -->
-    <script defer src="/__/firebase/init.js"></script>
+<head>
+  <title>Common</title>
+  <meta charset="utf-8">
+  <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,900' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/normalize.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="js/vendor/d3-annotations.min.js"></script>
+  <script defer src="/__/firebase/5.0.1/firebase-app.js"></script>
+  <script defer src="/__/firebase/5.0.1/firebase-auth.js"></script>
+  <script defer src="/__/firebase/5.0.1/firebase-database.js"></script>
+  <script defer src="/__/firebase/5.0.1/firebase-functions.js"></script>
+  <script defer src="/__/firebase/init.js"></script>
+</head>
 
-    <!-- <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style> -->
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome to Common: A play experience for communities </h2>
-      <p>Begins June 2, 2018</p>
-      <p id="auth-msg"></p>
-      <p id="auth-element"></p>
-      <p><a href="#" id="logout">logout</a></p>
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+<body>
 
-    <script>
-      //when the dom content is loaded, do the following
-      document.addEventListener('DOMContentLoaded', function() {
-        // event handlers
+  <header class="wrapper clearfix">
+    <h1 class="title">Common</h1>
+  </header>
 
-        // log the user out when clicking on the link.
-        document.getElementById('logout').addEventListener(
-          'click', function() {
-            firebase.auth().signOut().then(function() {
-              console.log("sign-out success!");
-              document.getElementById('auth-msg').innerHTML = "";
-            }).catch(function(error) {
-              console.log("sign-out error!");
-            });
-          }
-        );
+  <div class="main-container">
+    <div class="main wrapper clearfix">
 
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        firebase.auth().onAuthStateChanged(user => {
-          //grab auth element
-          let auth_msg = document.getElementById("auth-msg");
-          let auth_element = document.getElementById("auth-element");
-          //if the user is logged in then user is not null
-          if (user) {
-            auth_msg.innerHTML = "Yay, you're logged in!";
-          } else {
-            //you are logged out, create a link to log in
-            let anchor_node = document.createElement("a");
-            anchor_node.setAttribute("href","/auth.html");
-            anchor_node.innerHTML = "login";
-            //append link to auth element
-            auth_element.appendChild(anchor_node);
+      <div id="chart"></div>
 
-          }
-        });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+       <div class="ui">
 
-        try {
-          let app = firebase.app();
-          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-          document.getElementById('load').innerHTML = ''; //`Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
+         <div class ="zoomButtons">
+           <button id="zoom-in">Zoom In</button>
+           <button id="reset-button">Reset Zoom</button>
+           <button id="zoom-out">Zoom Out</button>
+         </div>
+
+         <div class="modalButtons">
+
+         <button id="aboutBtn">About</button>
+         <div id="aboutModal" class="modal">
+           <div class="modal-content">
+             <span class="close">&times;</span>
+               <h1>Welcome to Common. </h1>
+               <h2>How to Join</h2>
+               <p>The only way to join is to be invited, in person, by an active player. Here's a <a href="http://commonplay.ca/schedule.html">schedule</a>. You can also check <a href="https://twitter.com/hashtag/commonplay?f=tweets&amp;vertical=default">here</a>&nbsp;to see what's happening right now.</p>
+               <h2>What to do</h2>
+               <p>If you are an active player, there are 3 things you can do here:</p>
+               <ol>
+                 <li>Invite new players</li>
+                 <li>Strengthen your connections</li>
+                 <li>Do nothing and watch your connections dwindle away</li>
+               </ol>
+               <h2>Useful things to know</h2>
+               <ul>
+                 <li>You have a limited amount of life-force you can use to invite players or reinforce connections.</li>
+                 <li>Your life-force is replenished daily by the&nbsp;<em>Giver</em>&nbsp;as long as you keep your Common strong.</li>
+                 <li>The&nbsp;<em>Destroyer</em>&nbsp;also visits daily and decays connections and life-force at random.</li>
+               </ul>
+            </div>
+         </div>
+
+         <button id="settingsBtn">Settings</button>
+         <div id="settingsModal" class="modal">
+           <div class="modal-content">
+             <span class="close">&times;</span>
+             <h1>Change your settings here</h1>
+             <div class="onoffswitch">
+                 <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+                 <label class="onoffswitch-label" for="myonoffswitch">
+                     <span class="onoffswitch-inner"></span>
+                     <span class="onoffswitch-switch"></span>
+                 </label>
+             </div>
+             <ul>
+               <li>Sound on/off</li>
+
+               <li>Music on/off</li>
+               <li>Colour Contrast on/off</li>
+               <li>Open Dyslexic on/off</li>
+               <li>Large text on/off</li>
+               <li>Zoom Buttons Hidden on/off</li>
+             </ul>
+           </div>
+         </div>
+
+         <button id="add-player" type="button" value="add-player" onclick="window.open('minigame.html')"> </button>
+
+       </div>
+
+        <div class="adminButtons">
+          <p class="login-elements">
+            <span id="loading-indicator">Loading …</span>
+            <a style="display:none;" href="auth.html" id="login">Sign in to play</a>
+            <strong id="username"></strong> <a style="display:none;" href="/" id="logout">Log out</a>
+          </p>
+          My clicks: <span id="player-clicks">–</span><br>
+          My life-force: <span id="node-score-me">–</span><br>
+          Common decay rate: <span id="decay-rate">–</span><br>
+          Common status: <span id="status">–</span><br>
+
+
+          <button id="toggleDebugBtn">+</button>
+
+          <br><br>
+
+          <div id="toggleDebug">
+            <button id="destroy">Destroyer</button>
+            <button id="giver" class="control-button">Giver</button>
+            <button id="snapshot" class="control-button">Take Snapshot</button>
+            # people: <span id="nodecount">0</span><br> # connections: <span id="edgecount">0</span><br> edge from <input id="from" type="text"> to <input id="to" type="text">
+            <input id="add" type="button" value="add">
+            <input id="random" type="button" value="random"><br>
+            <input id="reinitialize" type="button" value="reinitialize"><br>
+            Each Common: <br>
+            <ul id="network-score"></ul><br>
+          </div>
+        </div>
+
+      </div>
+    </div> <!-- #main -->
+  </div> <!-- #main-container -->
+
+  <script src="js/svgCreation.js"></script>
+  <!-- define all the html and then define interactivity -->
+  <script src="js/underscore-min.js"></script>
+  <!-- order matters: global imported first -->
+  <script src="js/globals.js"></script>
+  <script src="js/sounds.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/action.js"></script>
+  <script src="js/scores.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
+  <script src="js/commonplay.js"></script>
+
+
+  <audio id="reinforcing-connection-sound" src="/sounds/reinforcing-connection-sound.mp3" preload="auto"></audio>
+  <audio id="connection-forming-sound" src="/sounds/connection-forming-sound.mp3" preload="auto"></audio>
+
+  <audio id="invitation-sound" src="/sounds/invitation-sound.mp3" preload="auto"></audio>
+  <audio id="new-connection-sound" src="/sounds/new-connection-sound.mp3" preload="auto"></audio>
+
+  <audio id="player1-sound" src="/sounds/player1-sound.mp3" preload="auto"></audio>
+  <audio id="player2-sound" src="/sounds/player2-sound.mp3" preload="auto"></audio>
+
+  <audio id="poor-sound" src="/sounds/poor-sound.mp3" preload="auto"></audio>
+  <audio id="error-sound" src="/sounds/error-sound.mp3" preload="auto"></audio>
+
+  <audio id="destroyer-sound" src="/sounds/destroyer-sound.mp3" preload="auto"></audio>
+  <audio id="giver-sound" src="/sounds/giver-sound.mp3" preload="auto"></audio>
+
+  <audio id="game-music" src="/sounds/game-music.mp3" preload="auto"></audio>
+
+
+</body>
 </html>

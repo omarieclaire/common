@@ -1,55 +1,48 @@
-/*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
-
 html {
-    color: #333;
-    background-color: inherit;
-    font-size: 1em;
-    line-height: 1.7;
+  color: white;
+  background-color: inherit;
+  font-size: 1em;
+  line-height: 1.7;
 }
 
 ::-moz-selection {
-    background: #b3d4fc;
-    text-shadow: none;
+  background: #b3d4fc;
+  text-shadow: none;
 }
 
 ::selection {
-    background: #b3d4fc;
-    text-shadow: none;
+  background: #b3d4fc;
+  text-shadow: none;
 }
 
 hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 1em 0;
-    padding: 0;
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
 }
 
-audio,
-canvas,
-iframe,
-img,
-svg,
-video {
-    vertical-align: middle;
+audio, canvas, iframe, img, svg, video {
+  vertical-align: middle;
 }
 
 fieldset {
-    border: 0;
-    margin: 0;
-    padding: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
 }
 
 textarea {
-    resize: vertical;
+  resize: vertical;
 }
 
 .browserupgrade {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
 }
 
 /* ===== Initializr Styles ==================================================
@@ -57,20 +50,31 @@ textarea {
    ========================================================================== */
 
 body {
-    font: 10px/14px "Helvetica", "Helvetica Neue", "Arial";
-    line-height: 1.8;
+  font: 18px "Lato", "Helvetica", "Helvetica Neue", "Arial";
+  line-height: 1.6;
+  background-image: url(/img/common-background.png);
+  background-position: 50% -50%;
+  background-size: 30%;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 900px) {
+  body {
+    font-size: 12px;
+  }
 }
 
 .wrapper {
-    width: 90%;
-    margin: 0 5%;
+  width: 90%;
+  margin: 0 5%;
 }
 
 .title {
   color: #333;
-  z-index: 2;
+  z-index: 1;
   display: inline-block;
   position: relative;
+  margin-bottom: 10px;
 }
 
 /* ==============
@@ -78,208 +82,367 @@ body {
    ============== */
 
 nav ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 nav a {
-    display: block;
-    margin-bottom: 10px;
-    padding: 15px 0;
-
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
-
-    color: white;
-    background: #e1e1e1;
+  display: block;
+  margin-bottom: 10px;
+  padding: 15px 0;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+  background: #e1e1e1;
 }
-
 
 /* ==============
     MOBILE: Main
    ============== */
 
 .main {
-    padding: 30px 0;
+  padding: 10px 0;
 }
 
 /* The Modal (background) */
+
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
+
 .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto; /* 15% from the top and centered */
-    padding: 15px;
-    border: 1px solid #888;
-    width: 40%; /* Could be more or less, depending on screen size */
+  background-color: #fefefe;
+  margin: 10% auto;
+  /* 15% from the top and centered */
+  padding: 15px;
+  border: 1px solid #888;
+  width: 40%;
+  /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
+
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 0.5;
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.close:hover, .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 /*fix teh modal?*/
+
 .clickable {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-   /* ==========================================================================
+
+/* ==========================================================================
       d3 styles
       ========================================================================== */
 
-  /* body {
-  position: relative;
-  width: 960px;
-  } */
+/* Make the chart container - SVG - fill the page using CSS. */
 
-  /* Make the chart container - SVG - fill the page using CSS. */
-  #chart {
-    position: fixed;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
-  }
+#chart {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  background-color: #0d0414;
+}
 
-  rect {
+/* rect {
     z-index: -1000;
-  }
-
-  /* #d3viz {
-    max-width: 100%;
-    border: solid black 1px;
-    background: aliceblue;
-    font: 16px sans-serif;
-
   } */
 
- .nodes circle {
-   width: 1.5px;
- }
+.nodeClass {
+  opacity: 0.5;
+  width: 10em;
+  height: 10em;
+}
 
- .nodeLabel {
-   stroke: #1f0535;
-   font-family: Helvetica;
-   font-size: 12px;
-   letter-spacing:  0.02em;;
- }
+.myNode {
+  opacity: 0.3;
+  width: 10em;
+  height: 10em;
+  stroke: yellow;
+  /* outline: 4px solid red; */
+  /* stroke-offset: 15px; */
 
- .nodeLabelContainer {
-   .attr("stroke", "#fff")
-   .attr("stroke-width", 1.5)
- }
+  /* border: solid 5px yellow;
+  border-radius: 50%;
+  width: 5em;
+  height: 5em; */
+}
 
- .annotation path {
-   stroke: grey;
-   fill: black;
- }
+.nodeFull {
+  opacity: 0.5;
+}
 
- .annotation-note {
-   margin-left: 10em;
- }
+.nodeHigh {
+  opacity: 0.5;
+}
 
+.nodeMedium {
+  opacity: 0.1;
+}
+
+.nodeLow {
+  opacity: 0.1;
+
+}
+
+.nodeDead {
+  opacity: 0.1;
+
+}
+
+.nodes circle {
+  /* width: 100px; */
+}
+
+.nodeLabel {
+  font-family: Helvetica;
+  /* background-color: rgb(201, 76, 76); */
+  font-size: 0.3em;
+  color: white;
+  /* opacity: 0.5; */
+  letter-spacing: 0.02em;
+}
+
+.nodeLabelContainer {
+  color: white;
+
+}
+
+.annotation-path {}
+
+.annotation-note {}
+
+.annotation-note-label {
+  font-weight: lighter;
+  font-size: 1.4em;
+}
 
 .annotation-note-title {
   font-weight: lighter;
-  padding-left: 10em;
-  font-size: 3em;
+  /* padding-left: 10em; */
+  font-size: 2.6em;
 }
 
-.annotationBox {
-  stroke: none;
-  /* fill: black; */
-  /* padding: 2em 2em 2em 2em; */
-}
+.annotationBox {}
 
 .annotation path {
   /* stroke: blue; */
   fill: blue;
   stroke: none;
-  fill-opacity: 0.05;
+  fill-opacity: 0.2;
 }
 
 .annotation-connector path {
-  stroke: black;
+  stroke: blue;
 }
 
 .ui {
   position: absolute;
+  opacity: 0.7;
 }
 
-  .modalButtons {
-    position: fixed;
-    right: 2em;
-    top: 2em;
-  }
+.modalButtons {
+  position: fixed;
+  right: 2em;
+  top: 2em;
+}
 
-  .zoomButtons {
-    position: fixed;
-    right: 2em;
-    bottom: 2em;
-  }
+.zoomButtons {
+  position: fixed;
+  right: 2em;
+  bottom: 2em;
+}
 
-  .zoomButtons button, .modalButtons button {
-    display: block;
-    border: none;
-    overflow: hidden;
-    width: 3em;
-    height: 3em;
-    margin: 0.75em;
-    text-indent: -1000em;
-    background-color: transparent;
-    opacity: 0.5;
-   }
+.zoomButtons button, .modalButtons button {
+  border: none;
+  overflow: hidden;
+  width: 3em;
+  height: 3em;
+  margin: 0.75em;
+  display: block;
+  text-indent: -1000em;
+  background-color: transparent;
+  opacity: 0.5;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
-  .zoomButtons button:hover, .modalButtons button:hover {
-    background-color: transparent;
-    opacity: 1;
-  }
+.zoomButtons button:hover, .modalButtons button:hover {
+  background-color: transparent;
+  opacity: 1;
+}
 
-  #zoom-in {
-    background-image: url(/img/zoom-in.svg);
-  }
+.login-elements {
+  min-height: 1.6em;
+}
 
-  #zoom-out {
-    background-image: url(/img/zoom-out.svg);
-  }
+#loading-indicator {
+  color: #ddd;
+}
 
-  #reset-button {
-    background-image: url(/img/reload.svg);
-    background-size: 75%;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
+#logout {
+  margin-left: 0.5em;
+  font-size: smaller;
+}
+
+.login-elements a, .login-elements a:visited {
+  color: rgb(0, 0, 238);
+  text-decoration: none;
+}
+
+.login-elements a:hover, .login-elements a:focus {
+  text-decoration: underline;
+}
+
+#toggleDebug {
+  display: none;
+}
+
+#toggleDebugAdmin {
+}
+
+#toggleDebugBtn {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  border: none;
+  margin: 0.75em;
+  background-color: transparent;
+  opacity: 0;
+}
+
+#aboutBtn {
+  background-image: url(/img/about.svg);
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+#settingsBtn {
+  background-image: url(/img/settings.svg);
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+#zoom-in {
+  background-image: url(/img/zoom-in.svg);
+}
+
+#zoom-out {
+  background-image: url(/img/zoom-out.svg);
+}
+
+#reset-button {
+  background-image: url(/img/reload.svg);
+  background-size: 105%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#add-player {
+  position: fixed;
+  left: 2.5em;
+  bottom: 2em;
+  background-image: url(/img/add-player.svg);
+  background-size: 85%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: solid 2px yellow;
+  border-radius: 50%;
+  width: 3em;
+  height: 3em;
+}
 
 button:hover {
   background-color: grey;
+}
+
+/* on/off switch  */
+
+.onoffswitch {
+    position: relative; width: 88px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #999999; border-radius: 10px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 25px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 10px;
+    background-color: #999999; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 10px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 12px; margin: 6.5px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 59px;
+    border: 2px solid #999999; border-radius: 10px;
+    transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px;
 }
 
 /* ==========================================================================
@@ -287,45 +450,43 @@ button:hover {
    ========================================================================== */
 
 .hidden {
-    display: none !important;
-    visibility: hidden;
+  /* display: none !important; */
+  visibility: hidden;
 }
 
 .visuallyhidden {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
-    clip: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    position: static;
-    width: auto;
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
 }
 
 .invisible {
-    visibility: hidden;
+  visibility: hidden;
 }
 
-.clearfix:before,
-.clearfix:after {
-    content: " ";
-    display: table;
+.clearfix:before, .clearfix:after {
+  content: " ";
+  display: table;
 }
 
 .clearfix:after {
-    clear: both;
+  clear: both;
 }
 
 .clearfix {
-    *zoom: 1;
+  *zoom: 1;
 }

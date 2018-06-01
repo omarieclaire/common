@@ -16,6 +16,26 @@ npm install firebase-tools
 ./node_modules/.bin/firebase login
 ```
 
+## Deploying
+
+Run
+
+```shell
+./node_modules/.bin/firebase deploy --project common-d2ecf --only hosting
+```
+
+You may need the following to deploy the cloud functions:
+
+* `functions/gmail.json` containing a `json` object like `{ "email": "", "password": ""}`
+* `functions/serviceAccountKey.json` which you need to get from `firebase`.
+* ensure the `functions/node_modules` has all the right dependencies, i.e. `nodemailer`
+
+To deploy the cloud functions:
+
+```shell
+./node_modules/.bin/firebase deploy --project common-d2ecf --only functions
+```
+
 ## Developing
 
 Run
@@ -25,3 +45,19 @@ Run
 ```
 
 This will allow you to access common at [http://localhost:5000](http://localhost:5000). You need to work this way so we can access `firebase` and allow it to vendor credentials.
+
+## Blowing away the authenticated user database
+
+Make sure you've got `firebase-admin` installed:
+
+```shell
+npm install firebase-admin --save
+```
+
+Then run the script:
+
+```shell
+node deleteAuthUsers.js
+```
+
+Note that you will need the `serviceAccount.json` credentials, which you can download from the firebase admin and then cp them into `node_modules`.

@@ -1,23 +1,29 @@
 
 var ZOOM_AMOUNT = 0.5;
+
 //location where my (ME) node will be fixed when it is drawn to screen
 var MY_FIXED_X = 0;
+
 //location where MY node will be fixed when it is drawn to screen
 var MY_FIXED_Y = 0;
-//default starting strength for each edge
-var DEFAULT_STRENGTH = 1;
-//capping the strength of each edge
-var MAX_EDGE_STRENGTH = 9;
+
 //default starting strength for each node
-var INITIAL_NODE_SCORE = 8;
-//the default amount of "life-force" a network receives
-var GIVER_POWER = 0.4;
-//the default amount of "life force" decayed by entropy/destroyer
-var DESTROYER_POWER = 0.5;
-//the "life force" a player trades to strengthen a edge
-var CLICK_NODE_DESTROYER_POWER = 2;
-//the edge-strength increase-when the node is clicked
-var CLICK_EDGE_INCREMENTER = 0.5;
+var INITIAL_NODE_SCORE = 100;
+
+// default amount to add to sender's score when inviting another player
+var INVITE_INCREMENT_SENDER_SCORE = 1;
+
+// default amount to add to receiver's score when being invited by another player
+var INVITE_INCREMENT_RECEIVER_SCORE = 1;
+
+// use as an "earliest timestamp" -- late on may 30th, 2018
+var COMMON_EPOCH = 1527733382598;
 
 // starting life
 var STARTING_LIFE = 30;
+
+var NODE_HEALTH_FULL = 99;
+var NODE_HEALTH_HIGH = 80;
+var NODE_HEALTH_MEDIUM = 50;
+var NODE_HEALTH_LOW = 25;
+var NODE_HEALTH_DEAD = 0;

@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <title>Common Authentication</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/main.css">
+
     <!-- *******************************************************************************************
        * TODO(DEVELOPER): Paste the initialization snippet from:
        * Firebase Console > Overview > Add Firebase to your web app. *
@@ -16,41 +19,35 @@
     <script defer src="/__/firebase/5.0.1/firebase-storage.js"></script>
     <script defer src="/__/firebase/init.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
-    <script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.js"></script>
+    <script src="js/globals.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/scores.js"></script>
+    <script src="js/db.js"></script>
 
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.7.0/firebaseui.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css" />
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
-      // FirebaseUI config.
-      var uiConfig = {
-        autoUpgradeAnonymousUsers: true,
-
-        //the user has sucessfully signed in so tell them to go to index
-        signInSuccessUrl: 'index.html',
-        signInOptions: [
-          // Leave the lines as is for the providers you want to offer your users.
-          //firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-          //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-          //firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-          //firebase.auth.GithubAuthProvider.PROVIDER_ID,
-          firebase.auth.EmailAuthProvider.PROVIDER_ID,
-          firebase.auth.PhoneAuthProvider.PROVIDER_ID
-        ],
-        // Terms of service url.
-        tosUrl: 'tos.html'
-      };
+      var ui = importUi();
+      var scores = importScores(ui);
+      var util = importUtil(scores, ui);
+      var dbModule = importDb(util, firebase);
+      var commonAuth = importAuth(firebase, dbModule);
 
       // Initialize the FirebaseUI Widget using Firebase.
       var ui = new firebaseui.auth.AuthUI(firebase.auth());
       // The start method will wait until the DOM is loaded.
-      ui.start('#firebaseui-auth-container', uiConfig);
+      ui.start('#firebaseui-auth-container', commonAuth.uiConfig);
     });
     </script>
   </head>
   <body>
     <!-- The surrounding HTML is left untouched by FirebaseUI.
          Your app may use that space for branding, controls and other customizations.-->
-    <h1>Please log in to Common</h1>
+    <h1>Please sign in to Common</h1>
+    <h2>You were emailed a temporary password when you were invited.<br>Use that email address and password to sign in.</h2>
     <div id="firebaseui-auth-container"></div>
   </body>
 </html>
