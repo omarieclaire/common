@@ -4,10 +4,14 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="50px" height="50px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
 <g>
-	<circle fill="none" stroke="#FFFFFF" stroke-linejoin="round" stroke-miterlimit="10" cx="22.211" cy="21.013" r="14"/>
-	
-		<line fill="none" stroke="#FFFFFF" stroke-linejoin="round" stroke-miterlimit="10" x1="31.135" y1="31.788" x2="41.789" y2="42.986"/>
-	
-		<line fill="none" stroke="#FFFFFF" stroke-linejoin="round" stroke-miterlimit="10" x1="15.711" y1="21.013" x2="28.711" y2="21.013"/>
+	<line fill="none" stroke="#FFFFFF" stroke-linejoin="round" stroke-miterlimit="10" x1="31.227" y1="31.5" x2="42.292" y2="42.5"/>
+	<g>
+		<circle fill="none" stroke="#FFFFFF" stroke-linejoin="round" stroke-miterlimit="10" cx="21.708" cy="21.5" r="14"/>
+		<g>
+			
+				<line fill="none" stroke="#FFFFFF" stroke-linejoin="round" stroke-miterlimit="10" x1="15.208" y1="21.5" x2="28.208" y2="21.5"/>
+			<line fill="none" stroke="#FFFFFF" stroke-linejoin="round" stroke-miterlimit="10" x1="21.708" y1="15" x2="21.708" y2="28"/>
+		</g>
+	</g>
 </g>
 </svg>
