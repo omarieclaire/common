@@ -100,17 +100,21 @@ var importUi = function() {
   // reportGameStatus("Some message here")
 
   window.reportGameStatus = (function () {
-    var statusLog = [];
+    var statusLog = ["PLAYING BACK …"];
     var statusElem = document.getElementById("game-status");
     var timeoutId;
-    var msBetweenQueuedMsgs = 50;
+    var msBetweenQueuedMsgs = 60;
     var msAfterLastQueuedMsg = 3000;
+    var numberMsgsToShow = 3;
 
     setInterval(function () {
       if (!statusElem) { return; }
       if (statusLog.length) {
         clearTimeout(timeoutId);
-        statusElem.textContent = statusLog.shift(0);
+
+        statusElem.innerHTML = statusLog.slice(0, numberMsgsToShow).reverse().join("<br>");
+        statusLog.shift(0);
+
         timeoutId = setTimeout(function () {
           statusElem.textContent = "";
         }, msAfterLastQueuedMsg);
@@ -118,7 +122,7 @@ var importUi = function() {
     }, msBetweenQueuedMsgs);
 
     return function (message) {
-      console.log("Game status update:", message);
+      // console.log("Game status update:", message);
       statusLog.push(message);
     }
   }());
