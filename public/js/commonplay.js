@@ -302,6 +302,7 @@ window.addEventListener("load", function() {
 					.append("line")
 					.attr("stroke-width", edgeStrength)
 					.attr("id", util.edgeIdAttr)
+					.attr("stroke", "gray")
 					.merge(edge);
 
 				// Update and restart the simulation.
