@@ -191,6 +191,13 @@ nav a {
   opacity: 0.5;
   width: 10em;
   height: 10em;
+  stroke: transparent;
+  stroke-width: 5px;
+  cursor: pointer;
+}
+
+.nodeClass:hover {
+  opacity: 1;
 }
 
 .myNode {
@@ -221,12 +228,10 @@ nav a {
 
 .nodeLow {
   opacity: 0.3;
-
 }
 
 .nodeDead {
   opacity: 0.3;
-
 }
 
 .nodes circle {
@@ -243,8 +248,7 @@ nav a {
 }
 
 .nodeLabelContainer {
-  color: white;
-
+  color: white;s
 }
 
 .annotation-path {}
