@@ -1,6 +1,6 @@
 html {
   color: white;
-  background-color: inherit;
+  background-color: black;
   font-size: 1em;
   line-height: 1.7;
 }
@@ -52,10 +52,6 @@ textarea {
 body {
   font: 18px "Lato", "Helvetica", "Helvetica Neue", "Arial";
   line-height: 1.6;
-  background-image: url(/img/common-background.png);
-  background-position: 50% -50%;
-  background-size: 30%;
-  background-repeat: no-repeat;
 }
 
 @media (max-width: 900px) {
@@ -70,11 +66,12 @@ body {
 }
 
 .title {
-  color: #333;
+  color: white;
   z-index: 1;
   display: inline-block;
   position: relative;
   margin-bottom: 10px;
+  opacity: 0.7;
 }
 
 /* ==============
@@ -336,7 +333,7 @@ nav a {
 }
 
 .login-elements a, .login-elements a:visited {
-  color: rgb(0, 0, 238);
+  color: rgba(0, 238, 230);
   text-decoration: none;
 }
 
@@ -351,7 +348,7 @@ nav a {
   vertical-align: text-bottom;
   border-radius: 50%;
   height: 2em;
-  background: black;
+  background: transparent;
   border: 1px solid white;
 }
 
