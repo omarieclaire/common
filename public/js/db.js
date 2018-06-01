@@ -179,7 +179,7 @@ var importDb = function(util, firebase, scores) {
       });
       scores.calculateCommonScore(state);
     } else if (msg.type === "gainClicks") {
-      if (msg.id === state.selfId && state.seenNodes[state.selfId].score > 0) {
+      if (msg.id === state.selfId && state.seenNodes[state.selfId] && state.seenNodes[state.selfId].score > 0) {
         // the logged-in player will gain clicks
         state.playerClicks = Math.min(6, state.playerClicks + msg.numClicks);
         state.lastClickGainedAt = msg.lastClickGainedAt;
@@ -209,7 +209,7 @@ var importDb = function(util, firebase, scores) {
     } else if (msg.type === "weakenCommon") {
       reportGameStatus("COMMON WEAKED w POWER " + msg.power);
     } else if (msg.type === "gainClicks") {
-      if (msg.id === state.selfId && state.seenNodes[state.selfId].score > 0) {
+      if (msg.id === state.selfId && state.seenNodes[state.selfId] && state.seenNodes[state.selfId].score > 0) {
         reportGameStatus("YOU GAINED CLICKS");
       }
     }
