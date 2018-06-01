@@ -102,6 +102,12 @@ window.addEventListener("load", function() {
 			var g = svg
 				.append("g");
 
+			// create a <g> element for annotations, append it to the first g
+			var annotationAnchor = g
+				.append("g")
+				.attr("class", "annotationBox")
+				.selectAll(".anchor");
+
 			// create a <g> element for edges, append it to the previous g
 			var edge = g
 				.append("g")
@@ -114,12 +120,6 @@ window.addEventListener("load", function() {
 				.append("g")
 				.attr("class", "nodeLabelContainer")
 				.selectAll(".label");
-
-			// create a <g> element for annotations, append it to the first g
-			var annotationAnchor = g
-				.append("g")
-				.attr("class", "annotationBox")
-				.selectAll(".anchor");
 
 			// create a <g> element for nodes, append it to the first g
 			var node = g
@@ -285,6 +285,8 @@ window.addEventListener("load", function() {
 				label = label.enter()
 					.append("text")
 					.attr("class", "nodeLabel")
+					.attr("fill", "white")
+					.attr("opacity", "0.5")
 					.text(function(d) {
 						return d.id;
 					})
@@ -346,8 +348,8 @@ window.addEventListener("load", function() {
 					})
 					.attr("y2", function(d) {
 						return d.target.y;
-					})
-					.attr("stroke-width", edgeStrength);
+					});
+					// .attr("stroke-width", edgeStrength);
 
 				label
 					.attr("x", function(d) {

@@ -1,5 +1,5 @@
 html {
-  color: #333;
+  color: white;
   background-color: inherit;
   font-size: 1em;
   line-height: 1.7;
@@ -71,9 +71,10 @@ body {
 
 .title {
   color: #333;
-  z-index: 2;
+  z-index: 1;
   display: inline-block;
   position: relative;
+  margin-bottom: 10px;
 }
 
 /* ==============
@@ -234,11 +235,16 @@ nav a {
 .nodeLabel {
   font-family: Helvetica;
   /* background-color: rgb(201, 76, 76); */
-  font-size: 12px;
+  font-size: 0.3em;
+  color: white;
+  /* opacity: 0.5; */
   letter-spacing: 0.02em;
 }
 
-.nodeLabelContainer {}
+.nodeLabelContainer {
+  color: white;
+
+}
 
 .annotation-path {}
 
@@ -261,7 +267,7 @@ nav a {
   /* stroke: blue; */
   fill: blue;
   stroke: none;
-  fill-opacity: 0.05;
+  fill-opacity: 0.2;
 }
 
 .annotation-connector path {
@@ -270,6 +276,7 @@ nav a {
 
 .ui {
   position: absolute;
+  opacity: 0.7;
 }
 
 .modalButtons {
@@ -346,14 +353,14 @@ nav a {
 #aboutBtn {
   background-image: url(/img/about.svg);
   background-position: center;
-  background-size: 125%;
+  background-size: 100%;
   background-repeat: no-repeat;
 }
 
 #settingsBtn {
   background-image: url(/img/settings.svg);
   background-position: center;
-  background-size: 120%;
+  background-size: 100%;
   background-repeat: no-repeat;
 }
 
@@ -367,23 +374,23 @@ nav a {
 
 #reset-button {
   background-image: url(/img/reload.svg);
-  background-size: 115%;
+  background-size: 105%;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 #add-player {
   position: fixed;
-  left: 2em;
+  left: 2.5em;
   bottom: 2em;
   background-image: url(/img/add-player.svg);
-  background-size: 90%;
+  background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
-  border: solid 5px yellow;
+  border: solid 2px yellow;
   border-radius: 50%;
-  width: 4em;
-  height: 4em;
+  width: 3em;
+  height: 3em;
 }
 
 button:hover {
