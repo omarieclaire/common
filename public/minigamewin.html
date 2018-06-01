@@ -4,7 +4,8 @@
       <meta charset="utf-8">
       <title>common minigame win</title>
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-      <link rel="stylesheet" href="css/minigamewin.css">
+      <link rel="stylesheet" href="/css/main.css">
+      <link rel="stylesheet" href="/css/minigamewin.css">
       <script defer src="/__/firebase/5.0.1/firebase-app.js"></script>
       <!-- include only the Firebase features as you need -->
       <script defer src="/__/firebase/5.0.1/firebase-auth.js"></script>
@@ -16,7 +17,7 @@
 
         <div class="container" id="newPlayerSignup">
           <h2>Welcome to Common</h2>
-          <h3 id="common-you-are-connecting"></h3>
+          <h3 id="common-you-are-connecting">&nbsp;</h3>
 
           <!-- On submit, send the form-data to X (to process the input): -->
           <div>
@@ -43,10 +44,13 @@
               </div>
             </div>
 
-            <br>
             <div class="row">
-              <input id="join" type="button" value="submit">
-              <p id="submitting-msg" style="color: green;"></p>
+              <div class="col-25">
+              </div>
+              <div class="col-75">
+                <input id="join" type="button" value="make connection">
+                <p id="submitting-msg" style="color: #45a049;"></p>
+              </div>
             </div>
             <div class="row">
               <p id="status"></p>
