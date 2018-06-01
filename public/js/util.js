@@ -42,6 +42,7 @@ var importUtil = function(scores, ui) {
         score: INITIAL_NODE_SCORE,
         x: 0,
         y:0,
+        alive: true,
         get r() {
           return this.score;
         }
@@ -81,6 +82,8 @@ var importUtil = function(scores, ui) {
       var y = addNode(to, state);
       // create a new edge
       var o = {id: id, source: x, target: y};
+      // revive the target player if they're dead.
+      y.alive = true;
       // add the edges to the array of edges
       state.edges.push(o);
       // add the edge id to the seenEdges object
@@ -161,6 +164,21 @@ var importUtil = function(scores, ui) {
   function health(n) {
     // ensure the result is between 0 and 100
     return Math.min(100, Math.max(0, n));
+  }
+
+  function killPlayer(node, state) {
+    node.alive = false;
+    var deletedEdges = [];
+    for (var i = state.edges.length - 1; i >= 0; i--) {
+      var edge = state.edges[i];
+      if(edge.source === node.id || edge.target === node.id) {
+        deletedEdges.push(edge.id);
+        deleteEdge(edge);
+      }
+    }
+    deletedEdges.forEach(function(edgeId) {
+      delete state.seenEdges[edgeId];
+    });
   }
 
   return {

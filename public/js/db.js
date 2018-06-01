@@ -172,10 +172,13 @@ var importDb = function(util, firebase, scores) {
       _.each(state.nodes, function (node) {
         var p = node.score;
         node.score = util.health(node.score - msg.power);
+        if(node.score <= 0) {
+          util.killPlayer(node);
+        }
       });
       scores.calculateCommonScore(state);
     } else if (msg.type === "gainClicks") {
-      if (msg.id === state.selfId) {
+      if (msg.id === state.selfId && state.seenNodes[state.selfId].alive) {
         // the logged-in player will gain clicks
         state.playerClicks = Math.min(6, state.playerClicks + msg.numClicks);
         state.lastClickGainedAt = msg.lastClickGainedAt;
