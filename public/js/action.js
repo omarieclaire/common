@@ -119,20 +119,20 @@ var importAction = function(ui, util, scores, db) {
 	}
 
   function tryToGainClicks(state) {
-	var eightHoursInMillis = 8 * 60 * 60 * 1000;
-	var now = util.currentTimeMillis();
-	var delta = now - state.lastClickGainedAt;
-	var numClicks = Math.floor(delta / eightHoursInMillis);
-	var remainder = delta % eightHoursInMillis;
-	if (state.playerClicks < 6 && numClicks > 0) {
-	  // player gains some clicks
-      console.log("gaining clicks %o", numClicks);
-	  db.gainClicks(state.selfId, numClicks, now - remainder);
-	} else {
-		console.log(util.nodesByNetwork(state.nodes));
-      console.log("no clicks to gain %o", delta);
-	  // nothing happens
-	}
+		var eightHoursInMillis = 8 * 60 * 60 * 1000;
+		var now = util.currentTimeMillis();
+		var delta = now - state.lastClickGainedAt;
+		var numClicks = Math.floor(delta / eightHoursInMillis);
+		var remainder = delta % eightHoursInMillis;
+		if (state.playerClicks < 6 && numClicks > 0) {
+		  // player gains some clicks
+	      console.log("gaining clicks %o", numClicks);
+		  db.gainClicks(state.selfId, numClicks, now - remainder);
+		} else {
+			console.log(util.nodesByNetwork(state.nodes));
+	      console.log("no clicks to gain %o", delta);
+		  // nothing happens
+		}
   }
 
 	return {

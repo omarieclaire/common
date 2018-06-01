@@ -29,20 +29,36 @@ var importUtil = function(scores, ui) {
 
   // given a node id, add a node
   // this function returns the node
-  function addNode(id, state) {
+  // sender = true
+  // receiver = false
+  function addNode(id, state, who) {
     // check if the id was already added
-    if (state.seenNodes[id]) {
+    var node = state.seenNodes[id];
+    if (node) {
       // the id was added, so return the node
+      // give them some score
+      var score;
+      if(who == "sender") {
+        score = INVITE_INCREMENT_SENDER_SCORE;
+      } else if(who == "receiver") {
+        score = INVITE_INCREMENT_RECEIVER_SCORE;
+      } else {
+        score = 0;
+      }
+
+      node.score += score;
+      // TODO: make a global. differentiate between sender and receiver
+
       return state.seenNodes[id];
     } else {
       // create a new node object
+
       var o = {
         "id": id,
         color: state.colorPicker(id),
         score: INITIAL_NODE_SCORE,
         x: 0,
         y:0,
-        alive: true,
         get r() {
           return this.score;
         }
@@ -69,7 +85,7 @@ var importUtil = function(scores, ui) {
     if (from === to) {
       // if 'from' id is equal to 'to' id, assume we're adding
       // a node and not an edge.
-      addNode(from, state);
+      addNode(from, state, "sender");
     } else if (state.seenEdges[id]) {
       // if 'from' and 'to' are different, but
       // we've seen the id before, do nothing
@@ -77,13 +93,11 @@ var importUtil = function(scores, ui) {
     } else {
       // if 'from' and 'to' are different and ne
       // add a node for 'from' in case it doesn't exist
-      var x = addNode(from, state);
+      var x = addNode(from, state, "sender");
       // add a node for 'to' in case it doesn't exist
-      var y = addNode(to, state);
+      var y = addNode(to, state, "reciever");
       // create a new edge
       var o = {id: id, source: x, target: y};
-      // revive the target player if they're dead.
-      y.alive = true;
       // add the edges to the array of edges
       state.edges.push(o);
       // add the edge id to the seenEdges object
@@ -167,7 +181,7 @@ var importUtil = function(scores, ui) {
   }
 
   function killPlayer(node, state) {
-    node.alive = false;
+    deactivateNode(node, state);
     var deletedEdges = [];
     for (var i = state.edges.length - 1; i >= 0; i--) {
       var edge = state.edges[i];
@@ -194,6 +208,7 @@ var importUtil = function(scores, ui) {
     recoverSeenEdges: recoverSeenEdges,
     currentTimeMillis: currentTimeMillis,
     clicks: clicks,
-    health: health
+    health: health,
+    killPlayer: killPlayer
   };
 };

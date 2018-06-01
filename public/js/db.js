@@ -141,7 +141,7 @@ var importDb = function(util, firebase, scores) {
     }
     if (msg.type === "invite") {
       if (msg.sender == null) {
-        util.addNode(msg.recipient, state);
+        util.addNode(msg.recipient, state, "receiver");
       } else {
         util.addEdge(msg.sender, msg.recipient, state);
       }
@@ -173,12 +173,12 @@ var importDb = function(util, firebase, scores) {
         var p = node.score;
         node.score = util.health(node.score - msg.power);
         if(node.score <= 0) {
-          util.killPlayer(node);
+          util.killPlayer(node, state);
         }
       });
       scores.calculateCommonScore(state);
     } else if (msg.type === "gainClicks") {
-      if (msg.id === state.selfId && state.seenNodes[state.selfId].alive) {
+      if (msg.id === state.selfId && state.seenNodes[state.selfId].score > 0) {
         // the logged-in player will gain clicks
         state.playerClicks = Math.min(6, state.playerClicks + msg.numClicks);
         state.lastClickGainedAt = msg.lastClickGainedAt;
