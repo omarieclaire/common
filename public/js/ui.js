@@ -46,14 +46,14 @@ var importUi = function() {
     });
   }
 
-  var createModal = function(modalId, buttonId, spanIndex) {
+  var createModal = function(modalId, buttonId) {
 
     // Get the modal
     var modal = document.getElementById(modalId);
     // Get the button that opens the modal
     var btn = document.getElementById(buttonId);
     // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[spanIndex];
+    var span = document.querySelector("#" + modalId + " .close");
     // When the user clicks on the button, open the modal
     btn.onclick = function() {
       modal.style.display = "block";
@@ -75,8 +75,8 @@ var importUi = function() {
 
   function createModals() {
 
-    createModal('aboutModal', 'aboutBtn', 0);
-    createModal('settingsModal', 'settingsBtn', 1);
+    createModal('aboutModal', 'aboutBtn');
+    createModal('settingsModal', 'settingsBtn');
 
     // var myData = [];
 
