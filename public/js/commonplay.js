@@ -222,7 +222,7 @@ window.addEventListener("load", function() {
 						return d.color;
 					})
 					.attr("r", function(d) {
-						return d.score;
+						return Math.max(d.score/10, 1);
 					})
 				// .attr("stroke", "pink")
 				// add an id attribute to each node, so we can access/select it later
@@ -398,7 +398,7 @@ window.addEventListener("load", function() {
 
 				label
 					.attr("x", function(d) {
-						return d.x + 9;
+						return d.x + 7;
 					})
 					.attr("y", function(d) {
 						return d.y - 4;
