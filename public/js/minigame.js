@@ -22,7 +22,7 @@ var lineLength2 = 0;
 
 var haveIWonYet = false;
 
-var introText = 'New player invitation Hold the buttons below to connect';
+var introText = 'New player invitation! Hold the buttons below to connect';
 var winText = 'Connection made'
 
 function setup() {
@@ -44,7 +44,7 @@ function draw() {
 
   if(haveIWonYet) {
     background(0, 255, 255);
-    text(winText, screenW/2 - 250, 20, 500, 300);
+    text(winText, screenW/2 - 240, 20, 480, 300);
     // document.querySelector("#reinforcing-connection-sound").play()
 
    setTimeout(function() {
