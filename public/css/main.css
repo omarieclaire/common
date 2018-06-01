@@ -1,4 +1,5 @@
 html {
+  font-family: monospace;
   color: white;
   background-color: black;
   font-size: 1em;
@@ -236,7 +237,7 @@ nav a {
 }
 
 .nodeLabel {
-  font-family: Helvetica;
+  font-family: monospace;
   /* background-color: rgb(201, 76, 76); */
   font-size: 0.3em;
   color: white;
@@ -435,7 +436,7 @@ button:hover {
 }
 .onoffswitch-inner:before, .onoffswitch-inner:after {
     display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 25px;
-    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    font-size: 14px; color: white; font-family: monospace, Trebuchet, Arial, sans-serif; font-weight: bold;
     box-sizing: border-box;
 }
 .onoffswitch-inner:before {

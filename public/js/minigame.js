@@ -22,6 +22,9 @@ var lineLength2 = 0;
 
 var haveIWonYet = false;
 
+var introText = 'New player invitation Hold the buttons below to connect';
+var winText = 'Connection made'
+
 function setup() {
   createCanvas(screenW, screenH);
   fill(0);
@@ -29,12 +32,19 @@ function setup() {
 }
 
 function draw() {
+  textAlign(CENTER, TOP);
+  // textLeading(leading)
+
+  strokeWeight(2);
+  // fill(255);
+  textFont("monospace");
+  textSize(30);
+
+  fill(50);
 
   if(haveIWonYet) {
     background(0, 255, 255);
-    textSize(50);
-    textAlign(CENTER);
-    text("connected!", screenW/2, screenH/2 - 30);
+    text(winText, screenW/2 - 250, 20, 500, 300);
     // document.querySelector("#reinforcing-connection-sound").play()
 
    setTimeout(function() {
@@ -42,6 +52,10 @@ function draw() {
     }, 2000);
 
   } else {
+    text(introText, screenW/2 - 250, 20, 500, 300);
+
+
+
     //background(200);
   }
 
