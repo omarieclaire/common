@@ -64,7 +64,7 @@ body {
   color: white;
   z-index: 1;
   display: inline-block;
-  position: relative;
+  position: fixed;
   margin-bottom: 10px;
   opacity: 0.7;
 }
@@ -277,6 +277,7 @@ nav a {
   position: fixed;
   opacity: 0.8;
   z-index: 1;
+  top: 5em;
 }
 
 .modalButtons {
