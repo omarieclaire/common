@@ -15,13 +15,12 @@ document.addEventListener("DOMContentLoaded", function() {
   var emailErrorMsg = document.getElementById("email-error-msg");
   var statusElement = document.getElementById("status");
   var submitButton = document.getElementById("join");
+  var submittingMsg = document.getElementById("submitting-msg");
   var youAreConnectingElement = document.getElementById("common-you-are-connecting");
 
   // import database, but we can only access a few methods
   // since we're passing null util and null scores.
   var database = importDb(null, firebase, null);
-
-
 
   firebase.auth().onAuthStateChanged(function(user) {
     if(user) {
@@ -64,14 +63,17 @@ document.addEventListener("DOMContentLoaded", function() {
           failure = true;
         }
 
-        if(failure) {
+        if (failure) {
           ev.preventDefault();
           return false;
+        } else {
+          submitButton.disabled = true;
+          submittingMsg.innerHTML = "attempting to make a connection …";
         }
 
         database.userExists(usernameEntered).then(function(exists) {
           console.log(exists);
-          if(exists) {
+          if (exists) {
             usernameLabel.style.color = "red";
             usernameErrorMsg.innerHTML = "username already exists :(";
             //ev.preventDefault();
@@ -82,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }).then(function(result) {
           // check if email exists
           return emailExistsFunc(emailEntered).then(function(emailExists) {
-            if(emailExists.data) {
+            if (emailExists.data) {
               emailLabel.style.color = "red";
               emailErrorMsg.innerHTML = "email already exists :(";
               //ev.preventDefault();
@@ -119,13 +121,14 @@ document.addEventListener("DOMContentLoaded", function() {
             if(error.message !== "email-exists" && error.message !== "username-exists") {
               document.getElementById('status').innerHTML = "Failed and we don't know why :(";
             }
+            submitButton.disabled = false;
             return false;
           });
         });
       });
     } else {
       submitButton.disabled = true;
-      statusElement.innerHTML = "you must be logged in to invite someone :(";
+      statusElement.innerHTML = "you must be signed in to invite someone :(";
     }
   });
 });
