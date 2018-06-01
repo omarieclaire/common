@@ -115,6 +115,11 @@ window.addEventListener("load", function() {
 				.attr("stroke-width", 0.5)
 				.selectAll(".edge");
 
+			var playerEdge = g
+				.append("g")
+				.attr("id", "other-edges")
+				.selectAll(".edge");
+
 			// create a <g> element for labels, append it to the first g
 			var label = g
 				.append("g")
@@ -305,6 +310,22 @@ window.addEventListener("load", function() {
 					.attr("stroke", "gray")
 					.merge(edge);
 
+					// create a duplicate list of edges connected to the player.
+					// getEdgesForNode(state.seenNodes[state.selfId], state.eedges).copy
+					// (should make a copy - not sure how to copy stuff in javascript)
+					// draw these edges ?
+				var playersEdges = util.getEdgesForNode(state.seenNodes[state.selfId], state.edges).slice();
+				playerEdge = playerEdge.data(playersEdges, function(d) {
+					return d.source.id + "-" + d.target.id;
+				});
+
+				playerEdge.exit().remove();
+				playerEdge = playerEdge.enter()
+					.append("line")
+					.attr("stroke-width", edgeStrength)
+					.attr("stroke", "red")
+					.merge(playerEdge);
+
 				// Update and restart the simulation.
 				simulation.nodes(state.nodes);
 				simulation.force("link").links(state.edges);
@@ -351,6 +372,20 @@ window.addEventListener("load", function() {
 						return d.target.y;
 					});
 					// .attr("stroke-width", edgeStrength);
+
+				playerEdge
+					.attr("x1", function(d) {
+						return d.source.x;
+					})
+					.attr("y1", function(d) {
+						return d.source.y;
+					})
+					.attr("x2", function(d) {
+						return d.target.x;
+					})
+					.attr("y2", function(d) {
+						return d.target.y;
+					});
 
 				label
 					.attr("x", function(d) {
