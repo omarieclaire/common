@@ -315,15 +315,15 @@ window.addEventListener("load", function() {
 					// (should make a copy - not sure how to copy stuff in javascript)
 					// draw these edges ?
 				var playersEdges;
-        var playerNode = state.seenNodes[state.selfId];
-        // Check if the playerNode exists (if it's not null or undefined)
-        // if it exists, playersEdges are the connected edges, otherwise they're
-        // an empty array
-        if(playerNode) {
-          playersEdges = util.getEdgesForNode(playerNode, state.edges).slice();
-        } else {
-          playersEdges = [];
-        }
+				var playerNode = state.seenNodes[state.selfId];
+				// Check if the playerNode exists (if it's not null or undefined)
+				// if it exists, playersEdges are the connected edges, otherwise they're
+				// an empty array
+				if(playerNode) {
+					playersEdges = util.getEdgesForNode(playerNode, state.edges).slice();
+				} else {
+					playersEdges = [];
+				}
 				playerEdge = playerEdge.data(playersEdges, function(d) {
 					return d.source.id + "-" + d.target.id;
 				});
