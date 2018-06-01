@@ -139,6 +139,7 @@ nav a {
   border: 1px solid #888;
   width: 40%;
   /* Could be more or less, depending on screen size */
+  color: black;
 }
 
 /* The Close Button */
@@ -331,6 +332,17 @@ nav a {
 
 .login-elements a:hover, .login-elements a:focus {
   text-decoration: underline;
+}
+
+.help-button {
+  width: 2em;
+  margin-left: 0.5em;
+  font-size: x-small;
+  vertical-align: text-bottom;
+  border-radius: 50%;
+  height: 2em;
+  background: black;
+  border: 1px solid white;
 }
 
 #toggleDebug {

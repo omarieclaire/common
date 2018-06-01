@@ -78,6 +78,11 @@ var importUi = function() {
     createModal('aboutModal', 'aboutBtn');
     createModal('settingsModal', 'settingsBtn');
 
+    createModal("player-clicks-explanation", "player-clicks-explanation-btn");
+    createModal("node-score-me-explanation", "node-score-me-explanation-btn");
+    createModal("decay-rate-explanation", "decay-rate-explanation-btn");
+    createModal("status-explanation", "status-explanation-btn");
+
     // var myData = [];
 
     document.getElementById("toggleDebugBtn").addEventListener("click", function() {
