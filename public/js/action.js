@@ -28,11 +28,6 @@ var importAction = function(ui, util, scores, db) {
 
 	function nodeClicked(state, d) {
 
-		if (state.playerClicks <= 0) {
-			console.log("action.nodeClicked: no clicks available!");
-			return;
-		}
-
 		var target = d.id;
 		//reference to the edge between me and the target
 		var ouredge = state.edges.filter(function (edge) {
@@ -41,8 +36,20 @@ var importAction = function(ui, util, scores, db) {
 		})[0];
 
 		// if clicking on a edge attached to our nodes
-		// decrement our score
 		var ourNode = state.seenNodes[state.selfId];
+		var htmlNode = document.getElementById(util.nodeIdAttr(d));
+
+		if (state.playerClicks <= 0) {
+			playSound("poor-sound", 0.2);
+			var clickHtmlText = document.getElementById("player-clicks-text");
+			var clickHtml = document.getElementById("player-clicks");
+			d3.select(clickHtmlText).transition().duration(500).style("color", "red").transition().duration(2000).style("color", null);
+			d3.select(clickHtml).transition().duration(1000).style("color", "red").transition().duration(1500).style("color", null);
+
+			console.log("action.nodeClicked: no clicks available!");
+			return;
+		}
+
 		if (ouredge && ourNode) {
 			db.giveStrength(ourNode.id, target);
 			playSound("reinforcing-connection-sound", 0.2);
@@ -51,8 +58,10 @@ var importAction = function(ui, util, scores, db) {
 			d3.select(htmlEdge).transition().duration(1000).attr("stroke", "#00FF00").transition().duration(1500).attr("stroke", null);
 
 			// begin node animation
-			var htmlNode = document.getElementById(util.nodeIdAttr(d));
-			// d3.select(htmlNode).transition().duration(10).style("fill","magenta").transition().duration(1500).style("fill", d.color);
+			d3.select(htmlNode).transition().duration(1000).style("fill","#00FF00").transition().duration(1500).style("fill", d.color);
+		} else {
+			playSound("error-sound", 0.5);
+			d3.select(htmlNode).transition().duration(1000).style("fill","gray").transition().duration(1500).style("fill", d.color);
 		}
 
 		scores.calculateCommonScore(state);
