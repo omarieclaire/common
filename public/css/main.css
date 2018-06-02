@@ -125,6 +125,7 @@ nav a {
 
 .modal-content {
   background-color: #fefefe;
+  margin-top: 10em;
   margin: 5em auto;
   padding: 15px;
   border: 1px solid #888;
@@ -242,7 +243,7 @@ nav a {
 }
 
 .nodeLabelContainer {
-  color: white;s
+  color: white;
 }
 
 .annotation-path {}

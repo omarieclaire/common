@@ -222,7 +222,7 @@ window.addEventListener("load", function() {
 						return d.color;
 					})
 					.attr("r", function(d) {
-						return Math.max(d.score/10, 1);
+						return DEFAULT_NODE_RADIUS;
 					})
 				// .attr("stroke", "pink")
 				// add an id attribute to each node, so we can access/select it later
@@ -360,9 +360,9 @@ window.addEventListener("load", function() {
 					.attr("cy", function(d) {
 						return d.y;
 					})
-					.attr("r", function(d) {
-						return Math.max(d.score/10, 1);
-					})
+					// .attr("r", function(d) {
+					// 	return Math.max(d.score/10, 1);
+					// })
 					.attr("fill", function(d) {
 						return d.color;
 					});
