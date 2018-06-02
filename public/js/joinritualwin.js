@@ -226,6 +226,8 @@ document.addEventListener("DOMContentLoaded", function() {
           }).catch(function(error) {
             handleError(ev, error);
           });
+        }).catch(function(error) {
+          handleError(ev, error);
         });
       });
 
@@ -266,6 +268,8 @@ document.addEventListener("DOMContentLoaded", function() {
           }).catch(function(error) {
             handleError(ev, error);
           });
+        }).catch(function(error) {
+          handleError(ev, error);
         });
       });
     } else {
