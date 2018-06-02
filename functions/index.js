@@ -58,7 +58,8 @@ function authenticatedUserHandler(email, sender, username, password) {
       sender: sender,
       recipient: username,
       startingLife: 100
-    }).then((previous) => {
+    });
+  }).then((previous) => {
     console.log("successfully pushed to log");
     return true;
   });
