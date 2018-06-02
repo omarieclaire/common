@@ -56,9 +56,6 @@ window.addEventListener("load", function() {
 			// list of node/edge data used by the force-directed graph
 			nodes: [],
 			edges: [],
-			lastClickTime: COMMON_EPOCH, // by default, ~may30
-			playerClicks: 0, // this is a count 0-6
-			lastClickGainedAt: 0, // these are milliseconds
 			// method used to draw the graph. For initialization reasons
 			// we start with a fake draw and mutate it below.
 			draw: function() { console.log("fake draw"); },
@@ -77,6 +74,18 @@ window.addEventListener("load", function() {
 			action.tryDestroyer(initialState);
 		}, 60 * 1000);
 		action.tryDestroyer(initialState);
+
+    var runSnapshotter =
+      (new URLSearchParams(window.location.search)).has('snapshots');
+    // If the snapshots query param is present then run the snapshotter
+    // in the background every minute.
+    if(runSnapshotter) {
+      window.setInterval(function() {
+        console.log("Capturing snapshot at key: " + initialState.logEntry);
+        action.runSnapshotter(initialState);
+      }, 60 * 1000);
+    }
+
 
 		var initializeGame = function (state) {
 
@@ -438,16 +447,6 @@ window.addEventListener("load", function() {
 			// draw refreshes the graph?
 			draw();
 
-			// add a function when "add" button is clicked
-			document.getElementById("add").addEventListener("click", function() {
-				action.addClicked(state);
-			});
-
-			// add a function when the `random` button is clicked
-			document.getElementById("random").addEventListener("click", function() {
-				action.randomClicked(state);
-			});
-
 			document.getElementById("reinitialize").addEventListener("click", function() {
 				action.reinitializeClicked(state);
 			});
@@ -559,6 +558,8 @@ window.addEventListener("load", function() {
 		// We pass the initial state, and a
 		// "initializeGame" function,
 		// and onLogUpdate function.
-		db.initLog(initialState, initializeGame, onLogUpdate);
+    var startLogFromBeginning =
+      (new URLSearchParams(window.location.search)).has('startLogFromBeginning');
+		db.initLog(initialState, initializeGame, onLogUpdate, startLogFromBeginning);
 	});
 });
