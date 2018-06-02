@@ -97,6 +97,10 @@ var importAction = function(ui, util, scores, db) {
 	}
 
 	function tryDestroyer(state) {
+		if (!state.seenNodes[state.selfId]) {
+			console.log("user is anonymous -- can't run destroyer");
+			return;
+		}
 		// destroyer has a 1-in-60 chance of running every minute.
 		// this means for each player, we expect the destroyer to run
 		// about once for every hour they play.
@@ -128,6 +132,11 @@ var importAction = function(ui, util, scores, db) {
 	}
 
   function tryToGainClicks(state) {
+		if (!state.seenNodes[state.selfId]) {
+			console.log("user is anonymous -- can't gain clicks");
+			return;
+		}
+
 		var eightHoursInMillis = 8 * 60 * 60 * 1000;
 		var now = util.currentTimeMillis();
 		var delta = now - state.lastClickGainedAt;
