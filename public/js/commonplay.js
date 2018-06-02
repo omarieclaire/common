@@ -332,7 +332,7 @@ window.addEventListener("load", function() {
 				playerEdge = playerEdge.enter()
 					.append("line")
 					.attr("stroke-width", edgeStrength)
-					.attr("stroke", "red")
+					.attr("stroke", "pink")
 					.merge(playerEdge);
 
 				// Update and restart the simulation.
@@ -512,6 +512,24 @@ window.addEventListener("load", function() {
 			ui.renderMyScore(state);
 			scores.calculateCommonScore(state);
 			state.draw();
+			if(msg.type === "destroyEdge") {
+				/*
+				// attempt to animate edge destruction when Destroyer
+				// destroys an edge.
+				var source = msg.source;
+				var target = msg.target;
+
+				var gEdgeContainer = edge.node();
+				var newpath = document.createElementNS('http://www.w3.org/2000/svg',"path");
+				newpath.setAttributeNS('d', 'M' + source.x + ' ' + source.y + ' ' + target.x + ' ' + target.y);
+				newpath.setAttributeNS('stroke','red');
+				newpath.setAttributeNS('stroke-width', 10);
+				gEdgeContainer.appendChild(newpath);
+				*/
+				//d3.select(edgeHtml).transition().duration(2000).attr("stroke", "red").transition().duration(2000).attr("stroke",null);
+				playSound("destroyer-sound", 0.3);
+			}
+
 		};
 
 		// We pass the initial state, and a

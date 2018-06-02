@@ -184,10 +184,8 @@ nav a {
 
 .nodeClass {
   opacity: 0.5;
-  width: 10em;
-  height: 10em;
   stroke: transparent;
-  stroke-width: 5px;
+  stroke-width: 1.5px;
   cursor: pointer;
 }
 
@@ -199,7 +197,7 @@ nav a {
   opacity: 0.3;
   width: 10em;
   height: 10em;
-  stroke: yellow;
+  /* stroke: yellow; */
   /* outline: 4px solid red; */
   /* stroke-offset: 15px; */
 
@@ -214,18 +212,23 @@ nav a {
 }
 
 .nodeHigh {
+  stroke: green;
   opacity: 0.5;
 }
 
 .nodeMedium {
+  stroke: blue;
   opacity: 0.3;
 }
 
 .nodeLow {
+  stroke: red;
   opacity: 0.3;
 }
 
 .nodeDead {
+  stroke: gray;
+  fill: black;
   opacity: 0.3;
 }
 
