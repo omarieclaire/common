@@ -176,7 +176,19 @@ document.addEventListener("DOMContentLoaded", function() {
   var handleError = function (ev, error) {
     ev.preventDefault();
 
-    if(error.message !== "email-exists" && error.message !== "username-exists") {
+    if (error.message === "username-exists") {
+      usernameLabel.style.color = "red";
+      usernameErrorMsg.innerHTML = "username already exists :(";
+    } else if (error.message === "email-exists") {
+      emailLabel.style.color = "red";
+      emailErrorMsg.innerHTML = "email already exists :(";
+    } else if (error.message === "username-does-not-exist") {
+      usernameLabel.style.color = "red";
+      usernameErrorMsg.innerHTML = "that username does not exist :(";
+    } else if (error.message === "email-does-not-exist") {
+      emailLabel.style.color = "red";
+      emailErrorMsg.innerHTML = "email does not already exist :(";
+    } else {
       document.getElementById('status').innerHTML = "Failed and we don't know why :(";
     }
 
@@ -198,9 +210,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         database.userExists(usernameEntered).then(function(exists) {
           if (exists) {
-            usernameLabel.style.color = "red";
-            usernameErrorMsg.innerHTML = "username already exists :(";
-
             return Promise.reject(new Error("username-exists"));
           } else {
             return Promise.resolve(true);
@@ -209,10 +218,7 @@ document.addEventListener("DOMContentLoaded", function() {
           // check if email exists
           return emailExistsFunc(emailEntered).then(function(emailExists) {
             if (emailExists.data) {
-              emailLabel.style.color = "red";
-              emailErrorMsg.innerHTML = "email already exists :(";
-
-              return Promise.reject(new Error("username-exists"));
+              return Promise.reject(new Error("email-exists"));
             } else {
               return Promise.resolve(true);
             }
@@ -234,10 +240,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         database.userExists(usernameEntered).then(function(exists) {
           if (!exists) {
-            usernameLabel.style.color = "red";
-            usernameErrorMsg.innerHTML = "that username does not exist :(";
-
-            return Promise.reject(new Error("username-exists"));
+            return Promise.reject(new Error("username-does-not-exist"));
           } else {
             return Promise.resolve(true);
           }
@@ -245,10 +248,7 @@ document.addEventListener("DOMContentLoaded", function() {
           // check if email exists
           return emailExistsFunc(emailEntered).then(function(emailExists) {
             if (!emailExists.data) {
-              emailLabel.style.color = "red";
-              emailErrorMsg.innerHTML = "email does not already exist :(";
-
-              return Promise.reject(new Error("username-exists"));
+              return Promise.reject(new Error("email-does-not-exist"));
             } else {
               return Promise.resolve(true);
             }
