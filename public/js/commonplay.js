@@ -446,25 +446,39 @@ window.addEventListener("load", function() {
 				g.attr("transform", d3.event.transform);
 			};
 
-			// call zooming function when d3 detects a zoom
-			var zoomCall = d3.zoom().scaleExtent([1 / 4, 4]).on("zoom", zoomFunction);
-			svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight / 2));
-			svg.call(zoomCall);
-			svg.on("dblclick.zoom", null);
-
 			var zoomIn = function() {
 				var currentScale = d3.zoomTransform(svg.node()).k;
 				svg.transition().duration(500).call(zoomCall.scaleTo, currentScale + ZOOM_AMOUNT).transition();
 			};
 
+			var zoomLevel = function () {
+				var defaultLevel = 1;
+
+				// if the screen is small, reduce size by half
+				if (svgWidth < 400 || svgHeight < 400) {
+					console.log("hemm")
+					return defaultLevel / 2;
+				} else {
+					console.log("good")
+					return defaultLevel;
+				}
+			}
+
 			var resetZoom = function() {
-				svg.transition().duration(500).call(zoomCall.translateTo, MY_FIXED_X, MY_FIXED_Y).transition().duration(500).call(zoomCall.scaleTo, 1).transition();
+				svg.transition().duration(500).call(zoomCall.translateTo, MY_FIXED_X, MY_FIXED_Y).transition().duration(500).call(zoomCall.scaleTo, zoomLevel()).transition();
 			};
 
 			var zoomOut = function() {
 				var currentScale = d3.zoomTransform(svg.node()).k;
 				svg.transition().duration(500).call(zoomCall.scaleTo, currentScale - ZOOM_AMOUNT).transition();
 			};
+
+			// call zooming function when d3 detects a zoom
+			var zoomCall = d3.zoom().scaleExtent([1 / 4, 4]).on("zoom", zoomFunction);
+			svg.call(zoomCall.transform, d3.zoomIdentity.translate(svgWidth / 2, svgHeight / 2));
+			svg.call(zoomCall.scaleTo, zoomLevel()).transition();
+			svg.call(zoomCall);
+			svg.on("dblclick.zoom", null);
 
 			document.getElementById("zoom-in").addEventListener("click", zoomIn);
 			document.getElementById("reset-button").addEventListener("click", resetZoom);
