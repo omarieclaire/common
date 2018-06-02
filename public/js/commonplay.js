@@ -559,6 +559,8 @@ window.addEventListener("load", function() {
 		// We pass the initial state, and a
 		// "initializeGame" function,
 		// and onLogUpdate function.
-		db.initLog(initialState, initializeGame, onLogUpdate);
+    var startLogFromBeginning =
+      (new URLSearchParams(window.location.search)).has('log');
+		db.initLog(initialState, initializeGame, onLogUpdate, startLogFromBeginning);
 	});
 });

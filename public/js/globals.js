@@ -33,3 +33,6 @@ var MAXIMUM_USERNAME_LENGTH = 15;
 
 // the default node radius
 // var DEFAULT_NODE_RADIUS = 7;
+
+// Version the snapshot database
+var SNAPSHOT_VERSION = 1;

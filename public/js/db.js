@@ -26,6 +26,17 @@ var importDb = function(util, firebase, scores) {
     ref.on('child_changed', update);
   }
 
+  function runLogFromBeginning(state, onLogUpdate) {
+    console.log("Running log from the start");
+    var ref = database.ref('/log');
+    return ref.on('child_added', function(data) {
+      var msg = data.val();
+      var key = data.key;
+      readLog(state, msg, key);
+      onLogUpdate(state, msg);
+    });
+  }
+
   /**
    * Do an initial read of /log/* and set up a listener to notice any
    * updates that happen. Any time /log/* changes we'll receive an
@@ -43,41 +54,42 @@ var importDb = function(util, firebase, scores) {
    *
    *
    */
-  function initLog(state, initializeGame, onLogUpdate) {
-    database
-      .ref('/state')
-      .orderByKey()
-      .limitToLast(1)
-      .once('child_added', function(snapshot) {
-        var stateSnapshot = snapshot.val();
-        var key = snapshot.key;
-        stateSnapshot.nodes.forEach(function(n) {
-          util.addNode(n.id, state, n.score);
+  function initLog(state, initializeGame, onLogUpdate, startLogFromBeginning) {
+    if(startLogFromBeginning) {
+      initializeGame(state);
+      return runLogFromBeginning(state, onLogUpdate);
+    } else {
+      database
+        .ref('/state')
+        .orderByKey()
+        .limitToLast(1)
+        .once('child_added', function(snapshot) {
+          var stateSnapshot = snapshot.val();
+          var key = snapshot.key;
+          console.log("Starting log from: " + key);
+          stateSnapshot.nodes.forEach(function(n) {
+            util.addNode(n.id, state, n.score);
+          });
+          stateSnapshot.edges.forEach(function(e) {
+            util.addEdge(e.source.id, e.target.id, state)
+          });
+          state.randomIndex = stateSnapshot.randomIndex;
+          state.players = stateSnapshot.players;
+          state.logEntry = key;
+          initializeGame(state);
+          var ref = database.ref('/log').orderByKey().startAt(key);
+          return ref.on('child_added', function(data) {
+            var msg = data.val();
+            var key = data.key;
+            readLog(state, msg, key);
+            onLogUpdate(state, msg);
+          });
+        }, function(error) {
+          console.log("ERROR fetching state, starting from scratch", error);
+          initializeGame(state);
+          runLogFromBeginning(state, onLogUpdate);
         });
-        stateSnapshot.edges.forEach(function(e) {
-          util.addEdge(e.source.id, e.target.id, state)
-        });
-        state.randomIndex = stateSnapshot.randomIndex;
-        state.players = stateSnapshot.players;
-        state.logEntry = key;
-        initializeGame(state);
-        var ref = database.ref('/log').orderByKey().startAt(snapshot.key);
-        return ref.on('child_added', function(data) {
-          var msg = data.val();
-          var key = data.key;
-          readLog(state, msg, key);
-          onLogUpdate(state, msg);
-        });
-      }, function(error) {
-        console.log("ERROR fetching state, starting from scratch", error);
-        var ref = database.ref('/log');
-        return ref.on('child_added', function(data) {
-          var msg = data.val();
-          var key = data.key;
-          readLog(state, msg, key);
-          onLogUpdate(state, msg);
-        });
-      });
+    }
   }
 
   /**
@@ -213,6 +225,8 @@ var importDb = function(util, firebase, scores) {
         // reportGameStatus("YOU GAINED CLICKS");
       }
     }
+
+    state.logEntry = key;
   }
 
   /**
