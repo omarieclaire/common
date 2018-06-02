@@ -248,7 +248,7 @@ nav a {
 .nodeLabel {
   font-family: monospace;
   /* background-color: rgb(201, 76, 76); */
-  font-size: 0.3em;
+  font-size: 0.7em;
   color: white;
   /* opacity: 0.5; */
   letter-spacing: 0.02em;
@@ -430,8 +430,8 @@ nav a {
 
 #add-player {
   position: fixed;
-  left: 2em;
-  bottom: 2em;
+  left: 1.5em;
+  bottom: 1.5em;
   background-image: url(/img/add-player.svg);
   background-size: 85%;
   background-repeat: no-repeat;
