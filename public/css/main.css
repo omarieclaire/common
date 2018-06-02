@@ -264,7 +264,9 @@ nav a {
   font-size: 2.6em;
 }
 
-.annotationBox {}
+.annotationBox {
+  user-select: none;
+}
 
 .annotation path {
   /* stroke: blue; */
