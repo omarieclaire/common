@@ -16,6 +16,10 @@ html {
   text-shadow: none;
 }
 
+@-ms-viewport{
+  width: device-width;
+}
+
 hr {
   display: block;
   height: 1px;
