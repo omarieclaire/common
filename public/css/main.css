@@ -2,7 +2,7 @@ html {
   font-family: monospace;
   color: white;
   background-color: black;
-  /* font-size: 1em; */
+  font-size: 3em;
   line-height: 1.7;
 }
 
@@ -311,9 +311,9 @@ nav a {
 .zoomButtons button, .modalButtons button {
   border: none;
   overflow: hidden;
-  width: 2.5em;
-  height: 2.5em;
-  margin: 0.5em;
+  width: 3em;
+  height: 3em;
+  margin: 0.75em;
   display: block;
   text-indent: -1000em;
   background-color: transparent;
@@ -374,14 +374,13 @@ nav a {
 
 .help-button {
   width: 2em;
-  height: 2em;
   margin-left: 0.5em;
   font-size: x-small;
   vertical-align: text-bottom;
   border-radius: 50%;
+  height: 2em;
   background: transparent;
-  opacity: 0.25;
-  border: 0.5px solid white;
+  border: 1px solid white;
 }
 
 #toggleDebug {
@@ -403,7 +402,7 @@ nav a {
 #aboutBtn {
   background-image: url(/img/about.svg);
   background-position: center;
-  background-size: 90%;
+  background-size: 100%;
   background-repeat: no-repeat;
 }
 
@@ -424,7 +423,7 @@ nav a {
 
 #reset-button {
   background-image: url(/img/reload.svg);
-  background-size: 90%;
+  background-size: 105%;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -437,7 +436,7 @@ nav a {
   background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
-  border: solid 1px #ff3399;
+  border: solid 2px #ff3399;
   border-radius: 50%;
   width: 3em;
   height: 3em;
