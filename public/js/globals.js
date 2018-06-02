@@ -27,3 +27,6 @@ var NODE_HEALTH_HIGH = 80;
 var NODE_HEALTH_MEDIUM = 50;
 var NODE_HEALTH_LOW = 25;
 var NODE_HEALTH_DEAD = 0;
+
+// Maximum username length.
+var MAXIMUM_USERNAME_LENGTH = 15;

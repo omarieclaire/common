@@ -5,6 +5,75 @@ document.addEventListener("DOMContentLoaded", function() {
     return re.test(String(email).toLowerCase());
   }
 
+  var bannedWords = [
+    "beeyotch",
+    "biatch",
+    "bitch",
+    "chinaman",
+    "chinamen",
+    "chink",
+    "crazie",
+    "crazy",
+    "crip",
+    "cunt",
+    "dago",
+    "daygo",
+    "dego",
+    "dick",
+    "dumb",
+    "douchebag",
+    "dyke",
+    "fag",
+    "fatass",
+    "fatso",
+    "gash",
+    "gimp",
+    "golliwog",
+    "gook",
+    "gyp",
+    "halfbreed",
+    "half-breed",
+    "homo",
+    "hooker",
+    "idiot",
+    "insane",
+    "insanitie",
+    "insanity",
+    "jap",
+    "kike",
+    "kraut",
+    "lame",
+    "lardass",
+    "lesbo",
+    "lunatic",
+    "negro",
+    "nigga",
+    "nigger",
+    "nigguh",
+    "paki",
+    "pickaninnie",
+    "pickaninny",
+    "pussie",
+    "pussy",
+    "raghead",
+    "retard",
+    "shemale",
+    "skank",
+    "slut",
+    "spade",
+    "spic",
+    "spook",
+    "tard",
+    "tits",
+    "titt",
+    "trannie",
+    "tranny",
+    "twat",
+    "wetback",
+    "whore",
+    "wop"
+];
+
   var createUser = firebase.functions().httpsCallable("createUserAndInvite");
   var emailExistsFunc = firebase.functions().httpsCallable("emailExists");
   var usernameInput = document.getElementById("username");
@@ -44,14 +113,29 @@ document.addEventListener("DOMContentLoaded", function() {
         usernameLabel.style.color = "black";
         emailLabel.style.color = "black";
 
-        var emailEntered = emailInput.value;
-        var usernameEntered = usernameInput.value;
+        var emailEntered = emailInput.value.trim();
+        var usernameEntered = usernameInput.value.trim();
 
+        // non-empty username
         if (usernameEntered.length == 0) {
           usernameLabel.style.color = "red";
           usernameErrorMsg.innerHTML = "username cannot be empty like the void that is our universe";
           failure = true;
         }
+
+        // username isn't a banned word.
+        if(bannedWords.includes(usernameEntered)) {
+          usernameLabel.style.color = "red";
+          usernameErrorMsg.innerHTML = "That username is already taken by a bigot.";
+          failure = true;
+        }
+
+        if(usernameEntered.length > MAXIMUM_USERNAME_LENGTH) {
+          usernameLabel.style.color = "red";
+          usernameErrorMsg.innerHTML = "Username is too looooooooooooooong. Length cannot be more than the 'o's."
+        }
+
+        // non-empty and/or valid email
         if (validateEmail(emailEntered) == false) {
           emailLabel.style.color = "red";
           if(emailEntered.length === 0) {
