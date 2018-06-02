@@ -64,7 +64,7 @@ var importUtil = function(scores, ui) {
       var o = {
         "id": id,
         color: state.colorPicker(id),
-        score: INITIAL_NODE_SCORE,
+        score: score,
         clicks: clicks ? clicks : INITIAL_CLICKS,
         lastClickTime: lastClickTime ? lastClickTime : COMMON_EPOCH,
         lastClickGainedAt: lastClickGainedAt ? lastClickGainedAt : 0,
