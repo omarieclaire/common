@@ -351,9 +351,7 @@ window.addEventListener("load", function() {
 				} else {
 					playersEdges = [];
 				}
-				//playerEdge = playerEdge.data(playersEdges, function(d) {
-
-				playerEdge = playerEdge.data([], function(d) {
+				playerEdge = playerEdge.data(playersEdges, function(d) {
 					return d.source.id + "-" + d.target.id;
 				});
 
