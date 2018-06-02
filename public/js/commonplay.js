@@ -456,10 +456,8 @@ window.addEventListener("load", function() {
 
 				// if the screen is small, reduce size by half
 				if (svgWidth < 400 || svgHeight < 400) {
-					console.log("hemm")
 					return defaultLevel / 2;
 				} else {
-					console.log("good")
 					return defaultLevel;
 				}
 			}
