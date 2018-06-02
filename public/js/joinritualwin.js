@@ -175,7 +175,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   var handleError = function (ev, error) {
     ev.preventDefault();
-    if(error.message !== "email-existence" && error.message !== "username-existence") {
+
+    if(error.message !== "email-exists" && error.message !== "username-exists") {
       document.getElementById('status').innerHTML = "Failed and we don't know why :(";
     }
 
@@ -200,10 +201,7 @@ document.addEventListener("DOMContentLoaded", function() {
             usernameLabel.style.color = "red";
             usernameErrorMsg.innerHTML = "username already exists :(";
 
-            submitButton.disabled = false;
-            submittingMsg.innerHTML = "";
-
-            return Promise.reject(new Error("username-existence"));
+            return Promise.reject(new Error("username-exists"));
           } else {
             return Promise.resolve(true);
           }
@@ -214,10 +212,7 @@ document.addEventListener("DOMContentLoaded", function() {
               emailLabel.style.color = "red";
               emailErrorMsg.innerHTML = "email already exists :(";
 
-              submitButton.disabled = false;
-              submittingMsg.innerHTML = "";
-
-              return Promise.reject(new Error("email-existence"));
+              return Promise.reject(new Error("username-exists"));
             } else {
               return Promise.resolve(true);
             }
@@ -242,10 +237,7 @@ document.addEventListener("DOMContentLoaded", function() {
             usernameLabel.style.color = "red";
             usernameErrorMsg.innerHTML = "that username does not exist :(";
 
-            submitButton.disabled = false;
-            submittingMsg.innerHTML = "";
-
-            return Promise.reject(new Error("username-existence"));
+            return Promise.reject(new Error("username-exists"));
           } else {
             return Promise.resolve(true);
           }
@@ -256,10 +248,7 @@ document.addEventListener("DOMContentLoaded", function() {
               emailLabel.style.color = "red";
               emailErrorMsg.innerHTML = "email does not already exist :(";
 
-              submitButton.disabled = false;
-              submittingMsg.innerHTML = "";
-
-              return Promise.reject(new Error("email-existence"));
+              return Promise.reject(new Error("username-exists"));
             } else {
               return Promise.resolve(true);
             }
@@ -272,6 +261,7 @@ document.addEventListener("DOMContentLoaded", function() {
           handleError(ev, error);
         });
       });
+
     } else {
       submitButton.disabled = true;
       statusElement.innerHTML = "you must be signed in to invite someone :(";
