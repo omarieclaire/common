@@ -178,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if(error.message !== "email-existence" && error.message !== "username-existence") {
       document.getElementById('status').innerHTML = "Failed and we don't know why :(";
     }
+
     submitButton.disabled = false;
     submittingMsg.innerHTML = "";
     return false;
@@ -195,7 +196,6 @@ document.addEventListener("DOMContentLoaded", function() {
         validateAndSubmit(ev, emailEntered, usernameEntered);
 
         database.userExists(usernameEntered).then(function(exists) {
-          console.log(exists);
           if (exists) {
             usernameLabel.style.color = "red";
             usernameErrorMsg.innerHTML = "username already exists :(";
@@ -203,7 +203,6 @@ document.addEventListener("DOMContentLoaded", function() {
             submitButton.disabled = false;
             submittingMsg.innerHTML = "";
 
-            //ev.preventDefault();
             return Promise.reject(new Error("username-existence"));
           } else {
             return Promise.resolve(true);
@@ -218,7 +217,6 @@ document.addEventListener("DOMContentLoaded", function() {
               submitButton.disabled = false;
               submittingMsg.innerHTML = "";
 
-              //ev.preventDefault();
               return Promise.reject(new Error("email-existence"));
             } else {
               return Promise.resolve(true);
@@ -238,7 +236,6 @@ document.addEventListener("DOMContentLoaded", function() {
         validateAndSubmit(ev, emailEntered, usernameEntered);
 
         database.userExists(usernameEntered).then(function(exists) {
-          console.log(exists);
           if (!exists) {
             usernameLabel.style.color = "red";
             usernameErrorMsg.innerHTML = "that username does not exist :(";
@@ -246,7 +243,6 @@ document.addEventListener("DOMContentLoaded", function() {
             submitButton.disabled = false;
             submittingMsg.innerHTML = "";
 
-            //ev.preventDefault();
             return Promise.reject(new Error("username-existence"));
           } else {
             return Promise.resolve(true);
@@ -261,7 +257,6 @@ document.addEventListener("DOMContentLoaded", function() {
               submitButton.disabled = false;
               submittingMsg.innerHTML = "";
 
-              //ev.preventDefault();
               return Promise.reject(new Error("email-existence"));
             } else {
               return Promise.resolve(true);
