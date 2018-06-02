@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   var handleError = function (ev, error) {
     ev.preventDefault();
-    if(error.message !== "email-exists" && error.message !== "username-exists") {
+    if(error.message !== "email-existence" && error.message !== "username-existence") {
       document.getElementById('status').innerHTML = "Failed and we don't know why :(";
     }
     submitButton.disabled = false;
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function() {
             submittingMsg.innerHTML = "";
 
             //ev.preventDefault();
-            return Promise.reject(new Error("username-exists"));
+            return Promise.reject(new Error("username-existence"));
           } else {
             return Promise.resolve(true);
           }
@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function() {
               submittingMsg.innerHTML = "";
 
               //ev.preventDefault();
-              return Promise.reject(new Error("email-exists"));
+              return Promise.reject(new Error("email-existence"));
             } else {
               return Promise.resolve(true);
             }
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function() {
             submittingMsg.innerHTML = "";
 
             //ev.preventDefault();
-            return Promise.reject(new Error("username-exists"));
+            return Promise.reject(new Error("username-existence"));
           } else {
             return Promise.resolve(true);
           }
@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function() {
               submittingMsg.innerHTML = "";
 
               //ev.preventDefault();
-              return Promise.reject(new Error("email-exists"));
+              return Promise.reject(new Error("email-existence"));
             } else {
               return Promise.resolve(true);
             }
