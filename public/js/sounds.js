@@ -2,14 +2,13 @@ var gameSounds = [
   "connection-forming-sound",
   "destroyer-sound",
   "error-sound",
-  "giver-sound",
   "invitation-sound",
   "new-connection-sound",
   "player1-sound",
   "player2-sound",
   "poor-sound",
-  "reinforcing-connection-sound",
-  "game-music"
+  "reinforcing-connection-sound"
+  //"game-music"
 ];
 
 gameSounds.forEach(function (path) {

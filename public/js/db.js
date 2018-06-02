@@ -201,8 +201,6 @@ var importDb = function(util, firebase, scores) {
       } else {
         // do nothing, it's a different player
       }
-    } else if (msg.type === "giver") {
-      // deprecated
     } else if (msg.type === "reinforceConnection") {
       // deprecated
     } else if (msg.type === "weakenNode") {

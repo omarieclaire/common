@@ -91,7 +91,7 @@ var importUi = function() {
   function createModals() {
 
     createModal('aboutModal', 'aboutBtn');
-    createModal('settingsModal', 'settingsBtn');
+    //createModal('settingsModal', 'settingsBtn');
 
     createModal("player-clicks-explanation", "player-clicks-explanation-btn");
     createModal("node-score-me-explanation", "node-score-me-explanation-btn");
