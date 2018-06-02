@@ -42,15 +42,23 @@ try {
  * Once a user object is either created or returned
  * we push an invite to the log.
  */
-function authenticatedUserHandler(email, sender, username) {
-  console.log("pushing to log");
-  return admin.database().ref('/log').push().set({
-    type: "invite",
+function authenticatedUserHandler(email, sender, username, password) {
+
+  return admin.database().ref('/players/' + username).set({
     email: email,
-    sender: sender,
-    recipient: username,
-    startingLife: 100
-  }).then((previous) => {
+    username: username,
+    lastSeen: 0,
+    invitedBy: sender,
+    initialPassword: password
+  }).then((x) => {
+    console.log("successfully created player " + username);
+    return admin.database().ref('/log').push().set({
+      type: "invite",
+      email: email,
+      sender: sender,
+      recipient: username,
+      startingLife: 100
+    }).then((previous) => {
     console.log("successfully pushed to log");
     return true;
   });
@@ -65,14 +73,14 @@ function createFirebaseUser(email, username, sender) {
     console.log("getUserByEmail(" + email + "): user already exists");
     console.log(user);
 
-    return user;
+    return {username: user.displayName, pass: null};
   }, (error) => {
     if(error.code === "auth/user-not-found") {
 
       console.log("User at " + email + " was not found")
 
       // Create the user and then add them to the /players log
-      var result = admin.auth().createUser({
+      return admin.auth().createUser({
         //uid: username,
         email: email,
         emailVerified: false,
@@ -80,37 +88,15 @@ function createFirebaseUser(email, username, sender) {
         displayName: username,
         disabled: false
       }).then((user) => {
-
         console.log("successfully created user " + username);
-
-        return admin.database().ref('/players/' + username).set({
-          email: email,
-          username: username,
-          lastSeen: 0,
-          invitedBy: sender,
-          initialPassword: password
-        }).then((x) => {
-          console.log("successfully created player " + username);
-          // we return the 'user' object form the auth database
-          // so we can return the same thing as the "success" branch
-          // of the initial promise above.
-          return user;
-        });
+        return { username: user.displayName, pass: password };
       });
-
-      return result;
     }
-
     console.log("Error fetching user");
     console.log(error);
     return Promise.reject(error);
-  }).then((user) => {
-    // we've created a user in the auth table, and if that user
-    // was new we created an entry in the /player database. Now
-    // it's time to create an 'invite' action in the /log database.
-    // Recall that the displayName on the user's object in the Authentication
-    // database is the same as the 'username'
-    return authenticatedUserHandler(email, sender, user.displayName);
+  }).then((result) => {
+    return authenticatedUserHandler(email, sender, result.username, result.pass);
   }).then((result) => {
     console.log("SUCCESS");
     return {success: true};
