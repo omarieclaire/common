@@ -327,6 +327,16 @@ nav a {
   color: #ddd;
 }
 
+#node-score-me.visual-score {
+  margin-left: 0.5em;
+  display: inline-block;
+  color: white;
+  background-color: white;
+  overflow: hidden;
+  font-size: smaller;
+  vertical-align: text-top;
+}
+
 #logout {
   margin-left: 0.5em;
   font-size: smaller;

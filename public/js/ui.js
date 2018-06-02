@@ -17,6 +17,9 @@ var importUi = function() {
     var myNode = state.seenNodes[state.selfId];
     if (myNode && myNode.score) {
       document.getElementById("node-score-me").textContent = myNode.score.toFixed(0);
+      document.getElementById("node-score-me").className = "visual-score"
+      document.getElementById("node-score-me").style.width = myNode.score.toFixed(0) + "px";
+
       document.getElementById("player-clicks").textContent = state.playerClicks.toFixed(0);
       document.getElementById("decay-rate").textContent = getDecayRate(state).toFixed(0);
     } else {
