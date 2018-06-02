@@ -111,29 +111,29 @@ document.addEventListener("DOMContentLoaded", function() {
     // non-empty username
     if (usernameEntered.length == 0) {
       usernameLabel.style.color = "red";
-      usernameErrorMsg.innerHTML = "username cannot be empty like the void that is our universe";
+      usernameErrorMsg.innerHTML = "username cannot be empty like the void that calls us all";
       failure = true;
     }
 
     // username isn't a banned word.
     if(bannedWords.includes(usernameEntered)) {
       usernameLabel.style.color = "red";
-      usernameErrorMsg.innerHTML = "That username is already taken by a bigot.";
+      usernameErrorMsg.innerHTML = "username is already taken by a bigot.";
       failure = true;
     }
 
     if(usernameEntered.length > MAXIMUM_USERNAME_LENGTH) {
       usernameLabel.style.color = "red";
-      usernameErrorMsg.innerHTML = "Username is too looooooooooooooong. Length cannot be more than the 'o's."
+      usernameErrorMsg.innerHTML = "username is too looooooooooooooong. Length cannot be more than the 'o's."
     }
 
     // non-empty and/or valid email
     if (validateEmail(emailEntered) == false) {
       emailLabel.style.color = "red";
       if(emailEntered.length === 0) {
-        emailErrorMsg.innerHTML = "email cannot be empty like an inbox that's never opened";
+        emailErrorMsg.innerHTML = "we dream of a future without email but that time is not now";
       } else {
-        emailErrorMsg.innerHTML = "email must be a valid email and must not be a tautology";
+        emailErrorMsg.innerHTML = "without a valid email, your password will fall into the void";
       }
 
       failure = true;

@@ -301,9 +301,9 @@ nav a {
 .zoomButtons button, .modalButtons button {
   border: none;
   overflow: hidden;
-  width: 3em;
-  height: 3em;
-  margin: 0.75em;
+  width: 2.5em;
+  height: 2.5em;
+  margin: 0.5em;
   display: block;
   text-indent: -1000em;
   background-color: transparent;
@@ -428,8 +428,8 @@ nav a {
   background-position: center;
   border: solid 2px yellow;
   border-radius: 50%;
-  width: 3em;
-  height: 3em;
+  width: 2.5em;
+  height: 2.5em;
 }
 
 #add-link {
@@ -442,8 +442,8 @@ nav a {
   background-position: center;
   /* border: solid 2px yellow; */
   /* border-radius: 50%; */
-  width: 3em;
-  height: 3em;
+  width: 2.5em;
+  height: 2.5em;
 }
 
 button:hover {
