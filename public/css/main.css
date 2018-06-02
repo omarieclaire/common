@@ -185,8 +185,8 @@ nav a {
 .nodeClass {
   opacity: 0.8;
   stroke: transparent;
+  stroke-width: 5px;
   cursor: pointer;
-  stroke: 4;
 }
 
 .nodeClass:hover {
