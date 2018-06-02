@@ -6,9 +6,9 @@ var importUi = function() {
   // getDecayRate(24 hours) = 7 energy
   // getDecayRate(1 week) = 9 energy
   // getDecayRate(1 year) = 13 energy
-  function getDecayRate(state) {
+  function getDecayRate(lastClickTime) {
     var d = new Date();
-    var millis = d.valueOf() - state.lastClickTime;
+    var millis = d.valueOf() - lastClickTime;
     var minutes = millis / (60 * 1000);
     return Math.round(Math.log1p(minutes));
   }
@@ -32,8 +32,8 @@ var importUi = function() {
 
       document.getElementById("node-score-me").className = className;
 
-      document.getElementById("player-clicks").textContent = state.playerClicks.toFixed(0);
-      document.getElementById("decay-rate").textContent = getDecayRate(state).toFixed(0);
+      document.getElementById("player-clicks").textContent = myNode.clicks.toFixed(0);
+      document.getElementById("decay-rate").textContent = getDecayRate(myNode.lastClickTime).toFixed(0);
     } else {
       console.log("can't find my id (" + state.selfId + ") in seenNodes");
     }
