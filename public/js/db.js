@@ -177,7 +177,7 @@ var importDb = function(util, firebase, scores) {
         scores.calculateCommonScore(state);
       }
     } else if (msg.type === "destroyEdge") {
-      var eid = util.edgeId(msg.source, msg.target);
+      var eid = util.edgeId(msg.source.id, msg.target.id);
       var edge = state.seenEdges[eid];
       if (edge) {
         util.deleteEdge(edge, state);
