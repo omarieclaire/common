@@ -22,7 +22,7 @@ var importAction = function(ui, util, scores, db) {
     var target = d.id;
     //reference to the edge between me and the target
     var ourEdgeId = util.edgeId(state.selfId, target);
-    var ourEdge = state.seenEdges[ourEdgeId];
+    var ouredge = state.seenEdges[ourEdgeId];
     // TODO: ensure ourEdge is available
 
 		if (ouredge && ourNode) {
