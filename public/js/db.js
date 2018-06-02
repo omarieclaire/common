@@ -210,7 +210,7 @@ var importDb = function(util, firebase, scores) {
       reportGameStatus("COMMON WEAKED w POWER " + msg.power);
     } else if (msg.type === "gainClicks") {
       if (msg.id === state.selfId && state.seenNodes[state.selfId] && state.seenNodes[state.selfId].score > 0) {
-        reportGameStatus("YOU GAINED CLICKS");
+        // reportGameStatus("YOU GAINED CLICKS");
       }
     }
   }
