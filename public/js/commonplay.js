@@ -153,13 +153,15 @@ window.addEventListener("load", function() {
 			function enclosedCirclesByNetwork(nodesByNetwork) {
 				var enclosedCircles = [];
 				Object.keys(nodesByNetwork).forEach(function(network, index) {
-					var networkData = nodesByNetwork[network];
-					var nodesInNetwork = networkData.nodes;
-					var networkScore = networkData.score;
-					var enclosedCircle = d3.packEnclose(nodesInNetwork);
-					enclosedCircle.id = "enclosing-network-" + index;
-					enclosedCircle.score = networkScore;
-					enclosedCircles.push(enclosedCircle);
+          var networkData = nodesByNetwork[network];
+          if(networkData.nodes.length > 1) {
+            var nodesInNetwork = networkData.nodes;
+            var networkScore = networkData.score;
+            var enclosedCircle = d3.packEnclose(nodesInNetwork);
+            enclosedCircle.id = "enclosing-network-" + index;
+            enclosedCircle.score = networkScore;
+            enclosedCircles.push(enclosedCircle);
+          }
 				});
 				return enclosedCircles;
 			}
@@ -167,11 +169,17 @@ window.addEventListener("load", function() {
 			// extremely side-effecty function
 			function doAnnotations(enclosedCircles, annotationAnchor) {
 				var annotations = enclosedCircles.map(function(circle, index) {
+          var score;
+          if(circle.score === undefined) {
+            score = ":(";
+          } else {
+            score = circle.score.toString();
+          }
 					return {
 						id: "annotation-" + index,
 						note: {
 							label: "Common Life Force",
-							title: circle.score || ":(",
+							title: score,
 							wrap: 400
 						},
 						dy: -(circle.r + 30) - 10,

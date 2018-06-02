@@ -4,13 +4,6 @@ var importAction = function(ui, util, scores, db) {
 
 	function nodeClicked(state, d) {
 
-		var target = d.id;
-		//reference to the edge between me and the target
-		var ouredge = state.edges.filter(function (edge) {
-			return edge.source.id == state.selfId && edge.target.id == target ||
-				edge.target.id == state.selfId && edge.source.id == target;
-		})[0];
-
 		// if clicking on a edge attached to our nodes
 		var ourNode = state.seenNodes[state.selfId];
 		var htmlNode = document.getElementById(util.nodeIdAttr(d));
@@ -25,6 +18,12 @@ var importAction = function(ui, util, scores, db) {
 			console.log("action.nodeClicked: no clicks available!");
 			return;
 		}
+
+    var target = d.id;
+    //reference to the edge between me and the target
+    var ourEdgeId = util.edgeId(state.selfId, target);
+    var ourEdge = state.seenEdges[ourEdgeId];
+    // TODO: ensure ourEdge is available
 
 		if (ouredge && ourNode) {
 			db.giveStrength(ourNode.id, target);
