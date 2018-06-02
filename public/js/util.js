@@ -121,10 +121,10 @@ var importUtil = function(scores, ui) {
 
   // Deletes edges
   function deleteEdge(edge, state) {
-    var index = state.edges.indexOf(edge);
-    console.log("DELETE EDGE: " + edge + " at index " + index);
     delete state.seenEdges[edge.id];
-    state.edges.splice(index,1);
+    // TODO: optimize this.
+    var index = state.edges.indexOf(edge);
+    state.edges.splice(index, 1);
   }
 
   function deactivateNode(node, state) {
