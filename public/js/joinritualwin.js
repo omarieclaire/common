@@ -91,6 +91,18 @@ document.addEventListener("DOMContentLoaded", function() {
   // since we're passing null util and null scores.
   var database = importDb(null, firebase, null);
 
+  usernameInput.addEventListener("focus", function(ev) {
+    usernameErrorMsg.innerHTML = "";
+    statusElement.innerHTML = "";
+    usernameLabel.style.color = "black";
+  });
+
+  emailInput.addEventListener("focus", function(ev) {
+    emailErrorMsg.innerHTML = "";
+    statusElement.innerHTML = "";
+    emailLabel.style.color = "black";
+  });
+
   var validateAndSubmit = function (ev, emailEntered, usernameEntered) {
     var failure = false;
     usernameLabel.style.color = "black";
@@ -173,18 +185,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   firebase.auth().onAuthStateChanged(function(user) {
     if(user) {
-
-      usernameInput.addEventListener("focus", function(ev) {
-        usernameErrorMsg.innerHTML = "";
-        statusElement.innerHTML = "";
-        usernameLabel.style.color = "black";
-      });
-
-      emailInput.addEventListener("focus", function(ev) {
-        emailErrorMsg.innerHTML = "";
-        statusElement.innerHTML = "";
-        emailLabel.style.color = "black";
-      });
 
       youAreConnectingElement.innerHTML = "you are connecting with 👯 " + user.displayName + " 👯";
 
