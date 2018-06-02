@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function() {
   firebase.auth().onAuthStateChanged(function(user) {
     if(user) {
 
-      youAreConnectingElement.innerHTML = "you are connecting with 👯 " + user.displayName + " 👯";
+      youAreConnectingElement.innerHTML = "you are connecting with " + user.displayName + " ";
 
       document.getElementById("join") && document.getElementById("join").addEventListener("click", function(ev) {
         var emailEntered = emailInput.value.trim();
