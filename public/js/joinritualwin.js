@@ -91,6 +91,86 @@ document.addEventListener("DOMContentLoaded", function() {
   // since we're passing null util and null scores.
   var database = importDb(null, firebase, null);
 
+  var validateAndSubmit = function (ev, emailEntered, usernameEntered) {
+    var failure = false;
+    usernameLabel.style.color = "black";
+    emailLabel.style.color = "black";
+
+    // non-empty username
+    if (usernameEntered.length == 0) {
+      usernameLabel.style.color = "red";
+      usernameErrorMsg.innerHTML = "username cannot be empty like the void that is our universe";
+      failure = true;
+    }
+
+    // username isn't a banned word.
+    if(bannedWords.includes(usernameEntered)) {
+      usernameLabel.style.color = "red";
+      usernameErrorMsg.innerHTML = "That username is already taken by a bigot.";
+      failure = true;
+    }
+
+    if(usernameEntered.length > MAXIMUM_USERNAME_LENGTH) {
+      usernameLabel.style.color = "red";
+      usernameErrorMsg.innerHTML = "Username is too looooooooooooooong. Length cannot be more than the 'o's."
+    }
+
+    // non-empty and/or valid email
+    if (validateEmail(emailEntered) == false) {
+      emailLabel.style.color = "red";
+      if(emailEntered.length === 0) {
+        emailErrorMsg.innerHTML = "email cannot be empty like an inbox that's never opened";
+      } else {
+        emailErrorMsg.innerHTML = "email must be a valid email and must not be a tautology";
+      }
+
+      failure = true;
+    }
+
+    if (failure) {
+      ev.preventDefault();
+      return false;
+    } else {
+      submitButton.disabled = true;
+      submittingMsg.innerHTML = "attempting to make a connection …";
+    }
+  };
+
+  var createConnection = function (emailEntered, usernameEntered) {
+    var sender = user.displayName || 'UNKNOWN';
+
+    console.log("about to create user. sender:", sender);
+    createUser({email: emailEntered, username: usernameEntered, sender: sender}, {}).then(function(result) {
+
+      // Read result of the Cloud Function.
+      console.log("RESULT OF CLOUD FUNCTION", result.data);
+      if(result.data.success) {
+        document.getElementById('status').innerHTML = "Success";
+      } else {
+        document.getElementById('status').innerHTML = "Failed :(";
+      }
+
+      var promise = new Promise(function(resolve, reject) {
+        setTimeout(function() {
+          window.location.href = "/";
+          resolve();
+        }, 1000);
+      });
+
+      return promise;
+    });
+  };
+
+  var handleError = function (ev, error) {
+    ev.preventDefault();
+    if(error.message !== "email-exists" && error.message !== "username-exists") {
+      document.getElementById('status').innerHTML = "Failed and we don't know why :(";
+    }
+    submitButton.disabled = false;
+    submittingMsg.innerHTML = "";
+    return false;
+  };
+
   firebase.auth().onAuthStateChanged(function(user) {
     if(user) {
 
@@ -109,51 +189,10 @@ document.addEventListener("DOMContentLoaded", function() {
       youAreConnectingElement.innerHTML = "you are connecting with 👯 " + user.displayName + " 👯";
 
       document.getElementById("join") && document.getElementById("join").addEventListener("click", function(ev) {
-        var failure = false;
-        usernameLabel.style.color = "black";
-        emailLabel.style.color = "black";
-
         var emailEntered = emailInput.value.trim();
         var usernameEntered = usernameInput.value.trim();
 
-        // non-empty username
-        if (usernameEntered.length == 0) {
-          usernameLabel.style.color = "red";
-          usernameErrorMsg.innerHTML = "username cannot be empty like the void that is our universe";
-          failure = true;
-        }
-
-        // username isn't a banned word.
-        if(bannedWords.includes(usernameEntered)) {
-          usernameLabel.style.color = "red";
-          usernameErrorMsg.innerHTML = "That username is already taken by a bigot.";
-          failure = true;
-        }
-
-        if(usernameEntered.length > MAXIMUM_USERNAME_LENGTH) {
-          usernameLabel.style.color = "red";
-          usernameErrorMsg.innerHTML = "Username is too looooooooooooooong. Length cannot be more than the 'o's."
-        }
-
-        // non-empty and/or valid email
-        if (validateEmail(emailEntered) == false) {
-          emailLabel.style.color = "red";
-          if(emailEntered.length === 0) {
-            emailErrorMsg.innerHTML = "email cannot be empty like an inbox that's never opened";
-          } else {
-            emailErrorMsg.innerHTML = "email must be a valid email and must not be a tautology";
-          }
-
-          failure = true;
-        }
-
-        if (failure) {
-          ev.preventDefault();
-          return false;
-        } else {
-          submitButton.disabled = true;
-          submittingMsg.innerHTML = "attempting to make a connection …";
-        }
+        validateAndSubmit(ev, emailEntered, usernameEntered);
 
         database.userExists(usernameEntered).then(function(exists) {
           console.log(exists);
@@ -185,87 +224,18 @@ document.addEventListener("DOMContentLoaded", function() {
               return Promise.resolve(true);
             }
           }).then(function(result) {
-
-            var sender = user.displayName || 'UNKNOWN';
-
-            console.log("about to create user. sender:", sender);
-            createUser({email: emailEntered, username: usernameEntered, sender: sender}, {}).then(function(result) {
-
-              // Read result of the Cloud Function.
-              console.log("RESULT OF CLOUD FUNCTION", result.data);
-              if(result.data.success) {
-                document.getElementById('status').innerHTML = "Success";
-              } else {
-                document.getElementById('status').innerHTML = "Failed :(";
-              }
-
-              var promise = new Promise(function(resolve, reject) {
-                setTimeout(function() {
-                  window.location.href = "/";
-                  resolve();
-                }, 1000);
-              });
-
-              return promise;
-            });
+            createConnection(emailEntered, usernameEntered);
           }).catch(function(error) {
-            ev.preventDefault();
-            if(error.message !== "email-exists" && error.message !== "username-exists") {
-              document.getElementById('status').innerHTML = "Failed and we don't know why :(";
-            }
-            submitButton.disabled = false;
-            submittingMsg.innerHTML = "";
-            return false;
+            handleError(ev, error);
           });
         });
       });
 
       document.getElementById("connect") && document.getElementById("connect").addEventListener("click", function(ev) {
-        var failure = false;
-        usernameLabel.style.color = "black";
-        emailLabel.style.color = "black";
-
         var emailEntered = emailInput.value.trim();
         var usernameEntered = usernameInput.value.trim();
 
-        // non-empty username
-        if (usernameEntered.length == 0) {
-          usernameLabel.style.color = "red";
-          usernameErrorMsg.innerHTML = "username cannot be empty like the void that is our universe";
-          failure = true;
-        }
-
-        // username isn't a banned word.
-        if(bannedWords.includes(usernameEntered)) {
-          usernameLabel.style.color = "red";
-          usernameErrorMsg.innerHTML = "That username is already taken by a bigot.";
-          failure = true;
-        }
-
-        if(usernameEntered.length > MAXIMUM_USERNAME_LENGTH) {
-          usernameLabel.style.color = "red";
-          usernameErrorMsg.innerHTML = "Username is too looooooooooooooong. Length cannot be more than the 'o's."
-        }
-
-        // non-empty and/or valid email
-        if (validateEmail(emailEntered) == false) {
-          emailLabel.style.color = "red";
-          if(emailEntered.length === 0) {
-            emailErrorMsg.innerHTML = "email cannot be empty like an inbox that's never opened";
-          } else {
-            emailErrorMsg.innerHTML = "email must be a valid email and must not be a tautology";
-          }
-
-          failure = true;
-        }
-
-        if (failure) {
-          ev.preventDefault();
-          return false;
-        } else {
-          submitButton.disabled = true;
-          submittingMsg.innerHTML = "attempting to make a connection …";
-        }
+        validateAndSubmit(ev, emailEntered, usernameEntered);
 
         database.userExists(usernameEntered).then(function(exists) {
           console.log(exists);
@@ -297,37 +267,9 @@ document.addEventListener("DOMContentLoaded", function() {
               return Promise.resolve(true);
             }
           }).then(function(result) {
-
-            var sender = user.displayName || 'UNKNOWN';
-
-            console.log("about to create user. sender:", sender);
-            createUser({email: emailEntered, username: usernameEntered, sender: sender}, {}).then(function(result) {
-
-              // Read result of the Cloud Function.
-              console.log("RESULT OF CLOUD FUNCTION", result.data);
-              if(result.data.success) {
-                document.getElementById('status').innerHTML = "Success";
-              } else {
-                document.getElementById('status').innerHTML = "Failed :(";
-              }
-
-              var promise = new Promise(function(resolve, reject) {
-                setTimeout(function() {
-                  window.location.href = "/";
-                  resolve();
-                }, 1000);
-              });
-
-              return promise;
-            });
+            createConnection(emailEntered, usernameEntered);
           }).catch(function(error) {
-            ev.preventDefault();
-            if(error.message !== "email-exists" && error.message !== "username-exists") {
-              document.getElementById('status').innerHTML = "Failed and we don't know why :(";
-            }
-            submitButton.disabled = false;
-            submittingMsg.innerHTML = "";
-            return false;
+            handleError(ev, error);
           });
         });
       });
