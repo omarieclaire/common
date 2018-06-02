@@ -430,7 +430,7 @@ nav a {
 
 #add-player {
   position: fixed;
-  left: 2.5em;
+  left: 2em;
   bottom: 2em;
   background-image: url(/img/add-player.svg);
   background-size: 85%;
@@ -438,13 +438,13 @@ nav a {
   background-position: center;
   border: solid 2px #ff3399;
   border-radius: 50%;
-  width: 3em;
-  height: 3em;
+  width: 2.5em;
+  height: 2.5em;
 }
 
 #add-link {
   position: fixed;
-  left: 5.5em;
+  left: 5em;
   bottom: 2em;
   background-image: url(/img/add-connection.svg);
   background-size: 85%;
@@ -452,8 +452,8 @@ nav a {
   background-position: center;
   border: solid 1px white;
   border-radius: 50%;
-  width: 3em;
-  height: 3em;
+  width: 2.5em;
+  height: 2.5em;
 }
 
 button:hover {
@@ -587,7 +587,7 @@ button:hover {
 
 @media (max-width: 900px) {
   body {
-    font-size: 12px;
+    font-size: 18px;
   }
   .modal-content {
     width: 60%;
