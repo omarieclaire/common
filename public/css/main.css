@@ -2,7 +2,7 @@ html {
   font-family: monospace;
   color: white;
   background-color: black;
-  font-size: 3em;
+  font-size: 1em;
   line-height: 1.7;
 }
 
@@ -55,7 +55,7 @@ textarea {
    ========================================================================== */
 
 body {
-  font: 18px "monospace", "Lato", "Helvetica", "Helvetica Neue", "Arial";
+  font: 12px/18px "monospace", "Lato", "Helvetica", "Helvetica Neue", "Arial";
   line-height: 1.6;
 }
 
@@ -299,13 +299,13 @@ nav a {
 .modalButtons {
   position: fixed;
   right: 2em;
-  top: 2em;
+  top: 1.5em;
 }
 
 .zoomButtons {
   position: fixed;
   right: 2em;
-  bottom: 2em;
+  bottom: 1.5em;
 }
 
 .zoomButtons button, .modalButtons button {
@@ -445,7 +445,7 @@ nav a {
 #add-link {
   position: fixed;
   left: 5em;
-  bottom: 2em;
+  bottom: 1.5em;
   background-image: url(/img/add-connection.svg);
   background-size: 85%;
   background-repeat: no-repeat;
