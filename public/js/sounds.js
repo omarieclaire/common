@@ -8,9 +8,8 @@ var gameSounds = [
   "player1-sound",
   "player2-sound",
   "poor-sound",
-  "reinforcing-connection-sound"
-  "music-sound",
-
+  "reinforcing-connection-sound",
+  "game-music"
 ];
 
 gameSounds.forEach(function (path) {
