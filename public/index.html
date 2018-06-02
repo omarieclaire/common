@@ -32,61 +32,21 @@
 
       <div id="chart"></div>
 
-       <div class="ui">
+      <div class="ui">
 
-         <div class ="zoomButtons">
-           <button id="zoom-in">Zoom In</button>
-           <button id="reset-button">Reset Zoom</button>
-           <button id="zoom-out">Zoom Out</button>
-         </div>
+        <div class ="zoomButtons">
+          <button id="zoom-in">Zoom In</button>
+          <button id="reset-button">Reset Zoom</button>
+          <button id="zoom-out">Zoom Out</button>
+        </div>
 
-         <div class="modalButtons">
+        <div class="modalButtons">
+          <button id="aboutBtn">About</button>
+          <button id="settingsBtn">Settings</button>
 
-         <button id="aboutBtn">About</button>
-         <div id="aboutModal" class="modal">
-           <div class="modal-content">
-             <span class="close">&times;</span>
-               <h2>How to Join</h2>
-               <p>The only way to join is to be invited, in person, by an active player. Here's a <a href="http://commonplay.ca/schedule.html">schedule</a>. You can also check <a href="https://twitter.com/hashtag/commonplay?f=tweets&amp;vertical=default">here</a>&nbsp;to see what's happening right now.</p>
-               <h2>What to do</h2>
-               <p>If you are an active player, there are 3 things you can do here:</p>
-               <ol>
-                 <li>Invite new players</li>
-                 <li>Strengthen your connections</li>
-                 <li>Do nothing and watch your connections dwindle away</li>
-               </ol>
-            </div>
-         </div>
-
-         <button id="settingsBtn">Settings</button>
-         <div id="settingsModal" class="modal">
-           <div class="modal-content">
-             <span class="close">&times;</span>
-             <h1>Change your settings here</h1>
-             <div class="onoffswitch">
-                 <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
-                 <label class="onoffswitch-label" for="myonoffswitch">
-                     <span class="onoffswitch-inner"></span>
-                     <span class="onoffswitch-switch"></span>
-                 </label>
-             </div>
-             <ul>
-               <li>Sound on/off</li>
-
-               <li>Music on/off</li>
-               <li>Colour Contrast on/off</li>
-               <li>Open Dyslexic on/off</li>
-               <li>Large text on/off</li>
-               <li>Zoom Buttons Hidden on/off</li>
-             </ul>
-           </div>
-         </div>
-
-         <button id="add-player" type="button" value="add-player" onclick="window.open('joinritual.html')"> </button>
-         <button id="add-link" type="button" value="add-link" onclick="window.open('addlink.html')"> </button>
-
-
-       </div>
+          <button id="add-player" type="button" value="add-player" onclick="window.open('joinritual.html')"> </button>
+          <button id="add-link" type="button" value="add-link" onclick="window.open('addlink.html')"> </button>
+        </div>
 
         <div class="adminButtons">
           <p class="login-elements">
@@ -98,38 +58,6 @@
           My life-force: <span id="node-score-me">–</span>  <button class="help-button" id="node-score-me-explanation-btn">?</button><br>
           Common decay rate: <span id="decay-rate">–</span> <button class="help-button" id="decay-rate-explanation-btn">?</button><br>
           Common status: <span id="status">–</span>         <button class="help-button" id="status-explanation-btn">?</button><br>
-
-          <div id="player-clicks-explanation" class="modal">
-           <div class="modal-content">
-             <span class="close">&times;</span>
-               <h1>My clicks</h1>
-               <p>You have a limited amount of clicks you can use. Use your clicks to give life-force to others, to invite new players to Common, or to make new connections with existing players. Clicks regenerate over time.</p>
-            </div>
-          </div>
-
-          <div id="node-score-me-explanation" class="modal">
-           <div class="modal-content">
-             <span class="close">&times;</span>
-               <h1>My life-force</h1>
-               <p>Through the relentless pressure of time and the natural decay of the universe, you will lose life-force. Want it back? Life force is generated through reinforcing connections, building new connections with existing memebers, and inviting new players to your Common. </p>
-            </div>
-          </div>
-
-          <div id="decay-rate-explanation" class="modal">
-           <div class="modal-content">
-             <span class="close">&times;</span>
-               <h1>Common decay rate</h1>
-               <p>The Common decay rate is related to the activity of the members. Forgotten Commons will decay quickly, disintegrating into the nothingness that awaits us all.</p>
-            </div>
-          </div>
-
-          <div id="status-explanation" class="modal">
-           <div class="modal-content">
-             <span class="close">&times;</span>
-               <h1>Common status</h1>
-               <p>Common status is where all things are known to you. Below is a feed of all the events happening over time.</p>
-            </div>
-          </div>
 
           <p id="game-status"></p>
 
@@ -149,8 +77,82 @@
             <ul id="network-score"></ul><br>
           </div>
         </div>
+      </div>
+
+      <div id="modals">
+
+        <div id="aboutModal" class="modal">
+         <div class="modal-content">
+           <span class="close">&times;</span>
+             <h2>How to Join</h2>
+             <p>The only way to join is to be invited, in person, by an active player. Here's a <a href="http://commonplay.ca/schedule.html">schedule</a>. You can also check <a href="https://twitter.com/hashtag/commonplay?f=tweets&amp;vertical=default">here</a>&nbsp;to see what's happening right now.</p>
+             <h2>What to do</h2>
+             <p>If you are an active player, there are 3 things you can do here:</p>
+             <ol>
+               <li>Invite new players</li>
+               <li>Strengthen your connections</li>
+               <li>Do nothing and watch your connections dwindle away</li>
+             </ol>
+          </div>
+        </div>
+
+        <div id="settingsModal" class="modal">
+         <div class="modal-content">
+           <span class="close">&times;</span>
+           <h1>Change your settings here</h1>
+           <div class="onoffswitch">
+               <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+               <label class="onoffswitch-label" for="myonoffswitch">
+                   <span class="onoffswitch-inner"></span>
+                   <span class="onoffswitch-switch"></span>
+               </label>
+           </div>
+           <ul>
+             <li>Sound on/off</li>
+
+             <li>Music on/off</li>
+             <li>Colour Contrast on/off</li>
+             <li>Open Dyslexic on/off</li>
+             <li>Large text on/off</li>
+             <li>Zoom Buttons Hidden on/off</li>
+           </ul>
+         </div>
+        </div>
+
+        <div id="player-clicks-explanation" class="modal">
+         <div class="modal-content">
+           <span class="close">&times;</span>
+             <h1>My clicks</h1>
+             <p>You have a limited amount of clicks you can use. Use your clicks to give life-force to others, to invite new players to Common, or to make new connections with existing players. Clicks regenerate over time.</p>
+          </div>
+        </div>
+
+        <div id="node-score-me-explanation" class="modal">
+         <div class="modal-content">
+           <span class="close">&times;</span>
+             <h1>My life-force</h1>
+             <p>Through the relentless pressure of time and the natural decay of the universe, you will lose life-force. Want it back? Life force is generated through reinforcing connections, building new connections with existing memebers, and inviting new players to your Common. </p>
+          </div>
+        </div>
+
+        <div id="decay-rate-explanation" class="modal">
+         <div class="modal-content">
+           <span class="close">&times;</span>
+             <h1>Common decay rate</h1>
+             <p>The Common decay rate is related to the activity of the members. Forgotten Commons will decay quickly, disintegrating into the nothingness that awaits us all.</p>
+          </div>
+        </div>
+
+        <div id="status-explanation" class="modal">
+         <div class="modal-content">
+           <span class="close">&times;</span>
+             <h1>Common status</h1>
+             <p>Common status is where all things are known to you. Below is a feed of all the events happening over time.</p>
+          </div>
+        </div>
 
       </div>
+
     </div> <!-- #main -->
   </div> <!-- #main-container -->
 
