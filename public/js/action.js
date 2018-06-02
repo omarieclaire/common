@@ -33,10 +33,16 @@ var importAction = function(ui, util, scores, db) {
 			d3.select(htmlEdge).transition().duration(1000).attr("stroke", "#00FF00").transition().duration(1500).attr("stroke", null);
 
 			// begin node animation
-			d3.select(htmlNode).transition().duration(1000).style("fill","#00FF00").transition().duration(1500).style("fill", d.color);
+      htmlNode.classList.add("nodeClickedTransition");
+      window.setTimeout(function() {
+        htmlNode.classList.remove("nodeClickedTransition");
+      }, 1500);
 		} else {
 			playSound("error-sound", 0.5);
-			d3.select(htmlNode).transition().duration(1000).style("fill","gray").transition().duration(1500).style("fill", d.color);
+      htmlNode.classList.add("nodeClickedErrorTransition");
+      window.setTimeout(function() {
+        htmlNode.classList.remove("nodeClickedErrorTransition");
+      }, 1500);
 		}
 
 		scores.calculateCommonScore(state);

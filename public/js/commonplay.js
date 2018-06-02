@@ -255,7 +255,7 @@ window.addEventListener("load", function() {
 				// add an id attribute to each node, so we can access/select it later
 					.attr("id", util.nodeIdAttr)
 					.attr("class", function(d) {
-						var classString = "";
+            var classString = "";
 						if(d.score === NODE_HEALTH_FULL) {
 							classString += "nodeFull ";
 						} else if(d.score > NODE_HEALTH_HIGH) {
@@ -403,6 +403,28 @@ window.addEventListener("load", function() {
 							return 3;
 						} else if(d.score === NODE_HEALTH_DEAD) {
 							return 3;
+						}
+					})
+					.attr("class", function(d) {
+            var classString = "";
+						if(d.score === NODE_HEALTH_FULL) {
+							classString += "nodeFull ";
+						} else if(d.score > NODE_HEALTH_HIGH) {
+							classString += "nodeHigh ";
+						} else if(d.score > NODE_HEALTH_MEDIUM) {
+							classString += "nodeMedium ";
+						} else if(d.score > NODE_HEALTH_LOW) {
+							classString += "nodeLow ";
+						} else if(d.score === NODE_HEALTH_DEAD) {
+							classString += "nodeDead ";
+						}
+
+						if(d.id === state.selfId) {
+							classString += "myNode nodeClass";
+							return classString;
+						} else {
+							classString += "nodeClass";
+							return classString;
 						}
 					})
 
