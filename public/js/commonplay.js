@@ -56,9 +56,6 @@ window.addEventListener("load", function() {
 			// list of node/edge data used by the force-directed graph
 			nodes: [],
 			edges: [],
-			lastClickTime: COMMON_EPOCH, // by default, ~may30
-			playerClicks: 0, // this is a count 0-6
-			lastClickGainedAt: 0, // these are milliseconds
 			// method used to draw the graph. For initialization reasons
 			// we start with a fake draw and mutate it below.
 			draw: function() { console.log("fake draw"); },

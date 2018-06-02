@@ -36,3 +36,6 @@ var MAXIMUM_USERNAME_LENGTH = 15;
 
 // Version the snapshot database
 var SNAPSHOT_VERSION = 1;
+
+// The number of initial clicks
+var INITIAL_CLICKS = 6;

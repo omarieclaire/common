@@ -68,7 +68,7 @@ var importDb = function(util, firebase, scores) {
           var key = snapshot.key;
           console.log("Starting log from: " + key);
           stateSnapshot.nodes.forEach(function(n) {
-            util.addNodeWithScore(n.id, state, n.score);
+            util.addNodeWithScore(n.id, state, n.score, n.clicks, n.lastClickTime, n.lastClickGainedAt);
           });
           stateSnapshot.edges.forEach(function(e) {
             util.addEdge(e.source.id, e.target.id, state)
@@ -136,10 +136,11 @@ var importDb = function(util, firebase, scores) {
   }
 
   function trackClick(state, msg) {
-    if (msg.sender === state.selfId) {
-      state.playerClicks = util.clicks(state.playerClicks - 1);
+    var node = state.seenNodes[msg.sender];
+    if(node) {
+      node.clicks = util.clicks(node.clicks - 1);
+      node.lastClickTime = msg.timestamp;
     }
-    state.lastClickTime = msg.timestamp;
   }
 
   /**
@@ -191,10 +192,12 @@ var importDb = function(util, firebase, scores) {
       });
       scores.calculateCommonScore(state);
     } else if (msg.type === "gainClicks") {
-      if (msg.id === state.selfId && state.seenNodes[state.selfId] && state.seenNodes[state.selfId].score > 0) {
+
+      var node = state.seenNodes[state.selfId];
+      if (msg.id === state.selfId && node && node.score > 0) {
         // the logged-in player will gain clicks
-        state.playerClicks = Math.min(6, state.playerClicks + msg.numClicks);
-        state.lastClickGainedAt = msg.lastClickGainedAt;
+        node.clicks = Math.min(6, node.clicks + msg.numClicks);
+        node.lastClickGainedAt = msg.lastClickGainedAt;
       } else {
         // do nothing, it's a different player
       }

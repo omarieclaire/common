@@ -27,11 +27,11 @@ var importUtil = function(scores, ui) {
     }
   }
 
-  function addNodeWithScore(id, state, score) {
-    return addNode(id, state, score);
+  function addNodeWithScore(id, state, score, clicks, lastClickTime, lastClickGainedAt) {
+    return addNode(id, state, score, clicks, lastClickTime, lastClickGainedAt);
   }
 
-  function addNodeWithSenderReceiver(id, state, who) {
+  function addNodeWithSenderReceiver(id, state, who, clicks, lastClickTime, lastClickGainedAt) {
     // the id was added, so return the node
     // give them some score
     var score;
@@ -43,14 +43,14 @@ var importUtil = function(scores, ui) {
       score = 0;
     }
 
-    return addNode(id, state, score);
+    return addNode(id, state, score, clicks, lastClickTime, lastClickGainedAt);
   }
 
   // given a node id, add a node
   // this function returns the node
   // sender = true
   // receiver = false
-  function addNode(id, state, score) {
+  function addNode(id, state, score, clicks, lastClickTime, lastClickGainedAt) {
     // check if the id was already added
     var node = state.seenNodes[id];
     if (node) {
@@ -65,6 +65,9 @@ var importUtil = function(scores, ui) {
         "id": id,
         color: state.colorPicker(id),
         score: INITIAL_NODE_SCORE,
+        clicks: clicks ? clicks : INITIAL_CLICKS,
+        lastClickTime: lastClickTime ? lastClickTime : COMMON_EPOCH,
+        lastClickGainedAt: lastClickGainedAt ? lastClickGainedAt : 0,
         x: 0,
         y:0,
         get r() {
