@@ -183,10 +183,10 @@ nav a {
   } */
 
 .nodeClass {
-  opacity: 0.5;
+  opacity: 0.8;
   stroke: transparent;
-  stroke-width: 1.5px;
   cursor: pointer;
+  stroke: 4;
 }
 
 .nodeClass:hover {
@@ -194,7 +194,7 @@ nav a {
 }
 
 .myNode {
-  opacity: 0.3;
+  opacity: 0.6;
   width: 10em;
   height: 10em;
   /* stroke: yellow; */
@@ -202,34 +202,34 @@ nav a {
   /* stroke-offset: 15px; */
 
   /* border: solid 5px yellow;
-  border-radius: 50%;
-  width: 5em;
-  height: 5em; */
+  border-radius: 50%; */
+  /* width: 5em;
+  height: 5em;  */
 }
 
 .nodeFull {
-  opacity: 0.5;
+  /* opacity: 0.5; */
 }
 
 .nodeHigh {
   /* stroke: green; */
-  opacity: 0.5;
+  /* opacity: 0.5; */
 }
 
 .nodeMedium {
   /* stroke: blue; */
-  opacity: 0.3;
+  /* opacity: 0.3; */
 }
 
 .nodeLow {
   stroke: red;
-  opacity: 0.3;
+  /* opacity: 0.3; */
 }
 
 .nodeDead {
   stroke: gray;
   fill: black;
-  opacity: 0.3;
+  /* opacity: 0.3; */
 }
 
 .nodes circle {

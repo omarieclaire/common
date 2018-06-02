@@ -223,15 +223,15 @@ window.addEventListener("load", function() {
 					})
 					.attr("r", function(d) {
 						if(d.score === NODE_HEALTH_FULL) {
-							return 7;
+							return 6;
 						} else if(d.score > NODE_HEALTH_HIGH) {
 							return 5;
 						} else if(d.score > NODE_HEALTH_MEDIUM) {
-							return 3.5;
+							return 4;
 						} else if(d.score > NODE_HEALTH_LOW) {
-							return 2;
+							return 3;
 						} else if(d.score === NODE_HEALTH_DEAD) {
-							return 2;
+							return 3;
 						}
 					})
 				// .attr("stroke", "pink")
@@ -375,15 +375,15 @@ window.addEventListener("load", function() {
 					// })
 					.attr("r", function(d) {
 						if(d.score === NODE_HEALTH_FULL) {
-							return 7;
+							return 6;
 						} else if(d.score > NODE_HEALTH_HIGH) {
 							return 5;
 						} else if(d.score > NODE_HEALTH_MEDIUM) {
-							return 3.5;
+							return 4;
 						} else if(d.score > NODE_HEALTH_LOW) {
-							return 2;
+							return 3;
 						} else if(d.score === NODE_HEALTH_DEAD) {
-							return 2;
+							return 3;
 						}
 					})
 
