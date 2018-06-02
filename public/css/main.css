@@ -288,9 +288,10 @@ nav a {
 
 .ui {
   position: fixed;
+  line-height: 1.4;
   opacity: 0.8;
   z-index: 1;
-  top: 5em;
+  top: 4em;
 }
 
 .modalButtons {
