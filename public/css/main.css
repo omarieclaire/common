@@ -51,7 +51,7 @@ textarea {
    ========================================================================== */
 
 body {
-  font: 18px "monospace", "Lato", "Helvetica", "Helvetica Neue", "Arial";
+  font: 16px "monospace", "Lato", "Helvetica", "Helvetica Neue", "Arial";
   line-height: 1.6;
 }
 
@@ -171,7 +171,6 @@ nav a {
 
 /* Make the chart container - SVG - fill the page using CSS. */
 
-
 #chart {
   position: fixed;
   left: 0px;
@@ -207,7 +206,6 @@ nav a {
   /* stroke: yellow; */
   /* outline: 4px solid red; */
   /* stroke-offset: 15px; */
-
   /* border: solid 5px yellow;
   border-radius: 50%; */
   /* width: 5em;
@@ -361,7 +359,7 @@ nav a {
 }
 
 .login-elements a, .login-elements a:visited {
-  color:  white;
+  color: white;
   opacity: 0.5;
   text-decoration: none;
 }
@@ -371,9 +369,8 @@ nav a {
 }
 
 .help-button {
-  width: 1.5em;
-  height: 1.5em;
-
+  width: 2em;
+  height: 2em;
   margin-left: 0.5em;
   font-size: x-small;
   vertical-align: text-bottom;
@@ -387,8 +384,7 @@ nav a {
   display: none;
 }
 
-#toggleDebugAdmin {
-}
+#toggleDebugAdmin {}
 
 #toggleDebugBtn {
   position: fixed;
@@ -439,8 +435,8 @@ nav a {
   background-position: center;
   border: solid 1px #ff3399;
   border-radius: 50%;
-  width: 2em;
-  height: 2em;
+  width: 3em;
+  height: 3em;
 }
 
 #add-link {
@@ -453,8 +449,8 @@ nav a {
   background-position: center;
   border: solid 1px white;
   border-radius: 50%;
-  width: 2em;
-  height: 2em;
+  width: 3em;
+  height: 3em;
 }
 
 button:hover {
@@ -464,49 +460,80 @@ button:hover {
 /* on/off switch  */
 
 .onoffswitch {
-    position: relative; width: 88px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+  position: relative;
+  width: 88px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
+
 .onoffswitch-checkbox {
-    display: none;
+  display: none;
 }
+
 .onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 2px solid #999999; border-radius: 10px;
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #999999;
+  border-radius: 10px;
 }
+
 .onoffswitch-inner {
-    display: block; width: 200%; margin-left: -100%;
-    transition: margin 0.3s ease-in 0s;
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.3s ease-in 0s;
 }
+
 .onoffswitch-inner:before, .onoffswitch-inner:after {
-    display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 25px;
-    font-size: 14px; color: white; font-family: monospace;
-    box-sizing: border-box;
+  display: block;
+  float: left;
+  width: 50%;
+  height: 25px;
+  padding: 0;
+  line-height: 25px;
+  font-size: 14px;
+  color: white;
+  font-family: monospace;
+  box-sizing: border-box;
 }
+
 .onoffswitch-inner:before {
-    content: "ON";
-    padding-left: 10px;
-    background-color: #999999; color: #FFFFFF;
+  content: "ON";
+  padding-left: 10px;
+  background-color: #999999;
+  color: #FFFFFF;
 }
+
 .onoffswitch-inner:after {
-    content: "OFF";
-    padding-right: 10px;
-    background-color: #EEEEEE; color: #999999;
-    text-align: right;
+  content: "OFF";
+  padding-right: 10px;
+  background-color: #EEEEEE;
+  color: #999999;
+  text-align: right;
 }
+
 .onoffswitch-switch {
-    display: block; width: 12px; margin: 6.5px;
-    background: #FFFFFF;
-    position: absolute; top: 0; bottom: 0;
-    right: 59px;
-    border: 2px solid #999999; border-radius: 10px;
-    transition: all 0.3s ease-in 0s;
+  display: block;
+  width: 12px;
+  margin: 6.5px;
+  background: #FFFFFF;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 59px;
+  border: 2px solid #999999;
+  border-radius: 10px;
+  transition: all 0.3s ease-in 0s;
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
-    margin-left: 0;
+
+.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-inner {
+  margin-left: 0;
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-    right: 0px;
+
+.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch {
+  right: 0px;
 }
 
 /* ==========================================================================
@@ -559,7 +586,6 @@ button:hover {
   body {
     font-size: 12px;
   }
-
   .modal-content {
     width: 60%;
   }
