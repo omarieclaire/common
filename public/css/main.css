@@ -432,6 +432,20 @@ nav a {
   height: 3em;
 }
 
+#add-link {
+  position: fixed;
+  left: 6.5em;
+  bottom: 2em;
+  background-image: url(/img/add-connection.svg);
+  background-size: 85%;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* border: solid 2px yellow; */
+  /* border-radius: 50%; */
+  width: 3em;
+  height: 3em;
+}
+
 button:hover {
   background-color: grey;
 }
