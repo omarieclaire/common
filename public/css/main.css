@@ -277,13 +277,13 @@ nav a {
 
 .annotation-note-label {
   font-weight: lighter;
-  font-size: 1.4em;
+  font-size: 1.1em;
 }
 
 .annotation-note-title {
   font-weight: lighter;
   /* padding-left: 10em; */
-  font-size: 2.6em;
+  font-size: 1.1em;
 }
 
 .annotationBox {

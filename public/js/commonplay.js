@@ -182,7 +182,7 @@ window.addEventListener("load", function() {
 							title: score,
 							wrap: 400
 						},
-						dy: -(circle.r + 30) - 10,
+						dy: -(circle.r + 30),
 						dx: 0,
 						x: circle.x,
 						y: circle.y,
