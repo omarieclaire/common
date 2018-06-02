@@ -49,7 +49,7 @@ function authenticatedUserHandler(email, sender, username) {
     email: email,
     sender: sender,
     recipient: username,
-    startingLife: 0
+    startingLife: 100
   }).then((previous) => {
     console.log("successfully pushed to log");
     return true;
