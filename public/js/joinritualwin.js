@@ -160,6 +160,10 @@ document.addEventListener("DOMContentLoaded", function() {
           if (exists) {
             usernameLabel.style.color = "red";
             usernameErrorMsg.innerHTML = "username already exists :(";
+
+            submitButton.disabled = false;
+            submittingMsg.innerHTML = "";
+
             //ev.preventDefault();
             return Promise.reject(new Error("username-exists"));
           } else {
@@ -171,6 +175,10 @@ document.addEventListener("DOMContentLoaded", function() {
             if (emailExists.data) {
               emailLabel.style.color = "red";
               emailErrorMsg.innerHTML = "email already exists :(";
+
+              submitButton.disabled = false;
+              submittingMsg.innerHTML = "";
+
               //ev.preventDefault();
               return Promise.reject(new Error("email-exists"));
             } else {
@@ -206,6 +214,7 @@ document.addEventListener("DOMContentLoaded", function() {
               document.getElementById('status').innerHTML = "Failed and we don't know why :(";
             }
             submitButton.disabled = false;
+            submittingMsg.innerHTML = "";
             return false;
           });
         });
