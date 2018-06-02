@@ -353,7 +353,7 @@ nav a {
 }
 
 .login-elements a, .login-elements a:visited {
-  color: rgba(255, 127, 223);
+  color:  #ff3399;
   text-decoration: none;
 }
 
@@ -362,14 +362,16 @@ nav a {
 }
 
 .help-button {
-  width: 2em;
+  width: 1.5em;
+  height: 1.5em;
+
   margin-left: 0.5em;
   font-size: x-small;
   vertical-align: text-bottom;
   border-radius: 50%;
-  height: 2em;
   background: transparent;
-  border: 1px solid white;
+  opacity: 0.25;
+  border: 0.5px solid white;
 }
 
 #toggleDebug {
@@ -392,7 +394,7 @@ nav a {
 #aboutBtn {
   background-image: url(/img/about.svg);
   background-position: center;
-  background-size: 100%;
+  background-size: 90%;
   background-repeat: no-repeat;
 }
 
@@ -413,7 +415,7 @@ nav a {
 
 #reset-button {
   background-image: url(/img/reload.svg);
-  background-size: 105%;
+  background-size: 90%;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -426,24 +428,24 @@ nav a {
   background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
-  border: solid 2px yellow;
+  border: solid 1px #ff3399;
   border-radius: 50%;
-  width: 2.5em;
-  height: 2.5em;
+  width: 2em;
+  height: 2em;
 }
 
 #add-link {
   position: fixed;
-  left: 6.5em;
+  left: 5.5em;
   bottom: 2em;
   background-image: url(/img/add-connection.svg);
   background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
-  /* border: solid 2px yellow; */
-  /* border-radius: 50%; */
-  width: 2.5em;
-  height: 2.5em;
+  border: solid 1px white;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
 }
 
 button:hover {
