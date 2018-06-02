@@ -2,30 +2,6 @@
 
 var importAction = function(ui, util, scores, db) {
 
-	function addEdge(from, to, state) {
-
-		if (state.playerClicks <= 0) {
-			console.log("action.addEdge: no clicks available!");
-			return;
-		}
-
-		if (state.players[from] == null) {
-			db.sendInvite("omarieclaire", from, from+"@fake.com");
-		}
-
-		if (state.players[to] == null) {
-			db.sendInvite(from, to, to+"@fake.com");
-			return;
-		}
-
-		var eid = util.edgeId(from, to);
-		if (!state.seenEdges[eid]) {
-			db.newConnection(from, to);
-		} else {
-			db.giveStrength(from, to);
-		}
-	}
-
 	function nodeClicked(state, d) {
 
 		var target = d.id;
@@ -39,7 +15,7 @@ var importAction = function(ui, util, scores, db) {
 		var ourNode = state.seenNodes[state.selfId];
 		var htmlNode = document.getElementById(util.nodeIdAttr(d));
 
-		if (state.playerClicks <= 0) {
+		if (ourNode !== undefined && ourNode.clicks <= 0) {
 			playSound("poor-sound", 0.2);
 			var clickHtmlText = document.getElementById("player-clicks-text");
 			var clickHtml = document.getElementById("player-clicks");
@@ -66,34 +42,6 @@ var importAction = function(ui, util, scores, db) {
 
 		scores.calculateCommonScore(state);
 		state.draw();
-	}
-
-	function addClicked(state) {
-		if (state.playerClicks <= 0) {
-			console.log("action.addClicked: no clicks available!");
-			return;
-		}
-		// get the text from the 'from' form
-		var from = document.getElementById("from").value;
-		// get the text from the to' form
-		var to = document.getElementById("to").value;
-		addEdge(from, to, state);
-	}
-
-	function randomClicked(state) {
-		// create a random name for a new node
-		// find an existing node to connect it
-		// connect the nodes
-		var to;
-		if (_.random(1) === 0) {
-			// create a new node
-			to = "rr" + state.randomIndex;
-			state.randomIndex += 1;
-		} else {
-			to = _.sample(state.seenNodes).id;
-		}
-		var from = _.sample(state.seenNodes).id;
-		addEdge(from, to, state);
 	}
 
 	function tryDestroyer(state) {
@@ -158,9 +106,6 @@ var importAction = function(ui, util, scores, db) {
   }
 
 	return {
-		addEdge: addEdge,
-		addClicked: addClicked,
-		randomClicked: randomClicked,
 		reinitializeClicked: reinitializeClicked,
 		nodeClicked: nodeClicked,
 		runDestroyer: runDestroyer,

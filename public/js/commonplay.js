@@ -447,16 +447,6 @@ window.addEventListener("load", function() {
 			// draw refreshes the graph?
 			draw();
 
-			// add a function when "add" button is clicked
-			document.getElementById("add").addEventListener("click", function() {
-				action.addClicked(state);
-			});
-
-			// add a function when the `random` button is clicked
-			document.getElementById("random").addEventListener("click", function() {
-				action.randomClicked(state);
-			});
-
 			document.getElementById("reinitialize").addEventListener("click", function() {
 				action.reinitializeClicked(state);
 			});
