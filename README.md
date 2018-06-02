@@ -46,6 +46,15 @@ Run
 
 This will allow you to access common at [http://localhost:5000](http://localhost:5000). You need to work this way so we can access `firebase` and allow it to vendor credentials.
 
+## Snapshots
+
+We have some query parameters to control snapshotting and interacting with the log:
+
+* `startLogFromBeginning=true`: will skip snapshots and run the log from the beginning. This is useful if you we make changes to `readLog` and need to produce a clean snapshot.
+* `snapshots=true`: will take snapshots every minute in the background.
+
+So, for example, to enable snapshots and run the log from the beginning, you'd visit: `http://localhost:5000/index.html?startLogFromBeginning=true&snapshots=true` or `https://commonplay.ca/index.html?startLogFromBeginning=true&snapshots=true`.
+
 ## Blowing away the authenticated user database
 
 Make sure you've got `firebase-admin` installed:

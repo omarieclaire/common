@@ -26,6 +26,17 @@ var importDb = function(util, firebase, scores) {
     ref.on('child_changed', update);
   }
 
+  function runLogFromBeginning(state, onLogUpdate) {
+    console.log("Running log from the start");
+    var ref = database.ref('/log');
+    return ref.on('child_added', function(data) {
+      var msg = data.val();
+      var key = data.key;
+      readLog(state, msg, key);
+      onLogUpdate(state, msg);
+    });
+  }
+
   /**
    * Do an initial read of /log/* and set up a listener to notice any
    * updates that happen. Any time /log/* changes we'll receive an
@@ -43,41 +54,42 @@ var importDb = function(util, firebase, scores) {
    *
    *
    */
-  function initLog(state, initializeGame, onLogUpdate) {
-    database
-      .ref('/state')
-      .orderByKey()
-      .limitToLast(1)
-      .once('child_added', function(snapshot) {
-        var stateSnapshot = snapshot.val();
-        var key = snapshot.key;
-        stateSnapshot.nodes.forEach(function(n) {
-          util.addNode(n.id, state, n.score);
+  function initLog(state, initializeGame, onLogUpdate, startLogFromBeginning) {
+    if(startLogFromBeginning) {
+      initializeGame(state);
+      return runLogFromBeginning(state, onLogUpdate);
+    } else {
+      database
+        .ref('/state')
+        .orderByKey()
+        .limitToLast(1)
+        .once('child_added', function(snapshot) {
+          var stateSnapshot = snapshot.val();
+          var key = snapshot.key;
+          console.log("Starting log from: " + key);
+          stateSnapshot.nodes.forEach(function(n) {
+            util.addNodeWithScore(n.id, state, n.score, n.clicks, n.lastClickTime, n.lastClickGainedAt);
+          });
+          stateSnapshot.edges.forEach(function(e) {
+            util.addEdge(e.source.id, e.target.id, state)
+          });
+          state.randomIndex = stateSnapshot.randomIndex;
+          state.players = stateSnapshot.players;
+          state.logEntry = key;
+          initializeGame(state);
+          var ref = database.ref('/log').orderByKey().startAt(key);
+          return ref.on('child_added', function(data) {
+            var msg = data.val();
+            var key = data.key;
+            readLog(state, msg, key);
+            onLogUpdate(state, msg);
+          });
+        }, function(error) {
+          console.log("ERROR fetching state, starting from scratch", error);
+          initializeGame(state);
+          runLogFromBeginning(state, onLogUpdate);
         });
-        stateSnapshot.edges.forEach(function(e) {
-          util.addEdge(e.source.id, e.target.id, state)
-        });
-        state.randomIndex = stateSnapshot.randomIndex;
-        state.players = stateSnapshot.players;
-        state.logEntry = key;
-        initializeGame(state);
-        var ref = database.ref('/log').orderByKey().startAt(snapshot.key);
-        return ref.on('child_added', function(data) {
-          var msg = data.val();
-          var key = data.key;
-          readLog(state, msg, key);
-          onLogUpdate(state, msg);
-        });
-      }, function(error) {
-        console.log("ERROR fetching state, starting from scratch", error);
-        var ref = database.ref('/log');
-        return ref.on('child_added', function(data) {
-          var msg = data.val();
-          var key = data.key;
-          readLog(state, msg, key);
-          onLogUpdate(state, msg);
-        });
-      });
+    }
   }
 
   /**
@@ -124,10 +136,11 @@ var importDb = function(util, firebase, scores) {
   }
 
   function trackClick(state, msg) {
-    if (msg.sender === state.selfId) {
-      state.playerClicks = util.clicks(state.playerClicks - 1);
+    var node = state.seenNodes[msg.sender];
+    if(node) {
+      node.clicks = util.clicks(node.clicks - 1);
+      node.lastClickTime = msg.timestamp;
     }
-    state.lastClickTime = msg.timestamp;
   }
 
   /**
@@ -142,7 +155,7 @@ var importDb = function(util, firebase, scores) {
     }
     if (msg.type === "invite") {
       if (msg.sender == null) {
-        util.addNode(msg.recipient, state, "receiver");
+        util.addNodeWithSenderReceiver(msg.recipient, state, "receiver");
       } else {
         util.addEdge(msg.sender, msg.recipient, state);
       }
@@ -179,10 +192,12 @@ var importDb = function(util, firebase, scores) {
       });
       scores.calculateCommonScore(state);
     } else if (msg.type === "gainClicks") {
-      if (msg.id === state.selfId && state.seenNodes[state.selfId] && state.seenNodes[state.selfId].score > 0) {
+
+      var node = state.seenNodes[state.selfId];
+      if (msg.id === state.selfId && node && node.score > 0) {
         // the logged-in player will gain clicks
-        state.playerClicks = Math.min(6, state.playerClicks + msg.numClicks);
-        state.lastClickGainedAt = msg.lastClickGainedAt;
+        node.clicks = Math.min(6, node.clicks + msg.numClicks);
+        node.lastClickGainedAt = msg.lastClickGainedAt;
       } else {
         // do nothing, it's a different player
       }
@@ -213,6 +228,8 @@ var importDb = function(util, firebase, scores) {
         // reportGameStatus("YOU GAINED CLICKS");
       }
     }
+
+    state.logEntry = key;
   }
 
   /**
@@ -231,7 +248,6 @@ var importDb = function(util, firebase, scores) {
    */
   function snapshotState(state) {
     console.log("snapshot key", state.logEntry);
-    console.log(state.seenNodes);
     return database.ref('/state/' + state.logEntry).set({
       randomIndex: state.randomIndex,
       players: state.players,
