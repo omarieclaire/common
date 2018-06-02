@@ -222,7 +222,17 @@ window.addEventListener("load", function() {
 						return d.color;
 					})
 					.attr("r", function(d) {
-						return DEFAULT_NODE_RADIUS;
+						if(d.score === NODE_HEALTH_FULL) {
+							return 7;
+						} else if(d.score > NODE_HEALTH_HIGH) {
+							return 5;
+						} else if(d.score > NODE_HEALTH_MEDIUM) {
+							return 3.5;
+						} else if(d.score > NODE_HEALTH_LOW) {
+							return 2;
+						} else if(d.score === NODE_HEALTH_DEAD) {
+							return 2;
+						}
 					})
 				// .attr("stroke", "pink")
 				// add an id attribute to each node, so we can access/select it later
@@ -363,6 +373,20 @@ window.addEventListener("load", function() {
 					// .attr("r", function(d) {
 					// 	return Math.max(d.score/10, 1);
 					// })
+					.attr("r", function(d) {
+						if(d.score === NODE_HEALTH_FULL) {
+							return 7;
+						} else if(d.score > NODE_HEALTH_HIGH) {
+							return 5;
+						} else if(d.score > NODE_HEALTH_MEDIUM) {
+							return 3.5;
+						} else if(d.score > NODE_HEALTH_LOW) {
+							return 2;
+						} else if(d.score === NODE_HEALTH_DEAD) {
+							return 2;
+						}
+					})
+
 					.attr("fill", function(d) {
 						return d.color;
 					});

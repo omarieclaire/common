@@ -32,4 +32,4 @@ var NODE_HEALTH_DEAD = 0;
 var MAXIMUM_USERNAME_LENGTH = 15;
 
 // the default node radius
-var DEFAULT_NODE_RADIUS = 7;
+// var DEFAULT_NODE_RADIUS = 7;

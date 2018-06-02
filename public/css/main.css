@@ -212,12 +212,12 @@ nav a {
 }
 
 .nodeHigh {
-  stroke: green;
+  /* stroke: green; */
   opacity: 0.5;
 }
 
 .nodeMedium {
-  stroke: blue;
+  /* stroke: blue; */
   opacity: 0.3;
 }
 
