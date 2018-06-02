@@ -55,7 +55,9 @@ var importUtil = function(scores, ui) {
     var node = state.seenNodes[id];
     if (node) {
 
-      node.score += score;
+      // We used to do this here, not sure why, but it was messing with the snapshots
+      // leaving tihs as a reminder in case there _was_ a reaosn we did this here.
+      //node.score += score;
       return state.seenNodes[id];
 
     } else {
