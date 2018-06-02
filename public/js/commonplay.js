@@ -78,6 +78,18 @@ window.addEventListener("load", function() {
 		}, 60 * 1000);
 		action.tryDestroyer(initialState);
 
+    var runSnapshotter =
+      (new URLSearchParams(window.location.search)).has('snapshots');
+    // If the snapshots query param is present then run the snapshotter
+    // in the background every minute.
+    if(runSnapshotter) {
+      window.setInterval(function() {
+        console.log("Capturing snapshot at key: " + initialState.logEntry);
+        action.runSnapshotter(initialState);
+      }, 60 * 1000);
+    }
+
+
 		var initializeGame = function (state) {
 
 			// create a d3 simulation object
@@ -560,7 +572,7 @@ window.addEventListener("load", function() {
 		// "initializeGame" function,
 		// and onLogUpdate function.
     var startLogFromBeginning =
-      (new URLSearchParams(window.location.search)).has('log');
+      (new URLSearchParams(window.location.search)).has('startLogFromBeginning');
 		db.initLog(initialState, initializeGame, onLogUpdate, startLogFromBeginning);
 	});
 });

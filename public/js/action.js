@@ -127,6 +127,10 @@ var importAction = function(ui, util, scores, db) {
 		}
 	}
 
+  function runSnapshotter(state) {
+    db.snapshotState(state);
+  }
+
 	function reinitializeClicked(state) {
 		db.reinitialize(state);
 	}
@@ -161,6 +165,7 @@ var importAction = function(ui, util, scores, db) {
 		nodeClicked: nodeClicked,
 		runDestroyer: runDestroyer,
 		tryDestroyer: tryDestroyer,
-		tryToGainClicks: tryToGainClicks
+		tryToGainClicks: tryToGainClicks,
+    runSnapshotter: runSnapshotter
 	};
 };

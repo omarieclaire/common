@@ -27,29 +27,37 @@ var importUtil = function(scores, ui) {
     }
   }
 
+  function addNodeWithScore(id, state, score) {
+    return addNode(id, state, score);
+  }
+
+  function addNodeWithSenderReceiver(id, state, who) {
+    // the id was added, so return the node
+    // give them some score
+    var score;
+    if(who == "sender") {
+      score = INVITE_INCREMENT_SENDER_SCORE;
+    } else if(who == "receiver") {
+      score = INVITE_INCREMENT_RECEIVER_SCORE;
+    } else {
+      score = 0;
+    }
+
+    return addNode(id, state, score);
+  }
+
   // given a node id, add a node
   // this function returns the node
   // sender = true
   // receiver = false
-  function addNode(id, state, who) {
+  function addNode(id, state, score) {
     // check if the id was already added
     var node = state.seenNodes[id];
     if (node) {
-      // the id was added, so return the node
-      // give them some score
-      var score;
-      if(who == "sender") {
-        score = INVITE_INCREMENT_SENDER_SCORE;
-      } else if(who == "receiver") {
-        score = INVITE_INCREMENT_RECEIVER_SCORE;
-      } else {
-        score = 0;
-      }
 
       node.score += score;
-      // TODO: make a global. differentiate between sender and receiver
-
       return state.seenNodes[id];
+
     } else {
       // create a new node object
 
@@ -85,7 +93,7 @@ var importUtil = function(scores, ui) {
     if (from === to) {
       // if 'from' id is equal to 'to' id, assume we're adding
       // a node and not an edge.
-      addNode(from, state, "sender");
+      addNodeWithSenderReceiver(from, state, "sender");
     } else if (state.seenEdges[id]) {
       // if 'from' and 'to' are different, but
       // we've seen the id before, do nothing
@@ -93,9 +101,9 @@ var importUtil = function(scores, ui) {
     } else {
       // if 'from' and 'to' are different and ne
       // add a node for 'from' in case it doesn't exist
-      var x = addNode(from, state, "sender");
+      var x = addNodeWithSenderReceiver(from, state, "sender");
       // add a node for 'to' in case it doesn't exist
-      var y = addNode(to, state, "reciever");
+      var y = addNodeWithSenderReceiver(to, state, "reciever");
       // create a new edge
       var o = {id: id, source: x, target: y};
       // add the edges to the array of edges
@@ -201,6 +209,8 @@ var importUtil = function(scores, ui) {
     getEdgesForNode: getEdgesForNode,
     edgeId: edgeId,
     addNode: addNode,
+    addNodeWithScore: addNodeWithScore,
+    addNodeWithSenderReceiver: addNodeWithSenderReceiver,
     addEdge: addEdge,
     deleteEdge: deleteEdge,
     nodesByNetwork: nodesByNetwork,

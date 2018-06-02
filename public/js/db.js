@@ -68,7 +68,7 @@ var importDb = function(util, firebase, scores) {
           var key = snapshot.key;
           console.log("Starting log from: " + key);
           stateSnapshot.nodes.forEach(function(n) {
-            util.addNode(n.id, state, n.score);
+            util.addNodeWithScore(n.id, state, n.score);
           });
           stateSnapshot.edges.forEach(function(e) {
             util.addEdge(e.source.id, e.target.id, state)
@@ -154,7 +154,7 @@ var importDb = function(util, firebase, scores) {
     }
     if (msg.type === "invite") {
       if (msg.sender == null) {
-        util.addNode(msg.recipient, state, "receiver");
+        util.addNodeWithSenderReceiver(msg.recipient, state, "receiver");
       } else {
         util.addEdge(msg.sender, msg.recipient, state);
       }
@@ -245,7 +245,6 @@ var importDb = function(util, firebase, scores) {
    */
   function snapshotState(state) {
     console.log("snapshot key", state.logEntry);
-    console.log(state.seenNodes);
     return database.ref('/state/' + state.logEntry).set({
       randomIndex: state.randomIndex,
       players: state.players,
