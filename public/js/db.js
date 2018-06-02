@@ -250,7 +250,6 @@ var importDb = function(util, firebase, scores) {
    * Snapshots the state at a given log entry
    */
   function snapshotState(state) {
-    console.log("snapshot key", state.logEntry);
     return database.ref('/state/' + state.logEntry).set({
       randomIndex: state.randomIndex,
       players: state.players,

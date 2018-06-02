@@ -35,7 +35,7 @@ var importUi = function() {
       document.getElementById("player-clicks").textContent = myNode.clicks.toFixed(0);
       document.getElementById("decay-rate").textContent = getDecayRate(myNode.lastClickTime).toFixed(0);
     } else {
-      console.log("can't find my id (" + state.selfId + ") in seenNodes");
+      //console.log("can't find my id (" + state.selfId + ") in seenNodes");
     }
   }
 
