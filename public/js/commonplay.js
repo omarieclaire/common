@@ -239,7 +239,7 @@ window.addEventListener("load", function() {
 						return d.color;
 					})
 					.attr("r", function(d) {
-						if(d.score === NODE_HEALTH_FULL) {
+						if(d.score >= NODE_HEALTH_FULL) {
 							return 6;
 						} else if(d.score > NODE_HEALTH_HIGH) {
 							return 5;
@@ -247,7 +247,7 @@ window.addEventListener("load", function() {
 							return 4;
 						} else if(d.score > NODE_HEALTH_LOW) {
 							return 3;
-						} else if(d.score === NODE_HEALTH_DEAD) {
+						} else if(d.score <= NODE_HEALTH_DEAD) {
 							return 3;
 						}
 					})
@@ -256,7 +256,7 @@ window.addEventListener("load", function() {
 					.attr("id", util.nodeIdAttr)
 					.attr("class", function(d) {
             var classString = "";
-						if(d.score === NODE_HEALTH_FULL) {
+						if(d.score >= NODE_HEALTH_FULL) {
 							classString += "nodeFull ";
 						} else if(d.score > NODE_HEALTH_HIGH) {
 							classString += "nodeHigh ";
@@ -264,7 +264,7 @@ window.addEventListener("load", function() {
 							classString += "nodeMedium ";
 						} else if(d.score > NODE_HEALTH_LOW) {
 							classString += "nodeLow ";
-						} else if(d.score === NODE_HEALTH_DEAD) {
+						} else if(d.score <= NODE_HEALTH_DEAD) {
 							classString += "nodeDead ";
 						}
 
@@ -391,7 +391,7 @@ window.addEventListener("load", function() {
 					// 	return Math.max(d.score/10, 1);
 					// })
 					.attr("r", function(d) {
-						if(d.score === NODE_HEALTH_FULL) {
+						if(d.score >= NODE_HEALTH_FULL) {
 							return 6;
 						} else if(d.score > NODE_HEALTH_HIGH) {
 							return 5;
@@ -399,13 +399,13 @@ window.addEventListener("load", function() {
 							return 4;
 						} else if(d.score > NODE_HEALTH_LOW) {
 							return 3;
-						} else if(d.score === NODE_HEALTH_DEAD) {
+						} else if(d.score <= NODE_HEALTH_DEAD) {
 							return 3;
 						}
 					})
 					.attr("class", function(d) {
             var classString = "";
-						if(d.score === NODE_HEALTH_FULL) {
+						if(d.score >= NODE_HEALTH_FULL) {
 							classString += "nodeFull ";
 						} else if(d.score > NODE_HEALTH_HIGH) {
 							classString += "nodeHigh ";
@@ -413,7 +413,7 @@ window.addEventListener("load", function() {
 							classString += "nodeMedium ";
 						} else if(d.score > NODE_HEALTH_LOW) {
 							classString += "nodeLow ";
-						} else if(d.score === NODE_HEALTH_DEAD) {
+						} else if(d.score <= NODE_HEALTH_DEAD) {
 							classString += "nodeDead ";
 						}
 
