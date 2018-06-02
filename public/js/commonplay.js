@@ -72,7 +72,7 @@ window.addEventListener("load", function() {
 		// once a minute, have a 1/60 chance of running the destroyer
 		window.setInterval(function () {
 			action.tryDestroyer(initialState);
-		}, 60 * 1000);
+		}, 6 * 1000);
 		action.tryDestroyer(initialState);
 
     var runSnapshotter =
@@ -343,7 +343,9 @@ window.addEventListener("load", function() {
 				} else {
 					playersEdges = [];
 				}
-				playerEdge = playerEdge.data(playersEdges, function(d) {
+				//playerEdge = playerEdge.data(playersEdges, function(d) {
+
+				playerEdge = playerEdge.data([], function(d) {
 					return d.source.id + "-" + d.target.id;
 				});
 

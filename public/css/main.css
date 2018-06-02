@@ -51,7 +51,7 @@ textarea {
    ========================================================================== */
 
 body {
-  font: 18px "Lato", "Helvetica", "Helvetica Neue", "Arial";
+  font: 18px "monospace", "Lato", "Helvetica", "Helvetica Neue", "Arial";
   line-height: 1.6;
 }
 
@@ -185,7 +185,7 @@ nav a {
 .nodeClass {
   opacity: 0.8;
   stroke: transparent;
-  stroke-width: 5px;
+  /* stroke-width: 3px; */
   cursor: pointer;
 }
 
@@ -353,7 +353,7 @@ nav a {
 }
 
 .login-elements a, .login-elements a:visited {
-  color: rgba(0, 238, 230);
+  color: rgba(255, 127, 223);
   text-decoration: none;
 }
 

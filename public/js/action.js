@@ -58,20 +58,27 @@ var importAction = function(ui, util, scores, db) {
 	}
 
 	function runDestroyer(state) {
-		var rate = ui.getDecayRate(state);
-		console.log("running the destroyer (decay rate: %o)", rate);
-		if (rate > 0) {
-			// if rate is 0, the common doesn't get weaker
-			db.weakenCommon(rate);
-		}
-		if (_.random(1, 10) == 10) {
-			// 10% chance of destroying a random connection
-			var i = _.random(0, state.edges.length - 1);
-			var edge = state.edges[i];
-			if (edge) {
-				console.log("destroying a random edge: %o", edge);
-				db.destroyEdge(edge.source, edge.target);
+		var myNode = state.seenNodes[state.selfId];
+		if(myNode) {
+			console.log("decay rate node: ", myNode);
+			var rate = ui.getDecayRate(myNode.lastClickTime);
+			console.log("running the destroyer (decay rate: %o)", rate);
+			if (rate > 0) {
+				// if rate is 0, the common doesn't get weaker
+				db.weakenCommon(rate);
 			}
+			if (_.random(1, 10) == 10) {
+				// 10% chance of destroying a random connection
+				var i = _.random(0, state.edges.length - 1);
+				var edge = state.edges[i];
+				if (edge) {
+					console.log("destroying a random edge: %o", edge);
+					db.destroyEdge(edge.source, edge.target);
+				}
+			}
+		} else {
+			console.log("action.runDestroyer not running because user is not logged in");
+			// do not run destroyer if user isn't logged in.
 		}
 	}
 
