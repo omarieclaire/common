@@ -184,6 +184,43 @@ var importUtil = function(scores, ui) {
     });
   }
 
+  function nodeRadius(node) {
+    if(node.score >= NODE_HEALTH_FULL) {
+      return 6;
+    } else if(node.score > NODE_HEALTH_HIGH) {
+      return 5;
+    } else if(node.score > NODE_HEALTH_MEDIUM) {
+      return 4;
+    } else if(node.score > NODE_HEALTH_LOW) {
+      return 3;
+    } else if(node.score <= NODE_HEALTH_DEAD) {
+      return 3;
+    }
+  }
+
+  function nodeClass(node, state) {
+    var classString = "";
+    if(node.score >= NODE_HEALTH_FULL) {
+      classString += "nodeFull ";
+    } else if(node.score > NODE_HEALTH_HIGH) {
+      classString += "nodeHigh ";
+    } else if(node.score > NODE_HEALTH_MEDIUM) {
+      classString += "nodeMedium ";
+    } else if(node.score > NODE_HEALTH_LOW) {
+      classString += "nodeLow ";
+    } else if(node.score <= NODE_HEALTH_DEAD) {
+      classString += "nodeDead ";
+    }
+
+    if(node.id === state.selfId) {
+      classString += "myNode nodeClass";
+      return classString;
+    } else {
+      classString += "nodeClass";
+      return classString;
+    }
+  }
+
   return {
     edgeIdAttr: edgeIdAttr,
     nodeIdAttr: nodeIdAttr,
@@ -198,6 +235,8 @@ var importUtil = function(scores, ui) {
     currentTimeMillis: currentTimeMillis,
     clicks: clicks,
     health: health,
-    killPlayer: killPlayer
+    killPlayer: killPlayer,
+    nodeRadius: nodeRadius,
+    nodeClass: nodeClass
   };
 };

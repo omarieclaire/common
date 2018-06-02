@@ -238,44 +238,12 @@ window.addEventListener("load", function() {
 					.attr("fill", function(d) {
 						return d.color;
 					})
-					.attr("r", function(d) {
-						if(d.score >= NODE_HEALTH_FULL) {
-							return 6;
-						} else if(d.score > NODE_HEALTH_HIGH) {
-							return 5;
-						} else if(d.score > NODE_HEALTH_MEDIUM) {
-							return 4;
-						} else if(d.score > NODE_HEALTH_LOW) {
-							return 3;
-						} else if(d.score <= NODE_HEALTH_DEAD) {
-							return 3;
-						}
-					})
+					.attr("r", util.nodeRadius)
 				// .attr("stroke", "pink")
 				// add an id attribute to each node, so we can access/select it later
 					.attr("id", util.nodeIdAttr)
-					.attr("class", function(d) {
-            var classString = "";
-						if(d.score >= NODE_HEALTH_FULL) {
-							classString += "nodeFull ";
-						} else if(d.score > NODE_HEALTH_HIGH) {
-							classString += "nodeHigh ";
-						} else if(d.score > NODE_HEALTH_MEDIUM) {
-							classString += "nodeMedium ";
-						} else if(d.score > NODE_HEALTH_LOW) {
-							classString += "nodeLow ";
-						} else if(d.score <= NODE_HEALTH_DEAD) {
-							classString += "nodeDead ";
-						}
+					.attr("class", function(d) { return util.nodeClass(d,state); })
 
-						if(d.id === state.selfId) {
-							classString += "myNode nodeClass";
-							return classString;
-						} else {
-							classString += "nodeClass";
-							return classString;
-						}
-					})
 				//we added the onclick to the circle, but maybe we should have added it to the node
 				//.on("click", nodeClick)
 					.on("click", function(d) {
@@ -390,42 +358,8 @@ window.addEventListener("load", function() {
 					// .attr("r", function(d) {
 					// 	return Math.max(d.score/10, 1);
 					// })
-					.attr("r", function(d) {
-						if(d.score >= NODE_HEALTH_FULL) {
-							return 6;
-						} else if(d.score > NODE_HEALTH_HIGH) {
-							return 5;
-						} else if(d.score > NODE_HEALTH_MEDIUM) {
-							return 4;
-						} else if(d.score > NODE_HEALTH_LOW) {
-							return 3;
-						} else if(d.score <= NODE_HEALTH_DEAD) {
-							return 3;
-						}
-					})
-					.attr("class", function(d) {
-            var classString = "";
-						if(d.score >= NODE_HEALTH_FULL) {
-							classString += "nodeFull ";
-						} else if(d.score > NODE_HEALTH_HIGH) {
-							classString += "nodeHigh ";
-						} else if(d.score > NODE_HEALTH_MEDIUM) {
-							classString += "nodeMedium ";
-						} else if(d.score > NODE_HEALTH_LOW) {
-							classString += "nodeLow ";
-						} else if(d.score <= NODE_HEALTH_DEAD) {
-							classString += "nodeDead ";
-						}
-
-						if(d.id === state.selfId) {
-							classString += "myNode nodeClass";
-							return classString;
-						} else {
-							classString += "nodeClass";
-							return classString;
-						}
-					})
-
+					.attr("r", util.nodeRadius)
+					.attr("class", function(d) { return util.nodeClass(d,state); })
 					.attr("fill", function(d) {
 						return d.color;
 					});
