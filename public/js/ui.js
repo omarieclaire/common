@@ -16,9 +16,21 @@ var importUi = function() {
   function renderMyScore(state) {
     var myNode = state.seenNodes[state.selfId];
     if (myNode && myNode.score) {
-      document.getElementById("node-score-me").textContent = myNode.score.toFixed(0);
-      document.getElementById("node-score-me").className = "visual-score"
-      document.getElementById("node-score-me").style.width = myNode.score.toFixed(0) + "px";
+      var score = 25; //myNode.score;
+      var className = "";
+
+      if (score === NODE_HEALTH_DEAD) {
+        document.getElementById("node-score-me").textContent = "None";
+      } else {
+        className = "visual-score";
+        if (score <= NODE_HEALTH_LOW) {
+          className += " health-low";
+        }
+        document.getElementById("node-score-me").style.width = (score + 3) + "px";
+        document.getElementById("node-score-me").textContent = score.toFixed();
+      }
+
+      document.getElementById("node-score-me").className = className;
 
       document.getElementById("player-clicks").textContent = state.playerClicks.toFixed(0);
       document.getElementById("decay-rate").textContent = getDecayRate(state).toFixed(0);

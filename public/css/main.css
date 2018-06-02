@@ -330,11 +330,16 @@ nav a {
 #node-score-me.visual-score {
   margin-left: 0.5em;
   display: inline-block;
-  color: white;
+  color: transparent;
   background-color: white;
   overflow: hidden;
-  font-size: smaller;
-  vertical-align: text-top;
+  font-size: x-small;
+  vertical-align: text-bottom;
+  opacity: 0.7;
+}
+
+#node-score-me.health-low {
+  background-color: red;
 }
 
 #logout {
