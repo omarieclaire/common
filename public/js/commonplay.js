@@ -74,7 +74,7 @@ window.addEventListener("load", function() {
 		// once a minute, have a 1/60 chance of running the destroyer
 		window.setInterval(function () {
 			action.tryDestroyer(initialState);
-		}, 6 * 1000);
+		}, 60 * 1000);
 		action.tryDestroyer(initialState);
 
     var runSnapshotter =
