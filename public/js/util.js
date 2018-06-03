@@ -27,25 +27,6 @@ var importUtil = function(scores, ui) {
     }
   }
 
-  function addNodeWithScore(id, state, score, clicks, lastClickTime, lastClickGainedAt) {
-    return addNode(id, state, score, clicks, lastClickTime, lastClickGainedAt);
-  }
-
-  function addNodeWithSenderReceiver(id, state, who, clicks, lastClickTime, lastClickGainedAt) {
-    // the id was added, so return the node
-    // give them some score
-    var score;
-    if(who == "sender") {
-      score = INVITE_INCREMENT_SENDER_SCORE;
-    } else if(who == "receiver") {
-      score = INVITE_INCREMENT_RECEIVER_SCORE;
-    } else {
-      score = 0;
-    }
-
-    return addNode(id, state, score, clicks, lastClickTime, lastClickGainedAt);
-  }
-
   // given a node id, add a node
   // this function returns the node
   // sender = true
@@ -54,19 +35,14 @@ var importUtil = function(scores, ui) {
     // check if the id was already added
     var node = state.seenNodes[id];
     if (node) {
-
-      // We used to do this here, not sure why, but it was messing with the snapshots
-      // leaving tihs as a reminder in case there _was_ a reaosn we did this here.
-      //node.score += score;
-      return state.seenNodes[id];
-
+      return node;
     } else {
       // create a new node object
 
       var o = {
         "id": id,
         color: state.colorPicker(id),
-        score: score,
+        score: score ? score : INITIAL_NODE_SCORE,
         clicks: clicks ? clicks : INITIAL_CLICKS,
         lastClickTime: lastClickTime ? lastClickTime : COMMON_EPOCH,
         lastClickGainedAt: lastClickGainedAt ? lastClickGainedAt : 0,
@@ -98,7 +74,7 @@ var importUtil = function(scores, ui) {
     if (from === to) {
       // if 'from' id is equal to 'to' id, assume we're adding
       // a node and not an edge.
-      addNodeWithSenderReceiver(from, state, "sender");
+      addNode(from, state);
     } else if (state.seenEdges[id]) {
       // if 'from' and 'to' are different, but
       // we've seen the id before, do nothing
@@ -106,9 +82,9 @@ var importUtil = function(scores, ui) {
     } else {
       // if 'from' and 'to' are different and ne
       // add a node for 'from' in case it doesn't exist
-      var x = addNodeWithSenderReceiver(from, state, "sender");
+      var x = addNode(from, state);
       // add a node for 'to' in case it doesn't exist
-      var y = addNodeWithSenderReceiver(to, state, "reciever");
+      var y = addNode(to, state);
       // create a new edge
       var o = {id: id, source: x, target: y};
       // add the edges to the array of edges
@@ -208,14 +184,49 @@ var importUtil = function(scores, ui) {
     });
   }
 
+  function nodeRadius(node) {
+    if(node.score >= NODE_HEALTH_FULL) {
+      return 6;
+    } else if(node.score > NODE_HEALTH_HIGH) {
+      return 5;
+    } else if(node.score > NODE_HEALTH_MEDIUM) {
+      return 4;
+    } else if(node.score > NODE_HEALTH_LOW) {
+      return 3;
+    } else if(node.score <= NODE_HEALTH_DEAD) {
+      return 3;
+    }
+  }
+
+  function nodeClass(node, state) {
+    var classString = "";
+    if(node.score >= NODE_HEALTH_FULL) {
+      classString += "nodeFull ";
+    } else if(node.score > NODE_HEALTH_HIGH) {
+      classString += "nodeHigh ";
+    } else if(node.score > NODE_HEALTH_MEDIUM) {
+      classString += "nodeMedium ";
+    } else if(node.score > NODE_HEALTH_LOW) {
+      classString += "nodeLow ";
+    } else if(node.score <= NODE_HEALTH_DEAD) {
+      classString += "nodeDead ";
+    }
+
+    if(node.id === state.selfId) {
+      classString += "myNode nodeClass";
+      return classString;
+    } else {
+      classString += "nodeClass";
+      return classString;
+    }
+  }
+
   return {
     edgeIdAttr: edgeIdAttr,
     nodeIdAttr: nodeIdAttr,
     getEdgesForNode: getEdgesForNode,
     edgeId: edgeId,
     addNode: addNode,
-    addNodeWithScore: addNodeWithScore,
-    addNodeWithSenderReceiver: addNodeWithSenderReceiver,
     addEdge: addEdge,
     deleteEdge: deleteEdge,
     nodesByNetwork: nodesByNetwork,
@@ -224,6 +235,8 @@ var importUtil = function(scores, ui) {
     currentTimeMillis: currentTimeMillis,
     clicks: clicks,
     health: health,
-    killPlayer: killPlayer
+    killPlayer: killPlayer,
+    nodeRadius: nodeRadius,
+    nodeClass: nodeClass
   };
 };

@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
 
-  var createConnection = function (emailEntered, usernameEntered) {
+  var createConnection = function (user, emailEntered, usernameEntered) {
     var sender = user.displayName || 'UNKNOWN';
 
     console.log("about to create user. sender:", sender);
@@ -189,6 +189,7 @@ document.addEventListener("DOMContentLoaded", function() {
       emailLabel.style.color = "red";
       emailErrorMsg.innerHTML = "email does not already exist :(";
     } else {
+      console.log(error);
       document.getElementById('status').innerHTML = "Failed and we don't know why :(";
     }
 
@@ -223,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function() {
               return Promise.resolve(true);
             }
           }).then(function(result) {
-            createConnection(emailEntered, usernameEntered);
+            createConnection(user, emailEntered, usernameEntered);
           }).catch(function(error) {
             handleError(ev, error);
           });
@@ -253,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function() {
               return Promise.resolve(true);
             }
           }).then(function(result) {
-            createConnection(emailEntered, usernameEntered);
+            createConnection(user, emailEntered, usernameEntered);
           }).catch(function(error) {
             handleError(ev, error);
           });

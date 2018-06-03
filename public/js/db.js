@@ -68,7 +68,7 @@ var importDb = function(util, firebase, scores) {
           var key = snapshot.key;
           console.log("Starting log from: " + key);
           stateSnapshot.nodes.forEach(function(n) {
-            util.addNodeWithScore(n.id, state, n.score, n.clicks, n.lastClickTime, n.lastClickGainedAt);
+            util.addNode(n.id, state, n.score, n.clicks, n.lastClickTime, n.lastClickGainedAt);
           });
           stateSnapshot.edges.forEach(function(e) {
             util.addEdge(e.source.id, e.target.id, state)
@@ -155,9 +155,14 @@ var importDb = function(util, firebase, scores) {
     }
     if (msg.type === "invite") {
       if (msg.sender == null) {
-        util.addNodeWithSenderReceiver(msg.recipient, state, "receiver");
+        // basically adding omarieclaire
+        util.addNode(msg.recipient, state);
       } else {
         util.addEdge(msg.sender, msg.recipient, state);
+        var senderNode = state.seenNodes[msg.sender];
+        var recipientNode = state.seenNodes[msg.recipient];
+        senderNode.score += INVITE_INCREMENT_SENDER_SCORE;
+        recipientNode.score += INVITE_INCREMENT_RECEIVER_SCORE;
       }
       trackClick(state, msg);
     } else if (msg.type === "newConnection") {
@@ -245,7 +250,6 @@ var importDb = function(util, firebase, scores) {
    * Snapshots the state at a given log entry
    */
   function snapshotState(state) {
-    console.log("snapshot key", state.logEntry);
     return database.ref('/state/' + state.logEntry).set({
       randomIndex: state.randomIndex,
       players: state.players,

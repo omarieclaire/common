@@ -65,7 +65,6 @@ var importAction = function(ui, util, scores, db) {
 	function runDestroyer(state) {
 		var myNode = state.seenNodes[state.selfId];
 		if(myNode) {
-			console.log("decay rate node: ", myNode);
 			var rate = ui.getDecayRate(myNode.lastClickTime);
 			console.log("running the destroyer (decay rate: %o)", rate);
 			if (rate > 0) {
