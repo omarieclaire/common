@@ -38,12 +38,12 @@ function draw() {
   strokeWeight(2);
   // fill(255);
   textFont("monospace");
-  textSize(30);
+  textSize(40);
 
   fill(50);
 
   if(haveIWonYet) {
-    background(0, 255, 255);
+    background(0, 0, 255);
     text(winText, screenW/2 - 240, 20, 480, 300);
     // document.querySelector("#reinforcing-connection-sound").play()
 
