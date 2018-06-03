@@ -225,7 +225,7 @@ var importDb = function(util, firebase, scores) {
     } else if (msg.type === "destroyEdge") {
       reportGameStatus("EDGE DESTROYED");
     } else if (msg.type === "weakenCommon") {
-      reportGameStatus("COMMON WEAKED w POWER " + msg.power);
+      reportGameStatus("COMMON WEAKENED w POWER " + msg.power);
     } else if (msg.type === "gainClicks") {
       if (msg.id === state.selfId && state.seenNodes[state.selfId] && state.seenNodes[state.selfId].score > 0) {
         // reportGameStatus("YOU GAINED CLICKS");
