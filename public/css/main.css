@@ -207,13 +207,13 @@ nav a {
   opacity: 0.6;
   width: 10em;
   height: 10em;
-  /* stroke: yellow; */
+  stroke: yellow;
   /* outline: 4px solid red; */
   /* stroke-offset: 15px; */
   /* border: solid 5px yellow;
   border-radius: 50%; */
-  /* width: 5em;
-  height: 5em;  */
+  width: 5em;
+  height: 5em; 
 }
 
 .nodeFull {
@@ -392,6 +392,7 @@ nav a {
   vertical-align: text-bottom;
   border-radius: 50%;
   height: 2em;
+  opacity: 0.5;
   background: transparent;
   border: 1px solid white;
 }
