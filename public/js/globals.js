@@ -11,10 +11,10 @@ var MY_FIXED_Y = 0;
 var INITIAL_NODE_SCORE = 100;
 
 // default amount to add to sender's score when inviting another player
-var INVITE_INCREMENT_SENDER_SCORE = 1;
+var INVITE_INCREMENT_SENDER_SCORE = 15;
 
 // default amount to add to receiver's score when being invited by another player
-var INVITE_INCREMENT_RECEIVER_SCORE = 1;
+var INVITE_INCREMENT_RECEIVER_SCORE = 35;
 
 // use as an "earliest timestamp" -- late on may 30th, 2018
 var COMMON_EPOCH = 1527733382598;
