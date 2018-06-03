@@ -213,7 +213,7 @@ nav a {
   /* border: solid 5px yellow;
   border-radius: 50%; */
   width: 5em;
-  height: 5em; 
+  height: 5em;
 }
 
 .nodeFull {
@@ -292,7 +292,7 @@ nav a {
 
 .annotation path {
   /* stroke: blue; */
-  fill: blue;
+  fill: #675be0;
   stroke: none;
   fill-opacity: 0.2;
 }

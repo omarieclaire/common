@@ -240,7 +240,7 @@ window.addEventListener("load", function() {
 					.attr("fill", function(d) {
 						return d.color;
 					})
-					.attr("r", util.nodeRadius)
+					.attr("r", function(d) { return util.nodeRadius(d); })
 				// .attr("stroke", "pink")
 				// add an id attribute to each node, so we can access/select it later
 					.attr("id", util.nodeIdAttr)
@@ -360,7 +360,7 @@ window.addEventListener("load", function() {
 					// .attr("r", function(d) {
 					// 	return Math.max(d.score/10, 1);
 					// })
-					.attr("r", util.nodeRadius)
+					.attr("r", function(d) { return util.nodeRadius(d); })
 					.attr("class", function(d) { return util.nodeClass(d,state); })
 					.attr("fill", function(d) {
 						return d.color;

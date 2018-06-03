@@ -193,7 +193,10 @@ var importUtil = function(scores, ui) {
       return 4;
     } else if(node.score > NODE_HEALTH_LOW) {
       return 3;
-    } else if(node.score <= NODE_HEALTH_DEAD) {
+    } else if(node.score >= NODE_HEALTH_DEAD) {
+      return 3;
+    } else {
+      console.log("Radius below 3 for node " + node.id);
       return 3;
     }
   }
@@ -208,7 +211,10 @@ var importUtil = function(scores, ui) {
       classString += "nodeMedium ";
     } else if(node.score > NODE_HEALTH_LOW) {
       classString += "nodeLow ";
-    } else if(node.score <= NODE_HEALTH_DEAD) {
+    } else if(node.score >= NODE_HEALTH_DEAD) {
+      classString += "nodeDead ";
+    } else {
+      console.log("Node score less than 0 for node " + node.id);
       classString += "nodeDead ";
     }
 
