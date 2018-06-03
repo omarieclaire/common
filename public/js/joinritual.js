@@ -22,8 +22,8 @@ var lineLength2 = 0;
 
 var haveIWonYet = false;
 
-var introText = 'New player invitation! Hold the buttons below to connect';
-var winText = 'Connection made'
+var introText = 'New player invitation: hold the buttons below to connect';
+var winText = 'connected!'
 
 function setup() {
   createCanvas(screenW, screenH);
@@ -33,26 +33,26 @@ function setup() {
 
 function draw() {
   textAlign(CENTER, TOP);
-  // textLeading(leading)
-
   strokeWeight(2);
-  // fill(255);
   textFont("monospace");
   textSize(40);
-
-  fill(50);
+  fill(0);
 
   if(haveIWonYet) {
     background(0, 0, 255);
     text(winText, screenW/2 - 240, 20, 480, 50);
     // document.querySelector("#reinforcing-connection-sound").play()
+    text(winText, screenW/2 - 240, 100, 480, 200);
+
 
    setTimeout(function() {
    window.location.href = "joinritualwin.html";
     }, 2000);
 
   } else {
-    text(introText, screenW/2 - 250, 20, 500, 50);
+    text(introText, screenW/2 - 250, 45, 480, 300);
+
+
 
 
 
