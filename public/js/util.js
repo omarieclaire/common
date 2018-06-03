@@ -185,36 +185,35 @@ var importUtil = function(scores, ui) {
   }
 
   function nodeRadius(node) {
-    if(node.score >= NODE_HEALTH_FULL) {
-      return 6;
+    if(node.score > NODE_HEALTH_FULL) {
+      return 8;
     } else if(node.score > NODE_HEALTH_HIGH) {
-      return 5;
+      return 7;
     } else if(node.score > NODE_HEALTH_MEDIUM) {
-      return 4;
+      return 6;
     } else if(node.score > NODE_HEALTH_LOW) {
-      return 3;
-    } else if(node.score >= NODE_HEALTH_DEAD) {
-      return 3;
+      return 5;
+    } else if(node.score > NODE_HEALTH_DEAD) {
+      return 4;
     } else {
-      console.log("Radius below 3 for node " + node.id);
+      // DEAD
       return 3;
     }
   }
 
   function nodeClass(node, state) {
     var classString = "";
-    if(node.score >= NODE_HEALTH_FULL) {
-      classString += "nodeFull ";
+    if(node.score > NODE_HEALTH_FULL) {
+      classString += "nodeFull"
     } else if(node.score > NODE_HEALTH_HIGH) {
       classString += "nodeHigh ";
     } else if(node.score > NODE_HEALTH_MEDIUM) {
       classString += "nodeMedium ";
     } else if(node.score > NODE_HEALTH_LOW) {
       classString += "nodeLow ";
-    } else if(node.score >= NODE_HEALTH_DEAD) {
-      classString += "nodeDead ";
+    } else if(node.score > NODE_HEALTH_DEAD) {
+      classString += "nodeDanger ";
     } else {
-      console.log("Node score less than 0 for node " + node.id);
       classString += "nodeDead ";
     }
 
