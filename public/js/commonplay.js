@@ -4,7 +4,57 @@
 // when the window is ready, call the function below
 window.addEventListener("load", function() {
 
-	// Don't start the app until we have the user object.
+  function lerp (value1, value2, amount) {
+    amount = amount < 0 ? 0 : amount;
+    amount = amount > 1 ? 1 : amount;
+    return value1 + (value2 - value1) * amount;
+  }
+
+  var valueline = d3.line()
+    .x(function (d) {
+      return d.xVal;
+    })
+    .y(function (d) {
+      return d.yVal;
+    });
+
+  var numSamples = 100;
+
+  function wavePath(numSamples, xStart, yStart, xEnd, yEnd) {
+    var angles = d3.range(0, 2 * Math.PI, Math.PI / 200);
+    var height = 200;
+    var amplitude = height/16.0;
+    var frequency = 2.0;
+
+    data = [];
+    for(var i = 0 ; i < numSamples ; i++) {
+      var progress = (i.toFixed(10) / numSamples);
+      var xpos = lerp(xStart, xEnd, progress);
+      var ypos = lerp(yStart, yEnd, progress);
+
+      var xDelta = xEnd - xStart;
+      var yDelta = yStart - yEnd;
+
+      var vecLength = Math.sqrt(xDelta*xDelta + yDelta*yDelta);
+
+      // normalize it
+      xDelta = xDelta / vecLength;
+      yDelta = yDelta / vecLength;
+
+      var angle = Math.atan2(yDelta, xDelta);
+      var wave = Math.sin(progress * Math.PI * 2.0 * frequency ) * amplitude;
+
+      xpos += Math.sin(angle) * wave * 0.5; //perpendicularVecX * wave*0.5;
+      ypos += Math.cos(angle) * wave * 0.5; //perpendicularVecY * wave*0.5;
+
+      var entry = { xVal:xpos, yVal:ypos };
+      data.push(entry);
+    }
+    return valueline(data);
+  }
+
+
+  // Don't start the app until we have the user object.
 	// If we need to optimize start time, moving this
 	// around might help.
 	firebase.auth().onAuthStateChanged(function(user) {
@@ -294,8 +344,24 @@ window.addEventListener("load", function() {
 					})
 					.merge(label);
 
+        var playerNode = state.seenNodes[state.selfId];
+        var playerEdges = [];
+        var otherEdges = [];
+        if(playerNode) {
+          var playerEdgesSet = util.playerEdgesSet(playerNode, state.edges);
+          state.edges.forEach(function(edge) {
+            if(playerEdgesSet.has(edge.id)) {
+              playerEdges.push(edge);
+            } else {
+              otherEdges.push(edge);
+            }
+          });
+        } else {
+          otherEdges = state.edges;
+        }
+
 				// do the same thing for the edges
-				edge = edge.data(state.edges, function(d) {
+				edge = edge.data(otherEdges, function(d) {
 					return d.source.id + "-" + d.target.id;
 				});
 				edge.exit().remove();
@@ -311,23 +377,24 @@ window.addEventListener("load", function() {
 					// getEdgesForNode(state.seenNodes[state.selfId], state.eedges).copy
 					// (should make a copy - not sure how to copy stuff in javascript)
 					// draw these edges ?
-				var playersEdges;
-				var playerNode = state.seenNodes[state.selfId];
+
 				// Check if the playerNode exists (if it's not null or undefined)
 				// if it exists, playersEdges are the connected edges, otherwise they're
 				// an empty array
-				if(playerNode) {
-					playersEdges = util.getEdgesForNode(playerNode, state.edges).slice();
-				} else {
-					playersEdges = [];
-				}
-				playerEdge = playerEdge.data(playersEdges, function(d) {
+				playerEdge = playerEdge.data(playerEdges, function(d) {
 					return d.source.id + "-" + d.target.id;
 				});
 
 				playerEdge.exit().remove();
 				playerEdge = playerEdge.enter()
-					.append("line")
+					.append("path")
+          .attr("d", function(edge) {
+            var xStart = edge.source.x;
+            var yStart = edge.source.y;
+            var xEnd = edge.target.x;
+            var yEnd = edge.target.y;
+            return wavePath(100, xStart, yStart, xEnd, yEnd);
+          })
 					.attr("stroke-width", edgeStrength)
 					.attr("stroke", "pink")
 					.merge(playerEdge);
@@ -382,18 +449,13 @@ window.addEventListener("load", function() {
 					// .attr("stroke-width", edgeStrength);
 
 				playerEdge
-					.attr("x1", function(d) {
-						return d.source.x;
-					})
-					.attr("y1", function(d) {
-						return d.source.y;
-					})
-					.attr("x2", function(d) {
-						return d.target.x;
-					})
-					.attr("y2", function(d) {
-						return d.target.y;
-					});
+          .attr("d", function(edge) {
+            var xStart = edge.source.x;
+            var yStart = edge.source.y;
+            var xEnd = edge.target.x;
+            var yEnd = edge.target.y;
+            return wavePath(100, xStart, yStart, xEnd, yEnd);
+          });
 
 				label
 					.attr("x", function(d) {
