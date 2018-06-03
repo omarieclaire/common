@@ -28,6 +28,8 @@ window.addEventListener("load", function() {
 				email: "unknown@null.void",
 				username: "anonymous-" + Date.now()
 			};
+			document.getElementById("add-player").disabled = true;
+			document.getElementById("add-link").disabled = true;
 		} else {
 			currentUser = {
 				email: user.email,
