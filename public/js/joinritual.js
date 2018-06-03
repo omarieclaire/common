@@ -38,6 +38,9 @@ function draw() {
   textSize(40);
   fill(0);
 
+  ellipse(360, 200, 200, 200);
+
+
   if(haveIWonYet) {
     background(0, 0, 255);
     text(winText, screenW/2 - 240, 20, 480, 50);
