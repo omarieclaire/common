@@ -4,8 +4,8 @@ const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
 // const gmailCredentials = require('./gmail.json');
 const passgen = require('./passgen.json');
-// const mailgunApiKey = require('./mailgun.json').apiKey;
-// const mailgun = require('mailgun-js')({apiKey: mailgunApiKey, domain: "mail.commonplay.ca"});
+const mailgunApiKey = require('./mailgun.json').apiKey;
+const mailgun = require('mailgun-js')({apiKey: mailgunApiKey, domain: "mail.commonplay.ca"});
 
 const nodemailer = require('nodemailer');
 // const mailTransport = nodemailer.createTransport({
