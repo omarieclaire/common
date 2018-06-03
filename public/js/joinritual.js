@@ -44,7 +44,7 @@ function draw() {
 
   if(haveIWonYet) {
     background(0, 0, 255);
-    text(winText, screenW/2 - 240, 20, 480, 300);
+    text(winText, screenW/2 - 240, 20, 480, 50);
     // document.querySelector("#reinforcing-connection-sound").play()
 
    setTimeout(function() {
@@ -52,7 +52,7 @@ function draw() {
     }, 2000);
 
   } else {
-    text(introText, screenW/2 - 250, 20, 500, 300);
+    text(introText, screenW/2 - 250, 20, 500, 50);
 
 
 
