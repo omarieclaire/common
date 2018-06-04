@@ -519,6 +519,11 @@ window.addEventListener("load", function() {
 			});
 			// start listening to DB updates
 			db.initPlayers(state);
+
+      // Force a tick in the simulation every 3 seconds
+      setInterval(function(){
+        simulation.alpha(0.1);
+      },3000);
 		};
 
 		// This is an onLogUpdate function
