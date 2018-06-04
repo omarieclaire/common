@@ -69,30 +69,6 @@ window.addEventListener("load", function() {
       animationClickSuccess: null,
 		};
 
-		// once a minute, try to gain a click
-		window.setInterval(function () {
-			action.tryToGainClicks(initialState);
-		}, 60 * 1000);
-		action.tryToGainClicks(initialState);
-
-		// once a minute, have a 1/60 chance of running the destroyer
-		window.setInterval(function () {
-			action.tryDestroyer(initialState);
-		}, 60 * 1000);
-		action.tryDestroyer(initialState);
-
-    var runSnapshotter =
-      (new URLSearchParams(window.location.search)).has('snapshots');
-    // If the snapshots query param is present then run the snapshotter
-    // in the background every minute.
-    if(runSnapshotter) {
-      window.setInterval(function() {
-        console.log("Capturing snapshot at key: " + initialState.logEntry);
-        action.runSnapshotter(initialState);
-      }, 60 * 1000);
-    }
-
-
 		var initializeGame = function (state) {
 
 			// create a d3 simulation object
@@ -559,6 +535,30 @@ window.addEventListener("load", function() {
       setInterval(function(){
         //simulation.alpha(0.1);
       },2000);
+
+      // once a minute, try to gain a click
+      window.setInterval(function () {
+        action.tryToGainClicks(state);
+      }, 60 * 1000);
+      action.tryToGainClicks(state);
+
+      // once a minute, have a 1/60 chance of running the destroyer
+      window.setInterval(function () {
+        action.tryDestroyer(state);
+      }, 60 * 1000);
+      action.tryDestroyer(state);
+
+      var runSnapshotter =
+        (new URLSearchParams(window.location.search)).has('snapshots');
+      // If the snapshots query param is present then run the snapshotter
+      // in the background every minute.
+      if(runSnapshotter) {
+        window.setInterval(function() {
+          console.log("Capturing snapshot at key: " + state.logEntry);
+          action.runSnapshotter(state);
+        }, 60 * 1000);
+      }
+
 		};
 
 		// This is an onLogUpdate function

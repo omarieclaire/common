@@ -140,6 +140,8 @@ var importDb = function(util, firebase, scores) {
     if(node) {
       node.clicks = util.clicks(node.clicks - 1);
       node.lastClickTime = msg.timestamp;
+    } else {
+      console.log("CAN'T ADD CLICK TO NODE WE AIN'T SEEN: " + msg.sender);
     }
   }
 
