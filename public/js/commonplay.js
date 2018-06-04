@@ -523,7 +523,7 @@ window.addEventListener("load", function() {
       // Force a tick in the simulation every 3 seconds
       setInterval(function(){
         simulation.alpha(0.1);
-      },1000);
+      },2000);
 		};
 
 		// This is an onLogUpdate function
