@@ -28,21 +28,37 @@ var haveIWonYet = false;
 var introText = 'New player invitation: hold the buttons below to connect';
 var winText = 'connected!'
 
+var xspacing = 16;    // Distance between each horizontal location
+var w;                // Width of entire wave
+var theta = 0.0;      // Start angle at 0
+var amplitude = 75.0; // Height of wave
+var period = 500.0;   // How many pixels before the wave repeats
+var dx;               // Value for incrementing x
+var yvalues;  // Using an array to store height values for the wave
+
 function setup() {
   createCanvas(screenW, screenH);
   background(0);
+
+  waveWidth = width+16;
+  dx = (TWO_PI / period) * xspacing;
+  yvalues = new Array(floor(w/xspacing));
+
 }
 
 function draw() {
   textAlign(CENTER, TOP);
-  strokeWeight(2);
+  strokeWeight(0);
   textFont("monospace");
   textSize(40);
   fill(255);
 
   if(haveIWonYet) {
     background(0, 0, 255);
-    text(winText, screenW/2 - 240, 20, 480, 50);
+    background(0);
+    calcWave();
+    renderWave();
+    // text(winText, screenW/2 - 240, 20, 480, 50);
     // document.querySelector("#reinforcing-connection-sound").play()
     text(winText, screenW/2 - 240, 100, 480, 200);
 
@@ -86,7 +102,7 @@ function draw() {
   line2 = line(rightButtonX - buttonWidth/2, rightButtonY, rightButtonX - buttonWidth/2 + lineLength2, leftButtonY);
 
   stroke(255);
-  strokeWeight(2);
+  strokeWeight(0);
 
 }
 
@@ -132,5 +148,28 @@ function winState(distance) {
     // console.log("not winning yet")
     return false;
 
+  }
+}
+
+
+function calcWave() {
+  // Increment theta (try different values for
+  // 'angular velocity' here
+  theta += 0.02;
+
+  // For every x value, calculate a y value with sine function
+  var x = theta;
+  for (var i = 0; i < yvalues.length; i++) {
+    yvalues[i] = sin(x)*amplitude;
+    x+=dx;
+  }
+}
+
+function renderWave() {
+  noStroke();
+  fill(255);
+  // A simple way to draw the wave with an ellipse at each location
+  for (var x = 0; x < yvalues.length; x++) {
+    ellipse(x*xspacing, height/2+yvalues[x], 16, 16);
   }
 }
