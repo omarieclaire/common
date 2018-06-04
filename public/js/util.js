@@ -115,6 +115,7 @@ var importUtil = function(scores, ui) {
 
   function deactivateNode(node, state) {
     node.score = 0;
+    node.clicks = 0;
     // TODO: change the styling for this node
   }
 
