@@ -65,7 +65,8 @@ window.addEventListener("load", function() {
 			draw: function() { console.log("fake draw"); },
 			// id of the leg entry for this version of the state.
 			logEntry: null,
-      animation: null
+      animationNoClicksAvailable: null,
+      animationClickSuccess: null,
 		};
 
 		// once a minute, try to gain a click
@@ -381,6 +382,9 @@ window.addEventListener("load", function() {
 
 			// function called on every "tick" of d3 like a clock or gameloop
 			function ticked(e) {
+
+        // animation for clicking a node.
+        var anim = state.animationNoClicksAvailable;
 				node
 				//cx is the relative position of the node
 					.attr("cx", function(d) {
@@ -395,13 +399,19 @@ window.addEventListener("load", function() {
 					.attr("r", function(d) { return util.nodeRadius(d); })
 					.attr("class", function(d) { return util.nodeClass(d,state); })
           .attr("fill", function(d) {
-            var anim = state.animation;
-            if(anim && anim.type === "no-clicks-available" && d.id === anim.targetNode && anim.ticks > 0) {
+            if(anim && d.id === anim.targetNode && anim.ticks > 0) {
               return CLICK_ERROR_NO_CLICKS_NODE_COLOR;
             } else {
               return d.color;
             }
 					});
+
+        if(anim) {
+          anim.ticks--;
+          if(anim.ticks < 0) {
+            state.animationNoClicksAvailable = null;
+          }
+        }
 
 				edge
 					.attr("x1", function(d) {
@@ -418,6 +428,7 @@ window.addEventListener("load", function() {
 					});
 					// .attr("stroke-width", edgeStrength);
 
+        var anim = state.animationClickSuccess;
         playerWaves.forEach(function(playerWave, index) {
           playerWave.attr("d", function(edge) {
             var xStart = edge.source.x;
@@ -427,10 +438,9 @@ window.addEventListener("load", function() {
             return waves.wavePath(playerWavesFrequencies[index], xStart, yStart, xEnd, yEnd);
           });
           // this animation stuff is a bit of a hack, but it's reliable.
-          if(state.animation) {
+          if(anim) {
             playerWave.attr("stroke", function(edge) {
-              var anim = state.animation;
-              if(anim && anim.type === "click-success" && anim.edgeId === edge.id && anim.ticks > 0) {
+              if(anim.edgeId === edge.id && anim.ticks > 0) {
                 return CLICK_SUCCESS_WAVE_COLOR;
               } else {
                 return playerWavesColours[index]
@@ -438,11 +448,10 @@ window.addEventListener("load", function() {
             });
           }
         });
-
-        if(state.animation) {
-          state.animation.ticks--;
-          if(state.animation.ticks < 0) {
-            state.animation = null;
+        if(anim) {
+          anim.ticks--;
+          if(anim.ticks < 0) {
+            state.animationClickSuccess = null;
           }
         }
 

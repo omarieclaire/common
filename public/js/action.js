@@ -15,8 +15,7 @@ var importAction = function(ui, util, scores, db) {
 			d3.select(clickHtmlText).transition().duration(500).style("color", "red").transition().duration(2000).style("color", null);
 			d3.select(clickHtml).transition().duration(1000).style("color", "red").transition().duration(1500).style("color", null);
 
-      state.animation = {
-        type: "no-clicks-available",
+      state.animationNoClicksAvailable = {
         targetNode: d.id,
         ticks: ANIMATION_TICKS
       };
@@ -33,11 +32,13 @@ var importAction = function(ui, util, scores, db) {
     // TODO: ensure ourEdge is available
 
 		if (ourEdge && ourNode) {
-			//db.giveStrength(ourNode.id, target);
+
+      // Update the log, decrement the click count
+			db.giveStrength(ourNode.id, target);
+
 			playSound("reinforcing-connection-sound", 0.2);
 			// begin edge animation
-      state.animation = {
-        type: "click-success",
+      state.animationClickSuccess = {
         edgeId: ourEdge.id,
         sourceId: ourEdge.source.id,
         targetId: ourEdge.target.id,
