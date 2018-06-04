@@ -357,7 +357,9 @@ window.addEventListener("load", function() {
             .attr("stroke-width", edgeStrength)
             .attr("stroke", playerWavesColours[index])
             .attr("fill", "none")
-            .style("mix-blend-mode", "darken")
+          // There is a bug in Chrome which prevents us from using this.
+          // https://bugs.chromium.org/p/chromium/issues/detail?id=711955&q=mix-blend-mode&colspec=ID%20Pri%20M%20Stars%20ReleaseBlock%20Component%20Status%20Owner%20Summary%20OS%20Modified
+            //.style("mix-blend-mode", "darken")
             .merge(array[index]);
         });
 
