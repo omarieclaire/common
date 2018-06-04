@@ -214,7 +214,7 @@ var importUtil = function(scores, ui) {
   function nodeClass(node, state) {
     var classString = "";
     if(node.score > NODE_HEALTH_FULL) {
-      classString += "nodeFull"
+      classString += "nodeFull "
     } else if(node.score > NODE_HEALTH_HIGH) {
       classString += "nodeHigh ";
     } else if(node.score > NODE_HEALTH_MEDIUM) {
