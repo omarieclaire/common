@@ -16,6 +16,12 @@ var INVITE_INCREMENT_SENDER_SCORE = 15;
 // default amount to add to receiver's score when being invited by another player
 var INVITE_INCREMENT_RECEIVER_SCORE = 35;
 
+// Amount to increase the sender's score when they click on something
+var CLICK_INCREMENT_SENDER_SCORE = 10;
+
+// Amount to increase the receiver's score when they click on something
+var CLICK_INCREMENT_RECEIVER_SCORE = 30;
+
 // use as an "earliest timestamp" -- late on may 30th, 2018
 var COMMON_EPOCH = 1527733382598;
 

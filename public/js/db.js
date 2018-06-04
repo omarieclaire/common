@@ -176,8 +176,8 @@ var importDb = function(util, firebase, scores) {
       if (!edge) {
         console.log("%o is not connected to %o", sender, recipient);
       } else {
-        sender.score = util.health(sender.score + 10);
-        recipient.score = util.health(recipient.score + 25);
+        sender.score = util.health(sender.score + CLICK_INCREMENT_SENDER_SCORE);
+        recipient.score = util.health(recipient.score + CLICK_INCREMENT_RECEIVER_SCORE);
         trackClick(state, msg);
         scores.calculateCommonScore(state);
       }
