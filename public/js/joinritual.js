@@ -16,9 +16,15 @@ var rightButtonColour = 255;
 
 var leftIsTouched = false;
 var rightIsTouched = false;
+// var fullScreenButtonIsTouched = false;
 
 var keyF = false;
 var keyJ = false;
+// var keyT = false;
+
+// var fullScreenButtonWidth = 150;
+// var fullScreenButtonX = 0;
+// var fullScreenButtonY = 0;
 
 var line1 = 0;
 var line2 = 0;
@@ -34,10 +40,13 @@ var winText = 'connected!'
 function setup() {
   createCanvas(screenW, screenH);
   background(0);
+
 }
 
 function draw() {
   background(0);
+  // fill(30);
+  // ellipse(fullScreenButtonX, fullScreenButtonY, fullScreenButtonWidth, fullScreenButtonWidth);
 
   textAlign(CENTER, TOP);
   // strokeWeight(0);
@@ -45,15 +54,19 @@ function draw() {
   textSize(40);
   fill(255);
 
-singleKeyDownCheck();
-keyDownCheck();
+  singleKeyDownCheck();
+  keyDownCheck();
+
+  // if (fullScreenButtonIsTouched) {
+  //   var fs = fullscreen();
+  //   fullscreen(!fs);
+  // }
+
 
   if(haveIWonYet) {
     background(0, 0, 255);
-    // text(winText, screenW/2 - 240, 20, 480, 50);
     // document.querySelector("#reinforcing-connection-sound").play()
     text(winText, screenW/2 - 240, 100, 480, 200);
-
 
    setTimeout(function() {
    window.location.href = "joinritualwin.html";
@@ -83,13 +96,10 @@ keyDownCheck();
     }
   }
 
-
-  // console.log(lineLength1, lineLength2);
   haveIWonYet = winState(distanceBetweenButtons / 2);
 
   stroke('rgb(0,255,0)');
   strokeWeight(10);
-
   line1 = line(leftButtonX + buttonWidth/2, leftButtonY, leftButtonX + buttonWidth/2 + lineLength1, leftButtonY);
   line2 = line(rightButtonX - buttonWidth/2, rightButtonY, rightButtonX - buttonWidth/2 + lineLength2, leftButtonY);
   stroke(255);
@@ -103,20 +113,25 @@ function withinRight(t) {
   return dist(t.x, t.y, rightButtonX, rightButtonY) <= buttonWidth;
 }
 
+// function withinFullScreenButton(t) {
+//   return dist(t.x, t.y, fullScreenButtonX, fullScreenButtonY) <= buttonWidth;
+// }
+
+function isTouched(touches) {
+  leftIsTouched = touches.reduce(leftReducer, false);
+  rightIsTouched = touches.reduce(rightReducer, false);
+  // fullScreenButtonIsTouched = touches.reduce(fullScreenButtonIsTouchedReducer, false);
+}
+
 function leftReducer(accumulator, currentValue) {
   return accumulator || withinLeft(currentValue);
 }
 function rightReducer(accumulator, currentValue) {
   return accumulator || withinRight(currentValue);
 }
-
-
-
-function isTouched(touches) {
-  leftIsTouched = touches.reduce(leftReducer, false);
-  rightIsTouched = touches.reduce(rightReducer, false);
-}
-
+// function fullScreenButtonIsTouchedReducer(accumulator, currentValue) {
+//   return accumulator || withinFullScreenButton(currentValue);
+// }
 
 
 function singleKeyDownCheck() {
@@ -137,11 +152,8 @@ function keyDownCheck() {
   if (keyF == true && keyJ == true) {
     return true;
   } else {
-
-return false;
+    return false;
   }
-    // leftIsTouched = touches.reduce(leftReducer, false);
-    // rightIsTouched = touches.reduce(rightReducer, false);
  }
 
 
@@ -169,3 +181,10 @@ function winState(distance) {
     return false;
   }
 }
+
+// function mousePressed() {
+//   if (mouseX > 0 && mouseX < 100 && mouseY > 0 && mouseY < 100) {
+//     var fs = fullscreen();
+//     fullscreen(!fs);
+//   }
+// }
