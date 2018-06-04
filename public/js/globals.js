@@ -45,3 +45,12 @@ var SNAPSHOT_VERSION = 1;
 
 // The number of initial clicks
 var INITIAL_CLICKS = 6;
+
+// Number of ticks to do an animation for
+var ANIMATION_TICKS = 125;
+
+// color of click successful 
+var CLICK_SUCCESS_WAVE_COLOR = "yellow";
+
+// Color of node when you try to click and you have no clicks
+var CLICK_ERROR_NO_CLICKS_NODE_COLOR = "gray";

@@ -64,7 +64,8 @@ window.addEventListener("load", function() {
 			// we start with a fake draw and mutate it below.
 			draw: function() { console.log("fake draw"); },
 			// id of the leg entry for this version of the state.
-			logEntry: null
+			logEntry: null,
+      animation: null
 		};
 
 		// once a minute, try to gain a click
@@ -393,8 +394,13 @@ window.addEventListener("load", function() {
 					// })
 					.attr("r", function(d) { return util.nodeRadius(d); })
 					.attr("class", function(d) { return util.nodeClass(d,state); })
-					.attr("fill", function(d) {
-						return d.color;
+          .attr("fill", function(d) {
+            var anim = state.animation;
+            if(anim && anim.type === "no-clicks-available" && d.id === anim.targetNode && anim.ticks > 0) {
+              return CLICK_ERROR_NO_CLICKS_NODE_COLOR;
+            } else {
+              return d.color;
+            }
 					});
 
 				edge
@@ -420,7 +426,25 @@ window.addEventListener("load", function() {
             var yEnd = edge.target.y;
             return waves.wavePath(playerWavesFrequencies[index], xStart, yStart, xEnd, yEnd);
           });
+          // this animation stuff is a bit of a hack, but it's reliable.
+          if(state.animation) {
+            playerWave.attr("stroke", function(edge) {
+              var anim = state.animation;
+              if(anim && anim.type === "click-success" && anim.edgeId === edge.id && anim.ticks > 0) {
+                return CLICK_SUCCESS_WAVE_COLOR;
+              } else {
+                return playerWavesColours[index]
+              }
+            });
+          }
         });
+
+        if(state.animation) {
+          state.animation.ticks--;
+          if(state.animation.ticks < 0) {
+            state.animation = null;
+          }
+        }
 
 				label
 					.attr("x", function(d) {
@@ -524,7 +548,7 @@ window.addEventListener("load", function() {
 
       // Force a tick in the simulation every 3 seconds
       setInterval(function(){
-        simulation.alpha(0.1);
+        //simulation.alpha(0.1);
       },2000);
 		};
 

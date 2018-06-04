@@ -15,34 +15,38 @@ var importAction = function(ui, util, scores, db) {
 			d3.select(clickHtmlText).transition().duration(500).style("color", "red").transition().duration(2000).style("color", null);
 			d3.select(clickHtml).transition().duration(1000).style("color", "red").transition().duration(1500).style("color", null);
 
+      state.animation = {
+        type: "no-clicks-available",
+        targetNode: d.id,
+        ticks: ANIMATION_TICKS
+      };
+
 			console.log("action.nodeClicked: no clicks available!");
+      state.draw();
 			return;
 		}
 
     var target = d.id;
     //reference to the edge between me and the target
     var ourEdgeId = util.edgeId(state.selfId, target);
-    var ouredge = state.seenEdges[ourEdgeId];
+    var ourEdge = state.seenEdges[ourEdgeId];
     // TODO: ensure ourEdge is available
 
-		if (ouredge && ourNode) {
-			db.giveStrength(ourNode.id, target);
+		if (ourEdge && ourNode) {
+			//db.giveStrength(ourNode.id, target);
 			playSound("reinforcing-connection-sound", 0.2);
 			// begin edge animation
-			var htmlEdge = document.getElementById(util.edgeIdAttr(ouredge));
-			d3.select(htmlEdge).transition().duration(1000).attr("stroke", "#00FF00").transition().duration(1500).attr("stroke", null);
+      state.animation = {
+        type: "click-success",
+        edgeId: ourEdge.id,
+        sourceId: ourEdge.source.id,
+        targetId: ourEdge.target.id,
+        ticks: ANIMATION_TICKS
+      };
 
-			// begin node animation
-      htmlNode.classList.add("nodeClickedTransition");
-      window.setTimeout(function() {
-        htmlNode.classList.remove("nodeClickedTransition");
-      }, 1500);
+
 		} else {
 			playSound("error-sound", 0.5);
-      htmlNode.classList.add("nodeClickedErrorTransition");
-      window.setTimeout(function() {
-        htmlNode.classList.remove("nodeClickedErrorTransition");
-      }, 1500);
 		}
 
 		scores.calculateCommonScore(state);
