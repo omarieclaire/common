@@ -184,9 +184,9 @@ var importUtil = function(scores, ui) {
     var deletedEdges = [];
     for (var i = state.edges.length - 1; i >= 0; i--) {
       var edge = state.edges[i];
-      if(edge.source === node.id || edge.target === node.id) {
+      if(edge.source.id === node.id || edge.target.id === node.id) {
         deletedEdges.push(edge.id);
-        deleteEdge(edge);
+        deleteEdge(edge, state);
       }
     }
     deletedEdges.forEach(function(edgeId) {
