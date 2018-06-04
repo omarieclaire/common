@@ -65,7 +65,9 @@ function authenticatedUserHandler(email, sender, username, password) {
   });
 }
 
-function createFirebaseUser(email, username, sender) {
+// displayName is what a user entered
+// all usernames are lowercase.
+function createFirebaseUser(email, displayName, username, sender) {
 
   var password = generatePassphrase();
 
@@ -86,7 +88,7 @@ function createFirebaseUser(email, username, sender) {
         email: email,
         emailVerified: false,
         password: password,
-        displayName: username,
+        displayName: displayName,
         disabled: false
       }).then((user) => {
         console.log("successfully created user " + username);
@@ -97,7 +99,7 @@ function createFirebaseUser(email, username, sender) {
     console.log(error);
     return Promise.reject(error);
   }).then((result) => {
-    return authenticatedUserHandler(email, sender, result.username, result.pass);
+    return authenticatedUserHandler(email, sender, username, result.pass);
   }).then((result) => {
     console.log("SUCCESS");
     return {success: true};
@@ -111,7 +113,7 @@ function createFirebaseUser(email, username, sender) {
 
 exports.createUserAndInvite = functions.https.onCall((data, context) => {
   var result =
-    createFirebaseUser(data.email, data.username, data.sender)
+    createFirebaseUser(data.email, data.username, data.username.toLowerCase(), data.sender)
 
   return result.then((result) => {
     return {success: result.success};
