@@ -17,6 +17,9 @@ var rightButtonColour = 255;
 var leftIsTouched = false;
 var rightIsTouched = false;
 
+var keyF = false;
+var keyJ = false;
+
 var line1 = 0;
 var line2 = 0;
 
@@ -34,11 +37,16 @@ function setup() {
 }
 
 function draw() {
+  background(0);
+
   textAlign(CENTER, TOP);
   // strokeWeight(0);
   textFont("monospace");
   textSize(40);
   fill(255);
+
+singleKeyDownCheck();
+keyDownCheck();
 
   if(haveIWonYet) {
     background(0, 0, 255);
@@ -55,13 +63,13 @@ function draw() {
     text(introText, screenW/2 - 250, 45, 480, 300);
   }
 
-  var distanceBetweenButtons = (rightButtonX - buttonWidth/2) - (leftButtonX - buttonWidth/2);
+  var distanceBetweenButtons = (rightButtonX - buttonWidth/2) - (leftButtonX + buttonWidth/2);
 
   ellipse(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   ellipse(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
 
   if (haveIWonYet == false) {
-    if(leftIsTouched && rightIsTouched) {
+    if(leftIsTouched && rightIsTouched || keyDownCheck()) {
 
       // connectionFormingSound.play();
       lineLength1 ++;
@@ -102,10 +110,40 @@ function rightReducer(accumulator, currentValue) {
   return accumulator || withinRight(currentValue);
 }
 
+
+
 function isTouched(touches) {
   leftIsTouched = touches.reduce(leftReducer, false);
   rightIsTouched = touches.reduce(rightReducer, false);
 }
+
+
+
+function singleKeyDownCheck() {
+  if (keyIsDown(70)) {
+    keyF = true;
+  } else {
+    keyF = false;
+  }
+
+  if (keyIsDown(74)) {
+    keyJ = true;
+  } else {
+    keyJ = false;
+  }
+}
+
+function keyDownCheck() {
+  if (keyF == true && keyJ == true) {
+    return true;
+  } else {
+
+return false;
+  }
+    // leftIsTouched = touches.reduce(leftReducer, false);
+    // rightIsTouched = touches.reduce(rightReducer, false);
+ }
+
 
 function touchStarted() {
   isTouched(touches);
