@@ -4,55 +4,6 @@
 // when the window is ready, call the function below
 window.addEventListener("load", function() {
 
-  function lerp (value1, value2, amount) {
-    amount = amount < 0 ? 0 : amount;
-    amount = amount > 1 ? 1 : amount;
-    return value1 + (value2 - value1) * amount;
-  }
-
-  var valueline = d3.line()
-    .x(function (d) {
-      return d.xVal;
-    })
-    .y(function (d) {
-      return d.yVal;
-    });
-
-  var numSamples = 100;
-
-  function wavePath(numSamples, xStart, yStart, xEnd, yEnd) {
-    var angles = d3.range(0, 2 * Math.PI, Math.PI / 200);
-    var height = 200;
-    var amplitude = height/16.0;
-    var frequency = 2.0;
-
-    data = [];
-    for(var i = 0 ; i < numSamples ; i++) {
-      var progress = (i.toFixed(10) / numSamples);
-      var xpos = lerp(xStart, xEnd, progress);
-      var ypos = lerp(yStart, yEnd, progress);
-
-      var xDelta = xEnd - xStart;
-      var yDelta = yStart - yEnd;
-
-      var vecLength = Math.sqrt(xDelta*xDelta + yDelta*yDelta);
-
-      // normalize it
-      xDelta = xDelta / vecLength;
-      yDelta = yDelta / vecLength;
-
-      var angle = Math.atan2(yDelta, xDelta);
-      var wave = Math.sin(progress * Math.PI * 2.0 * frequency ) * amplitude;
-
-      xpos += Math.sin(angle) * wave * 0.5; //perpendicularVecX * wave*0.5;
-      ypos += Math.cos(angle) * wave * 0.5; //perpendicularVecY * wave*0.5;
-
-      var entry = { xVal:xpos, yVal:ypos };
-      data.push(entry);
-    }
-    return valueline(data);
-  }
-
 
   // Don't start the app until we have the user object.
 	// If we need to optimize start time, moving this
@@ -62,6 +13,7 @@ window.addEventListener("load", function() {
 		// IMPORT
 		// Note: firebase is in scope from /__/firebase/init.js
 		var ui = importUi();
+    var waves = importWaves();
 		var scores = importScores(ui);
 		var util = importUtil(scores, ui);
 		var db = importDb(util, firebase, scores);
@@ -176,10 +128,16 @@ window.addEventListener("load", function() {
 				.attr("stroke-width", 0.5)
 				.selectAll(".edge");
 
-			var playerEdge = g
-				.append("g")
-				.attr("id", "other-edges")
-				.selectAll(".edge");
+      var playerWavesColours = ["cyan", "magenta", "yellow"];
+      var playerWavesFrequencies = [0, 0.5*Math.PI, Math.PI];
+      var playerWaves = [];
+      // if you want to add a third wave, put [0,1,2] in the array
+      [0,1].forEach(function(i) {
+        var elem =
+          g.append("g").attr("id", "player-wave-" + i).selectAll(".playewave" + i);
+
+        playerWaves.push(elem);
+      });
 
 			// create a <g> element for labels, append it to the first g
 			var label = g
@@ -381,23 +339,27 @@ window.addEventListener("load", function() {
 				// Check if the playerNode exists (if it's not null or undefined)
 				// if it exists, playersEdges are the connected edges, otherwise they're
 				// an empty array
-				playerEdge = playerEdge.data(playerEdges, function(d) {
-					return d.source.id + "-" + d.target.id;
-				});
+        playerWaves.forEach(function(playerWave, index, array) {
+          array[index] = playerWave.data(playerEdges, function(d) {
+            return d.source.id + "-" + d.target.id + "-wave-" + index;
+          });
 
-				playerEdge.exit().remove();
-				playerEdge = playerEdge.enter()
-					.append("path")
-          .attr("d", function(edge) {
-            var xStart = edge.source.x;
-            var yStart = edge.source.y;
-            var xEnd = edge.target.x;
-            var yEnd = edge.target.y;
-            return wavePath(100, xStart, yStart, xEnd, yEnd);
-          })
-					.attr("stroke-width", edgeStrength)
-					.attr("stroke", "pink")
-					.merge(playerEdge);
+          array[index].exit().remove();
+          array[index] = array[index].enter()
+            .append("path")
+            .attr("d", function(edge) {
+              var xStart = edge.source.x;
+              var yStart = edge.source.y;
+              var xEnd = edge.target.x;
+              var yEnd = edge.target.y;
+              return waves.wavePath(playerWavesFrequencies[index], xStart, yStart, xEnd, yEnd);
+            })
+            .attr("stroke-width", edgeStrength)
+            .attr("stroke", playerWavesColours[index])
+            .attr("fill", "none")
+            .style("mix-blend-mode", "darken")
+            .merge(array[index]);
+        });
 
 				// Update and restart the simulation.
 				simulation.nodes(state.nodes);
@@ -448,14 +410,15 @@ window.addEventListener("load", function() {
 					});
 					// .attr("stroke-width", edgeStrength);
 
-				playerEdge
-          .attr("d", function(edge) {
+        playerWaves.forEach(function(playerWave, index) {
+          playerWave.attr("d", function(edge) {
             var xStart = edge.source.x;
             var yStart = edge.source.y;
             var xEnd = edge.target.x;
             var yEnd = edge.target.y;
-            return wavePath(100, xStart, yStart, xEnd, yEnd);
+            return waves.wavePath(playerWavesFrequencies[index], xStart, yStart, xEnd, yEnd);
           });
+        });
 
 				label
 					.attr("x", function(d) {
