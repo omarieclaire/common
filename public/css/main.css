@@ -55,7 +55,7 @@ textarea {
    ========================================================================== */
 
 body {
-  font: 12px/18px "monospace", "Lato", "Helvetica", "Helvetica Neue", "Arial";
+  font: 12px/18px "monospace"f, "Lato", "Helvetica", "Helvetica Neue", "Arial";
   line-height: 1.6;
 }
 
@@ -195,7 +195,6 @@ nav a {
 .nodeClass {
   opacity: 0.8;
   stroke: transparent;
-  /* stroke-width: 3px; */
   cursor: pointer;
 }
 
@@ -207,7 +206,7 @@ nav a {
   opacity: 0.6;
   width: 10em;
   height: 10em;
-  stroke: yellow;
+  stroke: pink;
   /* outline: 4px solid red; */
   /* stroke-offset: 15px; */
   /* border: solid 5px yellow;
@@ -231,18 +230,22 @@ nav a {
 }
 
 .nodeLow {
+  opacity: 0.3;
+  stroke: red;
+
 
 }
 
 .nodeDanger {
+  stroke-width: 3px;
   stroke: red;
-  /* opacity: 0.3; */
+  opacity: 0.3;
 }
 
 .nodeDead {
   stroke: gray;
   fill: black;
-  /* opacity: 0.3; */
+  opacity: 0.3;
 }
 
 .nodeClickedTransition {
