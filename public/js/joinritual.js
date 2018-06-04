@@ -53,16 +53,9 @@ function draw() {
 
   } else {
     text(introText, screenW/2 - 250, 45, 480, 300);
-
-    //background(200);
   }
 
-  strokeWeight(10);
-
-  var distanceBetweenButtons = rightButtonX - leftButtonX;
-
-  line1 = line(leftButtonX + buttonWidth/2, leftButtonY, leftButtonX + buttonWidth/2 + lineLength1, leftButtonY);
-  line2 = line(rightButtonX - buttonWidth/2, rightButtonY, rightButtonX - buttonWidth/2 + lineLength2, leftButtonY);
+  var distanceBetweenButtons = (rightButtonX - buttonWidth/2) - (leftButtonX - buttonWidth/2);
 
   ellipse(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   ellipse(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
@@ -85,6 +78,15 @@ function draw() {
 
   // console.log(lineLength1, lineLength2);
   haveIWonYet = winState(distanceBetweenButtons / 2);
+
+  stroke('rgb(0,255,0)');
+  strokeWeight(10);
+
+  line1 = line(leftButtonX + buttonWidth/2, leftButtonY, leftButtonX + buttonWidth/2 + lineLength1, leftButtonY);
+  line2 = line(rightButtonX - buttonWidth/2, rightButtonY, rightButtonX - buttonWidth/2 + lineLength2, leftButtonY);
+
+  stroke(255);
+  strokeWeight(2);
 
 }
 
