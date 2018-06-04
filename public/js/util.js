@@ -18,6 +18,16 @@ var importUtil = function(scores, ui) {
     return connectedEdgesForNode;
   }
 
+  function playerEdgesSet(node, edges) {
+    var set = new Set();
+    edges.forEach(function(edge) {
+      if(edge.source.id === node.id || edge.target.id === node.id) {
+        set.add(edge.id);
+      }
+    });
+    return set;
+  }
+
   // given two node IDs, produce a consistent edge ID.
   function edgeId(from, to) {
     if (from < to) {
@@ -242,6 +252,7 @@ var importUtil = function(scores, ui) {
     health: health,
     killPlayer: killPlayer,
     nodeRadius: nodeRadius,
-    nodeClass: nodeClass
+    nodeClass: nodeClass,
+    playerEdgesSet: playerEdgesSet
   };
 };

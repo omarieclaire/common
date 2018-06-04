@@ -4,7 +4,8 @@
 // when the window is ready, call the function below
 window.addEventListener("load", function() {
 
-	// Don't start the app until we have the user object.
+
+  // Don't start the app until we have the user object.
 	// If we need to optimize start time, moving this
 	// around might help.
 	firebase.auth().onAuthStateChanged(function(user) {
@@ -12,6 +13,7 @@ window.addEventListener("load", function() {
 		// IMPORT
 		// Note: firebase is in scope from /__/firebase/init.js
 		var ui = importUi();
+    var waves = importWaves();
 		var scores = importScores(ui);
 		var util = importUtil(scores, ui);
 		var db = importDb(util, firebase, scores);
@@ -126,10 +128,16 @@ window.addEventListener("load", function() {
 				.attr("stroke-width", 0.5)
 				.selectAll(".edge");
 
-			var playerEdge = g
-				.append("g")
-				.attr("id", "other-edges")
-				.selectAll(".edge");
+      var playerWavesColours = ["cyan", "magenta", "yellow"];
+      var playerWavesFrequencies = [0, 0.5*Math.PI, Math.PI];
+      var playerWaves = [];
+      // if you want to add a third wave, put [0,1,2] in the array
+      [0,1].forEach(function(i) {
+        var elem =
+          g.append("g").attr("id", "player-wave-" + i).selectAll(".playewave" + i);
+
+        playerWaves.push(elem);
+      });
 
 			// create a <g> element for labels, append it to the first g
 			var label = g
@@ -294,8 +302,24 @@ window.addEventListener("load", function() {
 					})
 					.merge(label);
 
+        var playerNode = state.seenNodes[state.selfId];
+        var playerEdges = [];
+        var otherEdges = [];
+        if(playerNode) {
+          var playerEdgesSet = util.playerEdgesSet(playerNode, state.edges);
+          state.edges.forEach(function(edge) {
+            if(playerEdgesSet.has(edge.id)) {
+              playerEdges.push(edge);
+            } else {
+              otherEdges.push(edge);
+            }
+          });
+        } else {
+          otherEdges = state.edges;
+        }
+
 				// do the same thing for the edges
-				edge = edge.data(state.edges, function(d) {
+				edge = edge.data(otherEdges, function(d) {
 					return d.source.id + "-" + d.target.id;
 				});
 				edge.exit().remove();
@@ -311,26 +335,31 @@ window.addEventListener("load", function() {
 					// getEdgesForNode(state.seenNodes[state.selfId], state.eedges).copy
 					// (should make a copy - not sure how to copy stuff in javascript)
 					// draw these edges ?
-				var playersEdges;
-				var playerNode = state.seenNodes[state.selfId];
+
 				// Check if the playerNode exists (if it's not null or undefined)
 				// if it exists, playersEdges are the connected edges, otherwise they're
 				// an empty array
-				if(playerNode) {
-					playersEdges = util.getEdgesForNode(playerNode, state.edges).slice();
-				} else {
-					playersEdges = [];
-				}
-				playerEdge = playerEdge.data(playersEdges, function(d) {
-					return d.source.id + "-" + d.target.id;
-				});
+        playerWaves.forEach(function(playerWave, index, array) {
+          array[index] = playerWave.data(playerEdges, function(d) {
+            return d.source.id + "-" + d.target.id + "-wave-" + index;
+          });
 
-				playerEdge.exit().remove();
-				playerEdge = playerEdge.enter()
-					.append("line")
-					.attr("stroke-width", edgeStrength)
-					.attr("stroke", "pink")
-					.merge(playerEdge);
+          array[index].exit().remove();
+          array[index] = array[index].enter()
+            .append("path")
+            .attr("d", function(edge) {
+              var xStart = edge.source.x;
+              var yStart = edge.source.y;
+              var xEnd = edge.target.x;
+              var yEnd = edge.target.y;
+              return waves.wavePath(playerWavesFrequencies[index], xStart, yStart, xEnd, yEnd);
+            })
+            .attr("stroke-width", edgeStrength)
+            .attr("stroke", playerWavesColours[index])
+            .attr("fill", "none")
+            .style("mix-blend-mode", "darken")
+            .merge(array[index]);
+        });
 
 				// Update and restart the simulation.
 				simulation.nodes(state.nodes);
@@ -381,19 +410,15 @@ window.addEventListener("load", function() {
 					});
 					// .attr("stroke-width", edgeStrength);
 
-				playerEdge
-					.attr("x1", function(d) {
-						return d.source.x;
-					})
-					.attr("y1", function(d) {
-						return d.source.y;
-					})
-					.attr("x2", function(d) {
-						return d.target.x;
-					})
-					.attr("y2", function(d) {
-						return d.target.y;
-					});
+        playerWaves.forEach(function(playerWave, index) {
+          playerWave.attr("d", function(edge) {
+            var xStart = edge.source.x;
+            var yStart = edge.source.y;
+            var xEnd = edge.target.x;
+            var yEnd = edge.target.y;
+            return waves.wavePath(playerWavesFrequencies[index], xStart, yStart, xEnd, yEnd);
+          });
+        });
 
 				label
 					.attr("x", function(d) {
