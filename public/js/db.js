@@ -174,7 +174,7 @@ var importDb = function(util, firebase, scores) {
       var sender = state.seenNodes[msg.sender];
       var recipient = state.seenNodes[msg.sender];
       if (!edge) {
-        console.log("%o is not connected to %o", sender, recipient);
+        console.log("%o is not connected to %o", sender.id, recipient.id);
       } else {
         sender.score = util.health(sender.score + CLICK_INCREMENT_SENDER_SCORE);
         recipient.score = util.health(recipient.score + CLICK_INCREMENT_RECEIVER_SCORE);
