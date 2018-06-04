@@ -37,9 +37,20 @@ var haveIWonYet = false;
 var introText = 'New player invitation: hold the buttons below to connect';
 var winText = 'connected!'
 
+var xspacing = 5;    // Distance between each horizontal location
+var w;                // Width of entire wave
+var theta = 2.0;      // Start angle at 0
+var amplitude = 30.0; // Height of wave
+var period = 500.0;   // How many pixels before the wave repeats
+var dx;               // Value for incrementing x
+var yvalues;  // Using an array to store height values for the wave
+
 function setup() {
   createCanvas(screenW, screenH);
   background(0);
+  w = screenW - buttonWidth;
+  dx = (TWO_PI / period) * xspacing;
+  yvalues = new Array(floor(w/xspacing));
 
 }
 
@@ -57,6 +68,7 @@ function draw() {
   singleKeyDownCheck();
   keyDownCheck();
 
+
   // if (fullScreenButtonIsTouched) {
   //   var fs = fullscreen();
   //   fullscreen(!fs);
@@ -64,13 +76,16 @@ function draw() {
 
 
   if(haveIWonYet) {
-    background(0, 0, 255);
-    // document.querySelector("#reinforcing-connection-sound").play()
-    text(winText, screenW/2 - 240, 100, 480, 200);
 
+    // document.querySelector("#reinforcing-connection-sound").play()
+    background(0, 0, 255);
+    text(winText, screenW/2 - 240, 100, 480, 200);
+    calcWave();
+    stroke('rgb(0,255,0)');
+    renderWave();
    setTimeout(function() {
    window.location.href = "joinritualwin.html";
-    }, 2000);
+ }, 4000);
 
   } else {
     text(introText, screenW/2 - 250, 45, 480, 300);
@@ -188,3 +203,25 @@ function winState(distance) {
 //     fullscreen(!fs);
 //   }
 // }
+
+function calcWave() {
+  // Increment theta (try different values for
+  // 'angular velocity' here
+  theta += 0.02;
+
+  // For every x value, calculate a y value with sine function
+  var x = theta;
+  for (var i = 0; i < yvalues.length; i++) {
+    yvalues[i] = sin(x)*amplitude;
+    x+=dx;
+  }
+}
+
+function renderWave() {
+  noStroke();
+  fill(255);
+  // A simple way to draw the wave with an ellipse at each location
+  for (var x = 30; x < yvalues.length; x++) {
+    ellipse(x*xspacing, height/2+yvalues[x], 5, 5);
+  }
+}
