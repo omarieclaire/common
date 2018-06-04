@@ -42,7 +42,7 @@ function setup() {
 
   waveWidth = width+16;
   dx = (TWO_PI / period) * xspacing;
-  yvalues = new Array(floor(w/xspacing));
+  yvalues = new Array(floor(waveWidth/xspacing));
 
 }
 
