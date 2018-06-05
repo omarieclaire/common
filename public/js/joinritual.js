@@ -63,17 +63,6 @@ function setup() {
 
 function draw() {
   background(0);
-  // fill(30);
-  // ellipse(fullScreenButtonX, fullScreenButtonY, fullScreenButtonWidth, fullScreenButtonWidth);
-  // blendMode(MULTIPLY);
-
-  calcWave();
-  renderWave();
-  calcWave2();
-  renderWave2();
-  blendMode(BLEND);
-
-
 
   textAlign(CENTER, TOP);
   // strokeWeight(0);
@@ -93,11 +82,11 @@ function draw() {
     // document.querySelector("#reinforcing-connection-sound").play()
     background(36, 32, 69);
     text(winText, screenW/2 - 240, 100, 480, 200);
-    strokeWeight(1);
     calcWave();
     renderWave();
     calcWave2();
-    renderWave();
+    renderWave2();
+    blendMode(BLEND);
 
    setTimeout(function() {
    window.location.href = "joinritualwin.html";
@@ -111,6 +100,7 @@ function draw() {
   fill(255);
   ellipse(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   ellipse(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
+  noFill();
 
   if (haveIWonYet == false) {
     if(leftIsTouched && rightIsTouched || keyDownCheck()) {
@@ -131,12 +121,12 @@ function draw() {
     strokeWeight(10);
     line1 = line(leftButtonX + buttonWidth/2, leftButtonY, leftButtonX + buttonWidth/2 + lineLength1, leftButtonY);
     line2 = line(rightButtonX - buttonWidth/2, rightButtonY, rightButtonX - buttonWidth/2 + lineLength2, leftButtonY);
+    noStroke();
 
   }
 
 
- stroke(255);
-  strokeWeight(0);
+
 }
 
 function withinLeft(t) {
@@ -239,7 +229,6 @@ function calcWave2() {
   // Increment theta (try different values for
   // 'angular velocity' here
   theta += 0.03;
-
   // For every x value, calculate a y value with sine function
   var x = theta;
   for (var i = 0; i < yvalues.length; i++) {
@@ -247,29 +236,6 @@ function calcWave2() {
     x+=dx;
   }
 }
-
-// function calcWave2() {
-//   // Increment theta (try different values for
-//   // 'angular velocity' here
-//   theta += 0.03;
-//
-//   // For every x value, calculate a y value with sine function
-//   var x = theta;
-//   for (var i = 0; i < yvalues.length; i++) {
-//     yvalues[i] = sin(x)*amplitude;
-//     x+=dx;
-//   }
-// }
-
-// function calcWave2(numPoints, theta, amplitude, period, xspacing) {
-//   var points = [];
-//   var x = theta;
-//   for(var i = 0; i < numPoints; i++) {
-//     points.push(sin(x) * amplitude);
-//     x +=  (TWO_PI / period) * xspacing;
-//   }
-//   return points;
-// }
 
 function renderWave() {
   fill(255, 0, 255, waveCircleOpacity);
@@ -282,17 +248,8 @@ function renderWave() {
 function renderWave2() {
   fill(0, 255, 255, waveCircleOpacity);
 
-
   // A simple way to draw the wave with an ellipse at each location
   for (var x = 30; x < yvalues.length; x++) {
     ellipse(x*xspacing, height/2+yvalues[x], waveCircleW, waveCircleH);
   }
 }
-
-// function renderWave2(points, height, xspacing) {
-//   // noStroke();
-//   fill(0,255,0);
-//   for(var x = 30; x < points.length; x++) {
-//     ellipse(x*xspacing, height/2+points[x], 5,5);
-//   }
-// }
