@@ -11,8 +11,8 @@ var leftButtonY = screenH/2;
 var rightButtonX = screenW - 100;
 var rightButtonY = screenH/2;
 
-var magenta = (255,0,255);
-var cyan = (0,255,255);
+// var magenta = (255,0,255);
+// var cyan = (0,255,255);
 
 var leftIsTouched = false;
 var rightIsTouched = false;
@@ -37,13 +37,20 @@ var haveIWonYet = false;
 var introText = 'New player invitation: hold the buttons below to connect';
 var winText = 'connected!'
 
-var xspacing = 5;    // Distance between each horizontal location
+var xspacing = 1;    // Distance between each horizontal location
 var w;                // Width of entire wave
-var theta = 2.0;      // Start angle at 0
-var amplitude = 30.0; // Height of wave
-var period = 500.0;   // How many pixels before the wave repeats
+var theta = 0;      // Start angle at 0
+var theta2 = 1.5;      // Start angle at 0
+
+var amplitude = 10.0; // Height of wave
+var amplitude2 = 15.0; // Height of wave
+
+var period = 300.0;   // How many pixels before the wave repeats
 var dx;               // Value for incrementing x
 var yvalues;  // Using an array to store height values for the wave
+var waveCircleW = 4;
+var waveCircleH = 4;
+var waveCircleOpacity = 70;
 
 function setup() {
   createCanvas(screenW, screenH);
@@ -58,6 +65,15 @@ function draw() {
   background(0);
   // fill(30);
   // ellipse(fullScreenButtonX, fullScreenButtonY, fullScreenButtonWidth, fullScreenButtonWidth);
+  // blendMode(MULTIPLY);
+
+  calcWave();
+  renderWave();
+  calcWave2();
+  renderWave2();
+  blendMode(BLEND);
+
+
 
   textAlign(CENTER, TOP);
   // strokeWeight(0);
@@ -68,24 +84,21 @@ function draw() {
   singleKeyDownCheck();
   keyDownCheck();
 
-
   // if (fullScreenButtonIsTouched) {
   //   var fs = fullscreen();
   //   fullscreen(!fs);
   // }
 
-
   if(haveIWonYet) {
-
     // document.querySelector("#reinforcing-connection-sound").play()
     background(36, 32, 69);
     text(winText, screenW/2 - 240, 100, 480, 200);
     strokeWeight(1);
     calcWave();
-    calcWave();
-        calcWave();
-    // stroke('rgb(0,255,0)');
     renderWave();
+    calcWave2();
+    renderWave();
+
    setTimeout(function() {
    window.location.href = "joinritualwin.html";
  }, 4000);
@@ -95,7 +108,7 @@ function draw() {
   }
 
   var distanceBetweenButtons = (rightButtonX - buttonWidth/2) - (leftButtonX + buttonWidth/2);
-
+  fill(255);
   ellipse(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   ellipse(rightButtonX, rightButtonY, buttonWidth, buttonWidth);
 
@@ -222,29 +235,64 @@ function calcWave() {
   }
 }
 
-function calcWave2(numPoints, theta, amplitude, period, xspacing) {
-  var points = [];
+function calcWave2() {
+  // Increment theta (try different values for
+  // 'angular velocity' here
+  theta += 0.03;
+
+  // For every x value, calculate a y value with sine function
   var x = theta;
-  for(var i = 0; i < numPoints; i++) {
-    points.push(sin(x) * amplitude);
-    x +=  (TWO_PI / period) * xspacing;
+  for (var i = 0; i < yvalues.length; i++) {
+    yvalues[i] = sin(x)*amplitude2;
+    x+=dx;
   }
-  return points;
 }
+
+// function calcWave2() {
+//   // Increment theta (try different values for
+//   // 'angular velocity' here
+//   theta += 0.03;
+//
+//   // For every x value, calculate a y value with sine function
+//   var x = theta;
+//   for (var i = 0; i < yvalues.length; i++) {
+//     yvalues[i] = sin(x)*amplitude;
+//     x+=dx;
+//   }
+// }
+
+// function calcWave2(numPoints, theta, amplitude, period, xspacing) {
+//   var points = [];
+//   var x = theta;
+//   for(var i = 0; i < numPoints; i++) {
+//     points.push(sin(x) * amplitude);
+//     x +=  (TWO_PI / period) * xspacing;
+//   }
+//   return points;
+// }
 
 function renderWave() {
-  noStroke();
-  fill(255);
+  fill(255, 0, 255, waveCircleOpacity);
   // A simple way to draw the wave with an ellipse at each location
   for (var x = 30; x < yvalues.length; x++) {
-    ellipse(x*xspacing, height/2+yvalues[x], 5, 5);
+    ellipse(x*xspacing, height/2+yvalues[x], waveCircleW, waveCircleH);
   }
 }
 
-function renderWave2(points, height, xspacing) {
-  noStroke();
-  fill(255);
-  for(var x = 30; x < points.length; x++) {
-    ellipse(x*xspacing, height/2+points[x], 5,5);
+function renderWave2() {
+  fill(0, 255, 255, waveCircleOpacity);
+
+
+  // A simple way to draw the wave with an ellipse at each location
+  for (var x = 30; x < yvalues.length; x++) {
+    ellipse(x*xspacing, height/2+yvalues[x], waveCircleW, waveCircleH);
   }
 }
+
+// function renderWave2(points, height, xspacing) {
+//   // noStroke();
+//   fill(0,255,0);
+//   for(var x = 30; x < points.length; x++) {
+//     ellipse(x*xspacing, height/2+points[x], 5,5);
+//   }
+// }
