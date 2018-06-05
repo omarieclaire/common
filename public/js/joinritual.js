@@ -11,8 +11,8 @@ var leftButtonY = screenH/2;
 var rightButtonX = screenW - 100;
 var rightButtonY = screenH/2;
 
-var leftButtonColour = 255;
-var rightButtonColour = 255;
+var magenta = (255,0,255);
+var cyan = (0,255,255);
 
 var leftIsTouched = false;
 var rightIsTouched = false;

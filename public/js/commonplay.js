@@ -449,9 +449,9 @@ window.addEventListener("load", function() {
 			// draw refreshes the graph?
 			draw();
 
-			document.getElementById("reinitialize").addEventListener("click", function() {
-				action.reinitializeClicked(state);
-			});
+			// document.getElementById("reinitialize").addEventListener("click", function() {
+			// 	action.reinitializeClicked(state);
+			// });
 
 			document.getElementById("destroy").addEventListener("click", function() {
 				playSound("destroyer-sound", 0.1);

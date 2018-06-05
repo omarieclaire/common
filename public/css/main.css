@@ -200,7 +200,7 @@ nav a {
 }
 
 .myNode {
-  opacity: 0.6;
+  opacity: 0.8;
   width: 10em;
   height: 10em;
   stroke: pink;
@@ -363,11 +363,13 @@ nav a {
   margin-left: 0.5em;
   display: inline-block;
   color: transparent;
-  background-color: white;
+  background-color: magenta;
   overflow: hidden;
   font-size: x-small;
   vertical-align: text-bottom;
   opacity: 0.7;
+  mix-blend-mode: exclusion;
+
 }
 
 #node-score-me.health-low {
@@ -454,7 +456,7 @@ nav a {
   background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
-  border: solid 2px #ff3399;
+  border: solid 1px #ff3399;
   border-radius: 50%;
   width: 2.5em;
   height: 2.5em;
@@ -468,7 +470,7 @@ nav a {
   background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
-  border: solid 1px white;
+  border: solid 1px #ff3399;
   border-radius: 50%;
   width: 2.5em;
   height: 2.5em;
