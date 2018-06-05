@@ -174,7 +174,7 @@ var importDb = function(util, firebase, scores) {
       var eid = util.edgeId(msg.sender, msg.recipient);
       var edge = state.seenEdges[eid];
       var sender = state.seenNodes[msg.sender];
-      var recipient = state.seenNodes[msg.sender];
+      var recipient = state.seenNodes[msg.recipient];
       if (!edge) {
         console.log("%o is not connected to %o", sender.id, recipient.id);
       } else {
