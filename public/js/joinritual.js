@@ -82,6 +82,8 @@ function draw() {
     text(winText, screenW/2 - 240, 100, 480, 200);
     strokeWeight(1);
     calcWave();
+    calcWave();
+        calcWave();
     // stroke('rgb(0,255,0)');
     renderWave();
    setTimeout(function() {
@@ -110,15 +112,17 @@ function draw() {
         lineLength2++;
       }
     }
+
+    haveIWonYet = winState(distanceBetweenButtons / 2);
+    stroke('rgb(0,255,0)');
+    strokeWeight(10);
+    line1 = line(leftButtonX + buttonWidth/2, leftButtonY, leftButtonX + buttonWidth/2 + lineLength1, leftButtonY);
+    line2 = line(rightButtonX - buttonWidth/2, rightButtonY, rightButtonX - buttonWidth/2 + lineLength2, leftButtonY);
+
   }
 
-  haveIWonYet = winState(distanceBetweenButtons / 2);
 
-  stroke('rgb(0,255,0)');
-  strokeWeight(10);
-  line1 = line(leftButtonX + buttonWidth/2, leftButtonY, leftButtonX + buttonWidth/2 + lineLength1, leftButtonY);
-  line2 = line(rightButtonX - buttonWidth/2, rightButtonY, rightButtonX - buttonWidth/2 + lineLength2, leftButtonY);
-  stroke(255);
+ stroke(255);
   strokeWeight(0);
 }
 
@@ -218,11 +222,29 @@ function calcWave() {
   }
 }
 
+function calcWave2(numPoints, theta, amplitude, period, xspacing) {
+  var points = [];
+  var x = theta;
+  for(var i = 0; i < numPoints; i++) {
+    points.push(sin(x) * amplitude);
+    x +=  (TWO_PI / period) * xspacing;
+  }
+  return points;
+}
+
 function renderWave() {
   noStroke();
   fill(255);
   // A simple way to draw the wave with an ellipse at each location
   for (var x = 30; x < yvalues.length; x++) {
     ellipse(x*xspacing, height/2+yvalues[x], 5, 5);
+  }
+}
+
+function renderWave2(points, height, xspacing) {
+  noStroke();
+  fill(255);
+  for(var x = 30; x < points.length; x++) {
+    ellipse(x*xspacing, height/2+points[x], 5,5);
   }
 }
