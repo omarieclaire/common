@@ -132,7 +132,7 @@ nav a {
   margin: 5em auto;
   padding: 15px;
   border: 1px solid #888;
-  width: 40%;
+  width: 70%;
   color: black;
 }
 
@@ -321,7 +321,7 @@ nav a {
 
 .zoomButtons {
   position: fixed;
-  right: 2em;
+  right: 1.5em;
   bottom: 1.5em;
 }
 
@@ -393,7 +393,7 @@ nav a {
 
 .help-button {
   width: 2em;
-  margin-left: 0.5em;
+  margin-right: 0.5em;
   font-size: x-small;
   vertical-align: text-bottom;
   border-radius: 50%;
@@ -628,4 +628,6 @@ button:hover {
   .modal-content {
     width: 60%;
   }
+
+
 } */
