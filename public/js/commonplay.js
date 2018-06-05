@@ -26,16 +26,19 @@ window.addEventListener("load", function() {
 		// Note: if the user logs out, we should unset this.
 		var currentUser;
 		if (user === null || user === undefined) {
+      var name = "anonymous-" + Date.now();
 			currentUser = {
 				email: "unknown@null.void",
-				username: "anonymous-" + Date.now()
+				username: name,
+        displayName: name
 			};
 			document.getElementById("add-player").disabled = true;
 			document.getElementById("add-link").disabled = true;
 		} else {
 			currentUser = {
 				email: user.email,
-				username: user.displayName
+        displayName: user.displayName,
+				username: user.displayName.toLowerCase()
 			};
 		}
 
@@ -48,6 +51,7 @@ window.addEventListener("load", function() {
 			randomIndex: 1,
 			// id of the current user (same as ME)
 			selfId: currentUser.username,
+      displayName: currentUser.displayName,
 			// color picker
 			colorPicker: d3.scaleOrdinal(["#47ade0", "#be73e6", "#86e570", "#e466be", "#62b134", "#738ae8", "#db8f2e", "#4be0d9", "#ee5679", "#6de8a6",
 				"#ea6941", "#54b385", "#e07aa0", "#5dad5c", "#c792d6", "#90a44a", "#dc8869", "#cfe48c", "#caa74e"
@@ -506,14 +510,6 @@ window.addEventListener("load", function() {
 			document.getElementById("zoom-in").addEventListener("click", zoomIn);
 			document.getElementById("reset-button").addEventListener("click", resetZoom);
 			document.getElementById("zoom-out").addEventListener("click", zoomOut);
-
-			document.getElementById("add-player").addEventListener("click", function() {
-				// in case the user is anonymous
-				if(state.selfId) {
-					//db.weakenNode(state.selfId, ADD_PLAYER_DECREMENT_NODE_SCORE);
-					return true;
-				}
-			});
 
 			document.body.addEventListener("keydown", function(e) {
 				// console.log(e);

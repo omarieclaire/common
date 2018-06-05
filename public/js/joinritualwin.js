@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         validateAndSubmit(ev, emailEntered, usernameEntered);
 
-        database.userExists(usernameEntered).then(function(exists) {
+        database.userExists(usernameEntered.toLowerCase()).then(function(exists) {
           if (exists) {
             return Promise.reject(new Error("username-exists"));
           } else {
@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         validateAndSubmit(ev, emailEntered, usernameEntered);
 
-        database.userExists(usernameEntered).then(function(exists) {
+        database.userExists(usernameEntered.toLowerCase()).then(function(exists) {
           if (!exists) {
             return Promise.reject(new Error("username-does-not-exist"));
           } else {
