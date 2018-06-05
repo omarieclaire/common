@@ -78,10 +78,11 @@ function draw() {
   if(haveIWonYet) {
 
     // document.querySelector("#reinforcing-connection-sound").play()
-    background(0, 0, 255);
+    background(36, 32, 69);
     text(winText, screenW/2 - 240, 100, 480, 200);
+    strokeWeight(1);
     calcWave();
-    stroke('rgb(0,255,0)');
+    // stroke('rgb(0,255,0)');
     renderWave();
    setTimeout(function() {
    window.location.href = "joinritualwin.html";

@@ -106,7 +106,8 @@ var importAction = function(ui, util, scores, db) {
 			return;
 		}
 
-		var eightHoursInMillis = 8 * 60 * 60 * 1000;
+		// var eightHoursInMillis = 8 * 60 * 60 * 1000;
+		var eightHoursInMillis = 60 * 1000; //changed to 1 min in milis
 		var now = util.currentTimeMillis();
 		var delta = now - node.lastClickGainedAt;
 		var numClicks = Math.floor(delta / eightHoursInMillis);

@@ -16,9 +16,6 @@ html {
   text-shadow: none;
 }
 
-@-ms-viewport{
-  width: device-width;
-}
 
 hr {
   display: block;
@@ -605,6 +602,22 @@ button:hover {
 .clearfix {
   *zoom: 1;
 }
+
+/* @-ms-viewport{
+  width: device-width;
+} */
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+/* below is my own attempts to do the above */
 
 /* @media (max-width: 1200px) {
   body {
