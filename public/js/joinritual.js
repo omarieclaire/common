@@ -33,8 +33,8 @@ var bgcol = 0;
 // var cyan = 0, 255, 255;
 // var blue = 9, 6, 34;
 
-var rEllipseStroke = 1;
-var lEllipseStroke = 1;
+var rEllipseStroke = 2;
+var lEllipseStroke = 2;
 
 var line1 = 0;
 var line2 = 0;
@@ -92,7 +92,7 @@ function draw() {
 
     fill(255);
     textSize(40);
-    text(winText, screenW / 2 - 240, 90, 480, 200);
+    text(winText, screenW / 2 - 240, 150, 480, 200);
     noFill();
 
     calcWave();
@@ -109,9 +109,9 @@ function draw() {
     fill(255);
 
     textSize(30);
-    text(titleText, screenW / 2 - 250, 50, 480, 300);
-    textSize(40);
-    text(introText, screenW / 2 - 250, 140, 480, 300);
+    text(titleText, screenW / 2 - 250, 150, 480, 300);
+    textSize(30);
+    text(introText, screenW / 2 - 250, 200, 480, 300);
     noFill();
 
     if (leftIsTouched || keyIsDown(70)) {
@@ -121,7 +121,7 @@ function draw() {
       noFill();
       noStroke();
     } else {
-      lEllipseStroke = 1;
+      lEllipseStroke = 2;
     }
     if (rightIsTouched || keyJ == true) {
       rEllipseStroke = 5;
@@ -130,7 +130,7 @@ function draw() {
       noFill();
       noStroke();
     } else {
-      rEllipseStroke = 1;
+      rEllipseStroke = 2;
     }
   }
 
