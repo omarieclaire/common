@@ -244,7 +244,7 @@ var importDb = function(util, firebase, scores) {
    * "send" methods.
    */
   function sendLog(msg) {
-    msg.timestamp = util.currentTimeMillis();
+    msg.timestamp = firebase.database.ServerValue.TIMESTAMP;
     return database.ref('/log').push().set(msg);
   }
 

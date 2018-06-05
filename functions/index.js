@@ -49,7 +49,8 @@ function authenticatedUserHandler(email, sender, username, password) {
     username: username,
     lastSeen: 0,
     invitedBy: sender,
-    initialPassword: password
+    initialPassword: password,
+    timestamp: admin.database.ServerValue.TIMESTAMP
   }).then((x) => {
     console.log("successfully created player " + username);
     return admin.database().ref('/log').push().set({
@@ -57,7 +58,8 @@ function authenticatedUserHandler(email, sender, username, password) {
       email: email,
       sender: sender,
       recipient: username,
-      startingLife: 100
+      startingLife: 100,
+      timestamp: admin.database.ServerValue.TIMESTAMP
     });
   }).then((previous) => {
     console.log("successfully pushed to log");

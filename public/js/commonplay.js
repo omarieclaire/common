@@ -540,7 +540,12 @@ window.addEventListener("load", function() {
       window.setInterval(function () {
         action.tryToGainClicks(state);
       }, 60 * 1000);
-      action.tryToGainClicks(state);
+      // unintentional race condition: we can't try to calculate
+      // clicks too early because we don't know when the last message
+      // we received was.
+      window.setTimeout(function() {
+        action.tryToGainClicks(state);
+      }, 2*1000);
 
       // once a minute, have a 1/60 chance of running the destroyer
       window.setInterval(function () {
