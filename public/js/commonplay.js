@@ -30,6 +30,7 @@ window.addEventListener("load", function() {
 				email: "unknown@null.void",
 				username: "anonymous-" + Date.now()
 			};
+
 			document.getElementById("add-player").disabled = true;
 			document.getElementById("add-link").disabled = true;
 		} else {
@@ -507,13 +508,29 @@ window.addEventListener("load", function() {
 			document.getElementById("reset-button").addEventListener("click", resetZoom);
 			document.getElementById("zoom-out").addEventListener("click", zoomOut);
 
-			document.getElementById("add-player").addEventListener("click", function() {
+			document.getElementById("add-player").addEventListener("click", function(e) {
 				// in case the user is anonymous
-				if(state.selfId) {
+				var myNode = state.seenNodes[state.selfId];
+				if(myNode && myNode.clicks > 0) {
 					//db.weakenNode(state.selfId, ADD_PLAYER_DECREMENT_NODE_SCORE);
-					return true;
+					window.open('joinritual.html');
+				} else {
+					document.getElementById("poor-sound").play();
+					e.preventDefault();
 				}
-			});
+			}, false);
+
+			document.getElementById("add-link").addEventListener("click", function(e) {
+				// in case the user is anonymous
+				var myNode = state.seenNodes[state.selfId];
+				if(myNode && myNode.clicks > 0) {
+					//db.weakenNode(state.selfId, ADD_PLAYER_DECREMENT_NODE_SCORE);
+					window.open('newconnection.html');
+				} else {
+					document.getElementById("poor-sound").play();
+					e.preventDefault();
+				}
+			}, false);
 
 			document.body.addEventListener("keydown", function(e) {
 				// console.log(e);
