@@ -89,6 +89,8 @@ window.addEventListener("load", function() {
 				.alphaTarget(0.0)
 				.on("tick", ticked);
 
+            simulation.on('end', function() { simulation.restart(); });
+
 			// create a <g> element and append it into <svg>
 			//create the graph itself
 			var g = svg
