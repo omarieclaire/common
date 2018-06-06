@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function() {
       timestamp: 124
     };
     db.trackClick(state, msg)
-    assert(nodeWithZeroClicks.clicks === 2, "Node should have zero clicks");
+    assert(nodeWithZeroClicks.clicks === 0, "Node should have zero clicks");
 
   }
 
