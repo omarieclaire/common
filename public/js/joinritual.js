@@ -88,7 +88,7 @@ function draw() {
   if (haveIWonYet) {
     document.querySelector("#new-connection-sound").play()
 
-    background(36, 32, 69);
+    // background(36, 32, 69);
 
     fill(255);
     textSize(40);
