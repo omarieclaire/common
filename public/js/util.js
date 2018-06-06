@@ -37,6 +37,17 @@ var importUtil = function(scores, ui) {
     }
   }
 
+  // we had a bug where initializing scores and clicks with 0
+  // was reseulting in `score ? score : 100` returning a score
+  // of 100 instead of 0. This function should prevent this.
+  function orDefault(x, defaultValue) {
+    if(x === null || x === undefined) {
+      return defaultValue;
+    } else {
+      return x;
+    }
+  }
+
   // given a node id, add a node
   // this function returns the node
   // sender = true
@@ -52,10 +63,10 @@ var importUtil = function(scores, ui) {
       var o = {
         "id": id,
         color: state.colorPicker(id),
-        score: score ? score : INITIAL_NODE_SCORE,
-        clicks: clicks ? clicks : INITIAL_CLICKS,
-        lastClickTime: lastClickTime ? lastClickTime : COMMON_EPOCH,
-        lastClickGainedAt: lastClickGainedAt ? lastClickGainedAt : 0,
+        score: orDefault(score,INITIAL_NODE_SCORE),
+        clicks: orDefault(clicks, INITIAL_CLICKS),
+        lastClickTime: orDefault(lastClickTime, COMMON_EPOCH),
+        lastClickGainedAt: orDefault(lastClickGainedAt, 0),
         x: 0,
         y:0,
         get r() {

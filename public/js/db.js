@@ -375,6 +375,7 @@ var importDb = function(util, firebase, scores) {
     createPlayer: createPlayer,
     snapshotState: snapshotState,
     gainClicks: gainClicks,
-    userExists: userExists
+    userExists: userExists,
+    trackClick: trackClick
   };
 };
