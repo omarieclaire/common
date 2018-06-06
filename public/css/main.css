@@ -182,7 +182,7 @@ nav a {
 }
 
 .commonUsername {
-  color: #ff3399;
+  color: #ff4578;
 }
 
 /* rect {
@@ -363,7 +363,7 @@ nav a {
   margin-left: 0.5em;
   display: inline-block;
   color: transparent;
-  background-color: magenta;
+  background-color: white;
   overflow: hidden;
   font-size: x-small;
   vertical-align: text-bottom;
@@ -456,7 +456,7 @@ nav a {
   background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
-  border: solid 1px #ff3399;
+  border: solid 1px #ff4578;
   border-radius: 50%;
   width: 2.5em;
   height: 2.5em;
@@ -470,7 +470,7 @@ nav a {
   background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
-  border: solid 1px #ff3399;
+  border: solid 1px #ff4578;
   border-radius: 50%;
   width: 2.5em;
   height: 2.5em;
