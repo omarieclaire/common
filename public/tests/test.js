@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 
   var ui = importUi();
-  var scores = importScores(ui);
+  var scores = importScores();
   var util = importUtil(scores, ui);
 
   var mockFirebase = {

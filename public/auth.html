@@ -31,7 +31,7 @@
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
       var ui = importUi();
-      var scores = importScores(ui);
+      var scores = importScores();
       var util = importUtil(scores, ui);
       var dbModule = importDb(util, firebase);
       var commonAuth = importAuth(firebase, dbModule);

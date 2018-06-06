@@ -39,28 +39,6 @@ var importUi = function() {
     }
   }
 
-  //draw network scores to screen
-  function renderNetworkScores(networkScores) {
-    var scoreHtml = document.getElementById("network-score");
-    // clear the html elements
-    while(scoreHtml.firstChild){
-      scoreHtml.removeChild(scoreHtml.firstChild);
-    }
-    _.each(networkScores, function(networkScore) {
-      var liHtml = document.createElement("LI");
-      liHtml.textContent =
-        "network: " +
-        networkScore.network +
-        " score: " +
-        networkScore.score +
-        " health: " +
-        networkScore.health.toFixed(2) +
-        " people: " +
-        networkScore.people.toString();
-      scoreHtml.appendChild(liHtml);
-    });
-  }
-
   var createModal = function(modalId, buttonId) {
 
     // Get the modal
@@ -144,7 +122,6 @@ var importUi = function() {
 
   return {
     renderMyScore: renderMyScore,
-    renderNetworkScores: renderNetworkScores,
     createModals: createModals,
     getDecayRate: getDecayRate
   };
