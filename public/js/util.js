@@ -1,4 +1,4 @@
-var importUtil = function(scores, ui) {
+var importUtil = function(scores) {
   //create html id for each edge so we can change visuals
   function edgeIdAttr(edge) {
     return "edge-" + edge.id;
