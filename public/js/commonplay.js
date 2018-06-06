@@ -14,8 +14,8 @@ window.addEventListener("load", function() {
 		// Note: firebase is in scope from /__/firebase/init.js
 		var ui = importUi();
     var waves = importWaves();
-		var scores = importScores(ui);
-		var util = importUtil(scores, ui);
+		var scores = importScores();
+		var util = importUtil(scores);
 		var db = importDb(util, firebase, scores);
 		var action = importAction(ui, util, scores, db);
 

@@ -1,4 +1,4 @@
-var importScores = function(ui) {
+var importScores = function() {
 
   //calculate the health of the network (factors: number of edges,
   // strength of edges, and number of people)
@@ -75,7 +75,6 @@ var importScores = function(ui) {
         currentNetworkId += 1;
       }
     }
-    ui.renderNetworkScores(networks);
     return networks;
   };
 
