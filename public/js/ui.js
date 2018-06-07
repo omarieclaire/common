@@ -16,7 +16,7 @@ var importUi = function() {
   function renderMyScore(state) {
     var myNode = state.seenNodes[state.selfId];
     if (myNode && myNode.score) {
-      var score = myNode.score;
+      var score = myNode.score/2;
       var className = "";
 
       if (score === NODE_HEALTH_DEAD) {
