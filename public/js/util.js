@@ -74,6 +74,7 @@ var importUtil = function(scores) {
         }
       };
 
+      // overlapping nodes self at center of network
       if (id === state.selfId) {
         o.fx = MY_FIXED_X;
         o.fy = MY_FIXED_Y;

@@ -156,6 +156,14 @@ nav a {
   cursor: pointer;
 }
 
+.transparentNode:hover {
+  stroke-opacity: 0.2;
+  stroke: grey;
+  stroke-width: 3px;
+  stroke-location: inside;
+  cursor: pointer;
+}
+
 /*fix teh modal?*/
 
 .clickable {

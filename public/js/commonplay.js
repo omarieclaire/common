@@ -131,6 +131,11 @@ window.addEventListener("load", function() {
 				.attr("id", "g-node")
 				.selectAll(".node");
 
+			var transparentNode = g
+				.append("g")
+				.attr("id", "g-trans-node")
+				.selectAll(".transNode");
+
 			// get the nodecount HTML node
 			var nc = document.getElementById("nodecount");
 			// get the edgecount HTML node
@@ -211,36 +216,40 @@ window.addEventListener("load", function() {
 
 			// function to refresh d3 (for any changes to the graph)?
 			function draw() {
+
 				// Apply the update to the nodes.
 				// get nodes array, extract ids, and draw them
 				node = node.data(state.nodes, function(d) {
-					return d.id;
+					return "no-click-" + d.id;
 				});
-				// exit and remove before redrawing?
 				node.exit().remove();
-				// redraw the nodes
-				//enter is a d3 method being called on node
-				//whatever this process returns: append is called on it
 				node = node.enter()
 					.append("circle")
-				//fill takes a color but instead of giving a color I give it
-				// an anon function that returns a color
 					.attr("fill", function(d) {
 						return d.color;
 					})
 					.attr("r", function(d) { return util.nodeRadius(d); })
-				// .attr("stroke", "pink")
 				// add an id attribute to each node, so we can access/select it later
-					.attr("id", util.nodeIdAttr)
+					.attr("id", function(d) { return "no-click-" + util.nodeIdAttr(d);})
 					.attr("class", function(d) { return util.nodeClass(d,state); })
+					.merge(node);
 
-				//we added the onclick to the circle, but maybe we should have added it to the node
-				//.on("click", nodeClick)
+        // These are the nodes that people click on.
+				transparentNode = transparentNode.data(state.nodes, function(d) {
+					return d.id;
+				});
+				transparentNode.exit().remove();
+				transparentNode = transparentNode.enter()
+					.append("circle")
+					.attr("fill", "black")
+          .attr("fill-opacity", 0)
+					.attr("r", function(d) { return util.nodeRadius(d) + 7; })
+					.attr("id", util.nodeIdAttr)
+          .attr("class", "transparentNode")
 					.on("click", function(d) {
 						action.nodeClicked(state, d);
 					})
-				//what does this mean?
-					.merge(node);
+					.merge(transparentNode);
 
 				// In order to draw circles around each network, we calculate
 				// the network scores. Then we mutate each node by adding
@@ -371,9 +380,6 @@ window.addEventListener("load", function() {
 					.attr("cy", function(d) {
 						return d.y;
 					})
-					// .attr("r", function(d) {
-					// 	return Math.max(d.score/10, 1);
-					// })
 					.attr("r", function(d) { return util.nodeRadius(d); })
 					.attr("class", function(d) { return util.nodeClass(d,state); })
           .attr("fill", function(d) {
@@ -390,6 +396,15 @@ window.addEventListener("load", function() {
             state.animationNoClicksAvailable = null;
           }
         }
+
+				transparentNode
+					.attr("cx", function(d) {
+						return d.x;
+					})
+					.attr("cy", function(d) {
+						return d.y;
+					})
+					.attr("r", function(d) { return util.nodeRadius(d) + 7; })
 
 				edge
 					.attr("x1", function(d) {
