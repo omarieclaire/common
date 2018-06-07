@@ -315,7 +315,7 @@ nav a {
 
 .modalButtons {
   position: fixed;
-  right: 2em;
+  right: 1.5em;
   top: 1.5em;
 }
 
@@ -328,9 +328,9 @@ nav a {
 .zoomButtons button, .modalButtons button {
   border: none;
   overflow: hidden;
-  width: 3em;
-  height: 3em;
-  margin: 0.75em;
+  width: 3.5em;
+  height: 3.5em;
+  margin: 0.3em;
   display: block;
   text-indent: -1000em;
   background-color: transparent;
@@ -391,13 +391,17 @@ nav a {
   text-decoration: underline;
 }
 
+.buttonScale {
+
+}
+
 .help-button {
   width: 2em;
   margin-right: 0.5em;
   font-size: x-small;
   vertical-align: text-bottom;
   border-radius: 50%;
-  height: 2em;
+  height: 1.8em;
   opacity: 0.5;
   background: transparent;
   border: 1px solid white;
@@ -458,8 +462,8 @@ nav a {
   background-position: center;
   border: solid 1px #ff4578;
   border-radius: 50%;
-  width: 2.5em;
-  height: 2.5em;
+  width: 3em;
+  height: 3em;
 }
 
 #add-link {
@@ -472,8 +476,8 @@ nav a {
   background-position: center;
   border: solid 1px #ff4578;
   border-radius: 50%;
-  width: 2.5em;
-  height: 2.5em;
+  width: 3em;
+  height: 3em;
 }
 
 button:hover {
@@ -617,6 +621,7 @@ button:hover {
 
 @media only screen and (min-width: 35em) {
     /* Style adjustments for viewports that meet the condition */
+
 }
 
 /* below is my own attempts to do the above */
