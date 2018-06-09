@@ -136,11 +136,6 @@ window.addEventListener("load", function() {
 				.attr("id", "g-trans-node")
 				.selectAll(".transNode");
 
-			// get the nodecount HTML node
-			var nc = document.getElementById("nodecount");
-			// get the edgecount HTML node
-			var ec = document.getElementById("edgecount");
-
 			// small helper function to claculate all enclosed circles
 			// assumes nodesByNetwork is map (key-value pairs) of
 			// key=netowrk-id
@@ -249,6 +244,17 @@ window.addEventListener("load", function() {
 					.on("click", function(d) {
 						action.nodeClicked(state, d);
 					})
+          .on("dblclick", function(d) {
+            // in case the user is anonymous
+            var myNode = state.seenNodes[state.selfId];
+            if(myNode && myNode.clicks > 0) {
+              //db.weakenNode(state.selfId, ADD_PLAYER_DECREMENT_NODE_SCORE);
+              window.open('newconnection.html?username=' + d.id);
+            } else {
+              document.getElementById("poor-sound").play();
+              return false;
+            }
+          })
 					.merge(transparentNode);
 
 				// In order to draw circles around each network, we calculate
@@ -357,10 +363,6 @@ window.addEventListener("load", function() {
 				simulation.force("link").links(state.edges);
 				simulation.alpha(1).restart();
 
-				// update the node and edge counts
-				// can we instead call nodes.length and edges.length?
-				nc.textContent = Object.keys(state.seenNodes).length;
-				ec.textContent = Object.keys(state.seenEdges).length;
 			}
 
 			// Update the draw on state once we've defined it
@@ -596,7 +598,6 @@ window.addEventListener("load", function() {
           action.runSnapshotter(state);
         }, 60 * 1000);
       }
-
 		};
 
 		// This is an onLogUpdate function
