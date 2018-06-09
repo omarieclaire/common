@@ -136,11 +136,6 @@ window.addEventListener("load", function() {
 				.attr("id", "g-trans-node")
 				.selectAll(".transNode");
 
-			// get the nodecount HTML node
-			var nc = document.getElementById("nodecount");
-			// get the edgecount HTML node
-			var ec = document.getElementById("edgecount");
-
 			// small helper function to claculate all enclosed circles
 			// assumes nodesByNetwork is map (key-value pairs) of
 			// key=netowrk-id
@@ -357,10 +352,6 @@ window.addEventListener("load", function() {
 				simulation.force("link").links(state.edges);
 				simulation.alpha(1).restart();
 
-				// update the node and edge counts
-				// can we instead call nodes.length and edges.length?
-				nc.textContent = Object.keys(state.seenNodes).length;
-				ec.textContent = Object.keys(state.seenEdges).length;
 			}
 
 			// Update the draw on state once we've defined it
