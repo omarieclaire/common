@@ -244,6 +244,17 @@ window.addEventListener("load", function() {
 					.on("click", function(d) {
 						action.nodeClicked(state, d);
 					})
+          .on("dblclick", function(d) {
+            // in case the user is anonymous
+            var myNode = state.seenNodes[state.selfId];
+            if(myNode && myNode.clicks > 0) {
+              //db.weakenNode(state.selfId, ADD_PLAYER_DECREMENT_NODE_SCORE);
+              window.open('newconnection.html?username=' + d.id);
+            } else {
+              document.getElementById("poor-sound").play();
+              return false;
+            }
+          })
 					.merge(transparentNode);
 
 				// In order to draw circles around each network, we calculate
@@ -587,7 +598,6 @@ window.addEventListener("load", function() {
           action.runSnapshotter(state);
         }, 60 * 1000);
       }
-
 		};
 
 		// This is an onLogUpdate function

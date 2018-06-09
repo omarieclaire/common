@@ -87,6 +87,13 @@ document.addEventListener("DOMContentLoaded", function() {
   var submittingMsg = document.getElementById("submitting-msg");
   var youAreConnectingElement = document.getElementById("common-you-are-connecting");
 
+  // If the username is present in the query parameter
+  // fill in the form value.
+  var params = new URLSearchParams(window.location.search);
+  if(params.has('username')) {
+    usernameInput.value = params.get('username');
+  }
+
   // import database, but we can only access a few methods
   // since we're passing null util and null scores.
   var database = importDb(null, firebase, null);
