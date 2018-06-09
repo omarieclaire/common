@@ -49,8 +49,31 @@ var INITIAL_CLICKS = 6;
 // Number of ticks to do an animation for
 var ANIMATION_TICKS = 125;
 
-// color of click successful 
+// color of click successful
 var CLICK_SUCCESS_WAVE_COLOR = "yellow";
 
 // Color of node when you try to click and you have no clicks
 var CLICK_ERROR_NO_CLICKS_NODE_COLOR = "gray";
+
+var DARK_PINK_RGB = 255, 69, 120;
+var DARK_PINK_HEX = #ff4578;
+var LIGHT_PINK_RGB = 252, 121, 157;
+var LIGHT_PINK_HEX = #fc799d;
+
+var DARK_PURPLE_RGB = 88, 0, 155;
+var DARK_PURPLE_HEX = #58009b;
+var LIGHT_PURPLE_RGB = 184, 91, 255;
+var LIGHT_PURPLE_HEX = #b85bff;
+
+// background is dark blue
+
+var DARK_BLUE_RGB = 9, 6, 34;
+var DARK_BLUE_HEX = #090622;
+var LIGHT_BLUE_RGB = 0, 128, 128;
+var LIGHT_BLUE_HEX = #008080;
+
+var GREEN_RGB = 107, 220, 41;
+var GREEN_HEX = #6bdc29;
+
+var YELLOW_RGB = 255, 226, 0;
+var YELLOW_HEX = #ffe200;
