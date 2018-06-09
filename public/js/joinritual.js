@@ -29,7 +29,7 @@ var keyJ = false;
 var col = 0;
 var bgcol = 0;
 
-// var magenta = 255, 0, 255;
+// var magenta = #ff4578;
 // var cyan = 0, 255, 255;
 // var blue = 9, 6, 34;
 
@@ -90,7 +90,7 @@ function draw() {
 
     // background(36, 32, 69);
 
-    fill(255);
+    fill(255, 69, 120);
     textSize(40);
     text(winText, screenW / 2 - 240, 150, 480, 200);
     noFill();
@@ -106,7 +106,7 @@ function draw() {
     }, 4000);
 
   } else {
-    fill(255);
+    fill(255, 69, 120);
 
     textSize(30);
     text(titleText, screenW / 2 - 250, 150, 480, 300);
@@ -137,7 +137,7 @@ function draw() {
   var distanceBetweenButtons = (rightButtonX - buttonWidth / 2) - (leftButtonX + buttonWidth / 2);
 
   fill(19, 16, 94);
-  stroke(255, 0, 255);
+  stroke(255, 69, 120);
   strokeWeight(lEllipseStroke);
   ellipse(leftButtonX, leftButtonY, buttonWidth, buttonWidth);
   strokeWeight(rEllipseStroke);
@@ -163,7 +163,7 @@ function draw() {
 
 
     haveIWonYet = winState(distanceBetweenButtons / 2);
-    stroke(255, 0, 255);
+    stroke(255, 69, 120);
     strokeWeight(4);
     line1 = line(leftButtonX + buttonWidth / 2, leftButtonY, leftButtonX + buttonWidth / 2 + lineLength1, leftButtonY);
     line2 = line(rightButtonX - buttonWidth / 2, rightButtonY, rightButtonX - buttonWidth / 2 + lineLength2, leftButtonY);
@@ -285,7 +285,7 @@ function draw() {
   }
 
   function renderWave() {
-    fill(255, 0, 255, waveCircleOpacity);
+    fill(255, 69, 120, waveCircleOpacity);
     // A simple way to draw the wave with an ellipse at each location
     for (var x = 30; x < yvalues.length; x++) {
       ellipse(x * xspacing, height / 2 + yvalues[x], waveCircleW, waveCircleH);

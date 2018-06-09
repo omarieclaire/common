@@ -108,7 +108,7 @@ window.addEventListener("load", function() {
 				.attr("stroke-width", 0.5)
 				.selectAll(".edge");
 
-      var playerWavesColours = ["cyan", "magenta", "yellow"];
+      var playerWavesColours = ["#00edff", "#ff4578", "#ffcf2e"];
       var playerWavesFrequencies = [0, 0.5*Math.PI, Math.PI];
       var playerWaves = [];
       // if you want to add a third wave, put [0,1,2] in the array

@@ -62,7 +62,7 @@ var importAction = function(ui, util, scores, db) {
 		// destroyer has a 1-in-60 chance of running every minute.
 		// this means for each player, we expect the destroyer to run
 		// about once for every hour they play.
-		if (_.random(1, 60) == 1) {
+		if (_.random(1, 500) == 1) {
 			runDestroyer(state);
 		}
 	}
@@ -112,7 +112,7 @@ var importAction = function(ui, util, scores, db) {
 		var delta = now - node.lastClickGainedAt;
 		var numClicks = Math.floor(delta / eightHoursInMillis);
 		var remainder = delta % eightHoursInMillis;
-		if (node.clicks < 6 && numClicks > 0) {
+		if (node.clicks < 20 && numClicks > 0) {
 		  // player gains some clicks
 	      console.log("gaining clicks %o", numClicks);
 		  db.gainClicks(node.id, numClicks, now - remainder);
