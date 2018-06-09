@@ -203,7 +203,7 @@ var importDb = function(util, firebase, scores) {
       var node = state.seenNodes[state.selfId];
       if (msg.id === state.selfId && node && node.score > 0) {
         // the logged-in player will gain clicks
-        node.clicks = Math.min(6, node.clicks + msg.numClicks);
+        node.clicks = Math.min(20, node.clicks + msg.numClicks);
         node.lastClickGainedAt = msg.lastClickGainedAt;
       } else {
         // do nothing, it's a different player
