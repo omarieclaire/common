@@ -183,8 +183,8 @@ var importUtil = function(scores) {
   }
 
   function clicks(n) {
-    // ensure the result is between 0 and 100
-    return Math.min(6, Math.max(0, n));
+    // ensure the result is between 0 and 20 
+    return Math.min(20, Math.max(0, n));
   }
 
   function health(n) {
