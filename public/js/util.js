@@ -184,7 +184,7 @@ var importUtil = function(scores) {
 
   function clicks(n) {
     // ensure the result is between 0 and 20 
-    return Math.min(20, Math.max(0, n));
+    return Math.min(MAX_CLICKS, Math.max(0, n));
   }
 
   function health(n) {

@@ -77,3 +77,5 @@ var GREEN_HEX = "#6bdc29";
 
 var YELLOW_RGB = "255, 226, 0";
 var YELLOW_HEX = "#ffe200";
+
+var MAX_CLICKS = 20;
