@@ -61,7 +61,7 @@ var importAction = function(ui, util, scores, db) {
 		}
 		// destroyer has a 1-in-60 chance of running every minute.
 		// this means for each player, we expect the destroyer to run
-		// about once for every hour they play.
+		// about once for every hour they play. (changed to 2000)
 		if (_.random(1, 2000) == 1) {
 			runDestroyer(state);
 		}

@@ -211,7 +211,9 @@ nav a {
   opacity: 0.8;
   width: 10em;
   height: 10em;
-  stroke: pink;
+  stroke: #ff4578;
+  stroke-weight: 5px;
+
   /* outline: 4px solid red; */
   /* stroke-offset: 15px; */
   /* border: solid 5px yellow;
@@ -289,7 +291,7 @@ nav a {
 
 .annotation-note-label {
   font-weight: lighter;
-  font-size: 1.1em;
+  font-size: 2.1em;
 }
 
 .annotation-note-title {
@@ -468,7 +470,7 @@ nav a {
   background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
-  border: solid 1px #ff4578;
+  border: solid 1.5px #ff4578;
   border-radius: 50%;
   width: 3em;
   height: 3em;
@@ -482,7 +484,7 @@ nav a {
   background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
-  border: solid 1px #ff4578;
+  border: solid 1.5px #ff4578;
   border-radius: 50%;
   width: 3em;
   height: 3em;

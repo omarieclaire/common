@@ -137,8 +137,8 @@ exports.sendWelcomeEmail =
         to: user.email,
         bcc: 'marieflanagan@gmail.com',
         subject: "Welcome to Common!",
-        text: "Hello " + user.username + "! Welcome to Common. Your password is: " + password + ' . Try logging in at https://commonplay.ca/ to get started.',
-        html: "<!DOCTYPE html><html><body><p>Hello <strong>" + user.username + "</strong>!</p><p>Welcome to Common. Your password is: <strong>" + password + '</strong>. Try logging in at <a href="https://commonplay.ca/" target="_blank">https://commonplay.ca/</a> to get started.</p></body></html>'
+        text: "Hello " + user.username + "! Welcome to Common. Your password is: " + password + ' . Please do change your password. Try logging in at https://commonplay.ca/ to get started.',
+        html: "<!DOCTYPE html><html><body><p>Hello <strong>" + user.username + "</strong>!</p><p>Welcome to Common. Your password is: <strong>" + password + '</strong>. Please do change your password. Try logging in at <a href="https://commonplay.ca/" target="_blank">https://commonplay.ca/</a> to get started.</p></body></html>'
       };
 
       var mailgunPromise = new Promise((resolve, reject) => {

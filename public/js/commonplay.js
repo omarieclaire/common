@@ -50,7 +50,7 @@ window.addEventListener("load", function() {
 			// id of the current user (same as ME)
 			selfId: currentUser.username,
 			// color picker
-			colorPicker: d3.scaleOrdinal(["#84bcff"
+			colorPicker: d3.scaleOrdinal(["#BC31F1", "#6B00B9", "#7e0caa"
 			]),
 			// directory of known players
 			players: {},
@@ -108,7 +108,7 @@ window.addEventListener("load", function() {
 				.attr("stroke-width", 0.5)
 				.selectAll(".edge");
 
-      var playerWavesColours = ["#00edff", DARK_PINK_HEX, "#ffcf2e"];
+      var playerWavesColours = ["#FFADAE", DARK_PINK_HEX, "#ffcf2e"];
       var playerWavesFrequencies = [0, 0.5*Math.PI, Math.PI];
       var playerWaves = [];
       // if you want to add a third wave, put [0,1,2] in the array
