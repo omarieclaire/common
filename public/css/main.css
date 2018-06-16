@@ -297,7 +297,7 @@ nav a {
 .annotation-note-title {
   font-weight: lighter;
   /* padding-left: 10em; */
-  font-size: 1.1em;
+  font-size: 2.1em;
 }
 
 .annotationBox {
@@ -634,15 +634,22 @@ button:hover {
 
 }
 
-/* below is my own attempts to do the above */
-
-/* @media (max-width: 1200px) {
+@media only screen and (device-width: 768px) {
+  /* For general iPad layouts */
   body {
-    font-size: 18px;
+    font-size: 22px;
   }
-  .modal-content {
-    width: 60%;
+  #add-player {
+    position: fixed;
+    width: 5em;
+    height: 5em;
   }
+}
 
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
+  /* For portrait layouts only */
+}
 
-} */
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+  /* For landscape layouts only */
+}
