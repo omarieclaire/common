@@ -1,5 +1,7 @@
 var importDb = function(util, firebase, scores) {
 
+  var LOG_REF = '/log';
+
   var database = firebase.database();
 
   /**
@@ -28,7 +30,7 @@ var importDb = function(util, firebase, scores) {
 
   function runLogFromBeginning(state, onLogUpdate) {
     console.log("Running log from the start");
-    var ref = database.ref('/log');
+    var ref = database.ref(LOG_REF);
     return ref.on('child_added', function(data) {
       var msg = data.val();
       var key = data.key;
@@ -77,7 +79,7 @@ var importDb = function(util, firebase, scores) {
           state.players = stateSnapshot.players;
           state.logEntry = key;
           initializeGame(state);
-          var ref = database.ref('/log').orderByKey().startAt(key);
+          var ref = database.ref(LOG_REF).orderByKey().startAt(key);
           return ref.on('child_added', function(data) {
             var msg = data.val();
             var key = data.key;
@@ -111,7 +113,7 @@ var importDb = function(util, firebase, scores) {
     state.nodes = []
     state.edges = []
     database.ref('/players').set({});
-    database.ref('/log').set({});
+    database.ref(LOG_REF).set({});
     database.ref('/state').set({});
     createUser({
       email: "marieflanagan@gmail.com",
@@ -245,7 +247,7 @@ var importDb = function(util, firebase, scores) {
    */
   function sendLog(msg) {
     msg.timestamp = firebase.database.ServerValue.TIMESTAMP;
-    return database.ref('/log').push().set(msg);
+    return database.ref(LOG_REF).push().set(msg);
   }
 
   /**
